@@ -1,0 +1,62 @@
+@import './variables.scss';
+
+.search-icon-wrapper{
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+
+}
+
+.search-icon-inner{
+	display: flex;
+	margin: auto;
+	justify-content: flex-end;
+	width: 100%;
+	background-color: transparent;
+}
+
+.search-icon{
+	cursor: pointer;
+	margin: 10px 20px;
+	width: 55px;
+	height: 55px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	padding: 5px;
+	border-radius: 50%;
+	color:white;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+	&:hover{
+		color: $black;
+		background-color: $accent-color;
+	}
+}
+
+
+.search-dialog{
+	display: block;
+	margin: auto;
+	width: 400px;
+}
+
+.search-radio{
+	margin-top: 10px;
+}
+
+
+@media only screen and (min-width: 600px) {
+
+	.search-icon-inner{
+		display: flex;
+		margin: auto;
+		justify-content: flex-end;
+		width: 375px;
+		background-color: transparent;
+	}
+
+	
+}

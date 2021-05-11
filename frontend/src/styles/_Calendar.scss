@@ -1,0 +1,153 @@
+@import './variables.scss';
+
+.calendar{
+	position: relative;
+	display: block;
+	margin: auto;
+	width: 95%;
+	background-color: white !important;
+	
+}
+
+.modeWrapper{
+	color: transparent !important;
+	z-index: 5 !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100% !important;
+
+
+	
+}
+
+.modeButton{
+
+color: transparent !important;
+width: 100%;
+height: 100px;
+border:solid;
+ background-color: transparent;
+
+}
+
+.calendarHeader{
+	margin-top: -25px;
+	position: relative;
+	z-index: 1 !important;
+	background-color: white !important;
+	color: $accent-color !important;
+	padding: 18px 0px;
+
+button{
+	color:grey;
+
+	&:hover{
+		color:$accent-color;
+	}
+}
+	
+}
+
+#dayCell{
+	&:hover{
+		color: white;
+		background-color: lightgray;
+		border-radius: 5px;
+	}
+}
+
+.dailyHourWrapper{
+	cursor: pointer;
+
+	&:hover{
+		color: white;
+		background-color: lightgray;
+		border-radius: 5px;
+	}
+}
+
+.dailyEventWrapper{
+	cursor: pointer;
+
+	&:hover{
+	
+		color: yellow;
+	}
+}
+
+#dailyTimeLine{
+	position: relative;
+	z-index: 0 !important;
+	height: 900px !important;
+  margin-top: -280px;
+	overflow: hidden;
+	background-color: white !important;
+}
+
+.dayText.currentDay{
+	color: white;
+	background-color: $accent-color;
+}
+
+.dayEvent{
+	padding: 10px;
+	margin-bottom: 10px;
+}
+
+
+
+.calendar-modal{
+	display: block;
+	margin: auto;
+	width: 400px;
+}
+
+.calendar-select{
+	display: block;
+	margin: 5px auto;
+	width: 80%;
+
+}
+
+.select-div{
+	width: 100%;
+	background-color:$error;
+}
+
+.calendar-snackbar{
+
+	.MuiSnackbar-root {
+
+		width: 300px;
+	
+		.MuiPaper-root{
+	
+			background-color:$success;
+			color:white;
+		
+		}
+	
+	}
+}
+
+
+.calendar-snackbar-error{
+
+	.MuiSnackbar-root {
+
+		width: 300px;
+	
+		.MuiPaper-root{
+	
+			background-color:$error;
+			color:$white;
+		
+		}
+	
+	}
+}
+
+
+
+

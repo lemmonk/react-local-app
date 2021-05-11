@@ -1,0 +1,149 @@
+@import './variables.scss';
+
+
+.edit-header{
+	display: flex;
+	flex-direction: row;
+	margin: 20px 0px;
+	margin-left: -20px;
+
+	.edit-profile-pic{
+
+		
+		border: none;
+		background-color: transparent;
+		box-shadow: none;
+		border-radius: 10px;
+
+		&:focus{
+			border: none;
+			background-color: transparent;
+			box-shadow: none;
+		}
+
+		&:hover{
+			border: none;
+			background-color: transparent;
+			box-shadow: none;
+		}
+	}
+
+	.radio-title{
+		color: $primary-color;
+		font-weight: bold;
+		font-size: 1.2rem;
+	}
+
+	.edit-radio{
+		margin-left: 30px;
+	}
+}
+
+.edit-image{
+	img{
+		width: 90px;
+		height: 90px;
+    border-radius: 50%;
+	
+	}
+}
+
+.edit-date-picker{
+	margin-top:10px;
+	margin-left: 10px;
+}
+
+.edit-bio{
+	padding: 100px;
+}
+
+.edit-char-count{
+	display:flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	align-items:flex-start;
+	width:100%;
+	margin-top: -10px;
+	font-size: 0.8rem;
+
+}
+
+.edit-host-info{
+	margin-bottom: 5px;
+color: $primary-color;
+text-align: center	;
+border: solid;
+padding: 5px;
+border-radius: 5px;
+}
+
+.edit-calendar-icon{
+	cursor: pointer;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	color: grey;
+
+	
+}
+
+
+.edit-calendar-inner{
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-end;
+	margin-bottom: 5px;
+	&:hover{
+		color:$primary-color
+	}
+}
+
+.edit-logout{
+
+	width: 100%;
+button{
+	display: block;
+	margin: auto;
+	margin-top: 50px;
+	color: lightgray;
+
+	&:hover{
+		color: $error;
+	}
+}
+
+}
+
+
+.edit-snackbar{
+
+	.MuiSnackbar-root {
+
+		width: 300px;
+	
+		.MuiPaper-root{
+	
+			background-color:$success;
+			color:white;
+		
+		}
+	
+	}
+}
+
+
+.edit-snackbar-error{
+
+	.MuiSnackbar-root {
+
+		width: 300px;
+	
+		.MuiPaper-root{
+	
+			background-color:$error;
+			color:$white;
+		
+		}
+	
+	}
+}

@@ -1,0 +1,73 @@
+User Stories
+
+- As a user I want know what's going on
+- I want to browse my options
+- I want to a clear call to action
+- I want to see available dates
+- I want to book a date
+
+Routes
+GET /users
+POST /users/session
+POST /users/login
+CREATE /users
+EDIT /users
+DELETE /users
+
+GET /hosts
+
+GET /bookings
+CREATE /bookings
+DELETE /bookings
+
+
+Features
+
+[x] - search 
+[x] - navbar nav
+[x] - url param routes (confirm, recovery)
+[x] - edit profile bug fix
+[x] - logout route
+[x] - open calendar to both host and users
+[x] - move multi-day update to backend
+[x] - user calendar travel booking
+[] - emails
+     [x] - confirm
+     [x] - recovery
+     [] - booking made
+     [] - booking deleted
+     [] = booking upcoming
+     [] - booking complete
+     [] - rating
+     [] - style emails
+
+[] - bit bucket
+[] - stripe connect
+[] -  QR Code auth
+
+[] - PWA
+[] - terms
+[] - contact us
+[] - devices
+[] - error handling 
+[] - loading
+[] - styling
+
+
+[x] - real-time chat
+[x] - bookings
+
+
+[x] - block booking yourself
+[x] - change confirm back to uid
+[x] - uid hashed
+[x] - confirmation email
+[x] - social link
+[x] - public and private keys
+[x] - sign up
+[x] - welcome message
+[x] - login
+
+
+
+

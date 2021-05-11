@@ -1,0 +1,12 @@
+// save the day please
+@mixin card-layout {
+	border-radius: 10px;
+}
+
+$primary-color: rgb(59, 110, 252);
+$accent-color: #5f8aff;
+$white: white;
+$black: rgb(40, 40, 40);
+
+$success: rgb(0, 171, 0);
+$error: rgb(252, 93, 93);

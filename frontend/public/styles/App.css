@@ -1,0 +1,858 @@
+.nav {
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100%;
+  height: 70px;
+  color: white;
+}
+
+.nav-inner {
+  width: 100%;
+  margin-top: -8px;
+  background-color: #3b6efc;
+  padding: 15px 0px;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+}
+
+.top-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.top-bar h3 {
+  font-weight: normal;
+}
+
+.nav-logo {
+  cursor: pointer;
+  margin: 5px 20px;
+}
+
+.nav-logo:hover {
+  color: whitesmoke;
+}
+
+.nav-icon {
+  cursor: pointer;
+  margin: 5px 20px;
+}
+
+.nav-icon:hover {
+  color: whitesmoke;
+}
+
+.menuModal {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.menuModal .MuiMenu-paper {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  width: 120px;
+  border-radius: 5px;
+}
+
+.menuModal .MuiMenu-paper .MuiListItem-root:hover {
+  border-radius: 5px;
+  background-color: #5f8aff;
+}
+
+.nav-hide {
+  opacity: 0;
+}
+
+@media only screen and (min-width: 600px) {
+  .nav-inner {
+    width: 375px;
+  }
+}
+
+.search-icon-wrapper {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+}
+
+.search-icon-inner {
+  display: flex;
+  margin: auto;
+  justify-content: flex-end;
+  width: 100%;
+  background-color: transparent;
+}
+
+.search-icon {
+  cursor: pointer;
+  margin: 10px 20px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  padding: 5px;
+  border-radius: 50%;
+  color: white;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.search-icon:hover {
+  color: #282828;
+  background-color: #5f8aff;
+}
+
+.search-dialog {
+  display: block;
+  margin: auto;
+  width: 400px;
+}
+
+.search-radio {
+  margin-top: 10px;
+}
+
+@media only screen and (min-width: 600px) {
+  .search-icon-inner {
+    display: flex;
+    margin: auto;
+    justify-content: flex-end;
+    width: 375px;
+    background-color: transparent;
+  }
+}
+
+.splash {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 350px;
+  text-align: center;
+}
+
+.hook {
+  margin-top: 60px;
+  line-height: 1.4;
+  text-align: center;
+  width: 75%;
+  color: #282828;
+  font-size: 1.5rem;
+}
+
+.pitch {
+  line-height: 1.4;
+  text-align: center;
+  margin-top: -50px;
+  width: 80%;
+  color: #282828;
+  font-size: 1.2rem;
+}
+
+.call-to-action {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  width: 80%;
+}
+
+.call-to-action button {
+  width: 200px;
+  font-size: 1.2rem;
+  border: none;
+  padding: 20px;
+  color: white;
+  background-color: #3b6efc;
+  border-radius: 10px;
+  box-shadow: rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px;
+}
+
+.feed {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.calendar-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  color: #3b6efc;
+}
+
+.host-card {
+  position: relative;
+  margin: 30px 0px;
+  width: 95%;
+  height: 360px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.host-card button {
+  position: absolute;
+  width: 100%;
+  padding: 15px;
+  bottom: 0;
+  left: 0;
+  font-size: 1.5rem;
+  color: white;
+  background-color: #3b6efc;
+  border: none;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.host-card button:hover {
+  background-color: #5f8aff;
+}
+
+.host-wrapper {
+  padding: 20px;
+}
+
+.host-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.host-header img {
+  width: 110px;
+  height: 110px;
+}
+
+.host-header h3 {
+  margin-left: 25px;
+}
+
+.host-body {
+  margin-top: -12px;
+  padding: 0px 5px;
+  height: 80px;
+  background-color: whitesmoke;
+}
+
+.host-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.star-lite {
+  color: #5f8aff;
+}
+
+.star-dim {
+  color: grey;
+}
+
+.host-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.calendar-icon {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+  color: #3b6efc;
+}
+
+.host-card {
+  position: relative;
+  margin: 10px 0px;
+  width: 95%;
+  height: 340px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.host-card button {
+  position: absolute;
+  width: 100%;
+  padding: 15px;
+  bottom: 0;
+  left: 0;
+  font-size: 1.3rem;
+  color: white;
+  background-color: #3b6efc;
+  border: none;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.host-card button:hover {
+  background-color: #5f8aff;
+}
+
+.host-wrapper {
+  padding: 20px;
+}
+
+.host-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.host-header img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+
+.host-header h3 {
+  line-height: 0.5;
+  margin-left: 25px;
+}
+
+.host-body {
+  height: 100px;
+  background-color: #d8e5f2;
+  border-radius: 5px;
+}
+
+.host-body p {
+  padding: 5px;
+}
+
+.host-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.star-lite {
+  color: #5f8aff;
+}
+
+.star-dim {
+  color: grey;
+}
+
+.err-msg {
+  text-align: center;
+  color: #fc5d5d;
+  height: 10px;
+}
+
+.pass-msg {
+  cursor: pointer;
+  text-align: center;
+  color: #5f8aff;
+  height: 10px;
+}
+
+.pass-msg:hover {
+  color: #3b6efc;
+}
+
+.edit-header {
+  display: flex;
+  flex-direction: row;
+  margin: 20px 0px;
+  margin-left: -20px;
+}
+
+.edit-header .edit-profile-pic {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 10px;
+}
+
+.edit-header .edit-profile-pic:focus {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.edit-header .edit-profile-pic:hover {
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.edit-header .radio-title {
+  color: #3b6efc;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.edit-header .edit-radio {
+  margin-left: 30px;
+}
+
+.edit-image img {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}
+
+.edit-date-picker {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.edit-bio {
+  padding: 100px;
+}
+
+.edit-char-count {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: -10px;
+  font-size: 0.8rem;
+}
+
+.edit-host-info {
+  margin-bottom: 5px;
+  color: #3b6efc;
+  text-align: center;
+  border: solid;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.edit-calendar-icon {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  color: grey;
+}
+
+.edit-calendar-inner {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-bottom: 5px;
+}
+
+.edit-calendar-inner:hover {
+  color: #3b6efc;
+}
+
+.edit-logout {
+  width: 100%;
+}
+
+.edit-logout button {
+  display: block;
+  margin: auto;
+  margin-top: 50px;
+  color: lightgray;
+}
+
+.edit-logout button:hover {
+  color: #fc5d5d;
+}
+
+.edit-snackbar .MuiSnackbar-root {
+  width: 300px;
+}
+
+.edit-snackbar .MuiSnackbar-root .MuiPaper-root {
+  background-color: #00ab00;
+  color: white;
+}
+
+.edit-snackbar-error .MuiSnackbar-root {
+  width: 300px;
+}
+
+.edit-snackbar-error .MuiSnackbar-root .MuiPaper-root {
+  background-color: #fc5d5d;
+  color: white;
+}
+
+.calendar {
+  position: relative;
+  display: block;
+  margin: auto;
+  width: 95%;
+  background-color: white !important;
+}
+
+.modeWrapper {
+  color: transparent !important;
+  z-index: 5 !important;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+}
+
+.modeButton {
+  color: transparent !important;
+  width: 100%;
+  height: 100px;
+  border: solid;
+  background-color: transparent;
+}
+
+.calendarHeader {
+  margin-top: -25px;
+  position: relative;
+  z-index: 1 !important;
+  background-color: white !important;
+  color: #5f8aff !important;
+  padding: 18px 0px;
+}
+
+.calendarHeader button {
+  color: grey;
+}
+
+.calendarHeader button:hover {
+  color: #5f8aff;
+}
+
+#dayCell:hover {
+  color: white;
+  background-color: lightgray;
+  border-radius: 5px;
+}
+
+.dailyHourWrapper {
+  cursor: pointer;
+}
+
+.dailyHourWrapper:hover {
+  color: white;
+  background-color: lightgray;
+  border-radius: 5px;
+}
+
+.dailyEventWrapper {
+  cursor: pointer;
+}
+
+.dailyEventWrapper:hover {
+  color: yellow;
+}
+
+#dailyTimeLine {
+  position: relative;
+  z-index: 0 !important;
+  height: 900px !important;
+  margin-top: -280px;
+  overflow: hidden;
+  background-color: white !important;
+}
+
+.dayText.currentDay {
+  color: white;
+  background-color: #5f8aff;
+}
+
+.dayEvent {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.calendar-modal {
+  display: block;
+  margin: auto;
+  width: 400px;
+}
+
+.calendar-select {
+  display: block;
+  margin: 5px auto;
+  width: 80%;
+}
+
+.select-div {
+  width: 100%;
+  background-color: #fc5d5d;
+}
+
+.calendar-snackbar .MuiSnackbar-root {
+  width: 300px;
+}
+
+.calendar-snackbar .MuiSnackbar-root .MuiPaper-root {
+  background-color: #00ab00;
+  color: white;
+}
+
+.calendar-snackbar-error .MuiSnackbar-root {
+  width: 300px;
+}
+
+.calendar-snackbar-error .MuiSnackbar-root .MuiPaper-root {
+  background-color: #fc5d5d;
+  color: white;
+}
+
+.inbox-card-wrapper {
+  width: 95%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 10px 0px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  background-color: white;
+  border: solid 3px #5f8aff;
+}
+
+.inbox-card-wrapper h3 {
+  text-align: center;
+}
+
+.inbox-card-wrapper-host {
+  width: 95%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 10px 0px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  border: solid 3px #5f8aff;
+}
+
+.inbox-card-wrapper-host h3 {
+  text-align: center;
+}
+
+.inbox-card-inner {
+  display: flex;
+  width: 95%;
+  margin: auto;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0px;
+}
+
+.inbox-card-inner p {
+  line-height: 0;
+}
+
+.inbox-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.inbox-left img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 50px;
+}
+
+.inbox-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.inbox-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+
+.inbox-icons {
+  display: flex;
+  margin: 0px 5px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.inbox-icon-msg {
+  cursor: pointer;
+  color: lightgray;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+.inbox-icon-msg:hover {
+  color: #5f8aff;
+}
+
+.inbox-icon-delete {
+  cursor: pointer;
+  color: lightgray;
+}
+
+.inbox-icon-delete:hover {
+  color: #fc5d5d;
+}
+
+.inbox-status {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #3b6efc;
+}
+
+.chat-card-wrapper {
+  width: 90%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 10px 0px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  color: black;
+  background-color: white;
+  border-left: solid 5px #282828;
+}
+
+.chat-card-wrapper-other {
+  width: 90%;
+  display: flex;
+  margin: auto;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  padding: 10px 0px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+  color: black;
+  background-color: white;
+  border-left: solid 5px #5f8aff;
+}
+
+.chat-name {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: #5f8aff;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.chat-card-inner {
+  padding: 10px;
+}
+
+.chat-stamp {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  color: lightgray;
+  margin-top: 20px;
+}
+
+.chat-input-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.chat-input-inner {
+  z-index: 5;
+  width: 365px;
+  display: block;
+  margin: auto;
+  background-color: white;
+  border-top: solid 5px grey;
+  padding-top: 15px;
+}
+
+.chat-send-icon {
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 10px;
+  color: #5f8aff;
+}
+
+.chat-send-icon:hover {
+  color: #3b6efc;
+}
+
+#outlined-multiline-static {
+  background-color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'sans-serif';
+  background-color: whitesmoke;
+}
+
+.App {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  background-color: whitesmoke;
+}
+
+.divider {
+  width: 100%;
+  height: 100px;
+  margin: 0;
+  padding: 0;
+}
+
+.loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+@media only screen and (min-width: 600px) {
+  body {
+    background-color: whitesmoke;
+  }
+  .App {
+    width: 375px;
+    display: block;
+    margin: auto;
+    background-color: white;
+  }
+}

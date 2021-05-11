@@ -1,0 +1,122 @@
+@import './variables.scss';
+
+.inbox-card-wrapper{
+	width: 95%;
+	display: flex;
+	margin: auto;
+	flex-direction: column;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	padding: 10px 0px;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	background-color: white;
+	border: solid 3px $accent-color;
+
+	h3{
+		text-align: center;
+	}
+
+}
+
+.inbox-card-wrapper-host{
+	width: 95%;
+	display: flex;
+	margin: auto;
+	flex-direction: column;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	padding: 10px 0px;
+	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+	border: solid 3px $accent-color;
+
+	h3{
+		text-align: center;
+	}
+
+}
+
+
+
+.inbox-card-inner{
+	
+	display: flex;
+	width: 95%;
+	margin: auto;
+	
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+	padding: 10px 0px;
+
+	
+
+	p{
+		line-height: 0;
+	}
+
+}
+
+.inbox-left{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+	img{
+		width: 70px;
+		height: 70px;
+		border-radius: 50%;
+		margin-bottom: 50px;
+	}
+}
+
+.inbox-center{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: flex-start;
+
+}
+
+.inbox-right{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	align-items: flex-end;
+
+}
+
+.inbox-icons{
+
+	display: flex;
+	margin: 0px 5px;
+	justify-content: flex-end;
+	align-items: center;
+	
+}
+
+.inbox-icon-msg{
+	cursor: pointer;
+	color: lightgray;
+	margin-top: 5px;
+	margin-right: 5px;
+
+	&:hover{
+		color: $accent-color;
+	}
+}
+
+.inbox-icon-delete{
+	cursor: pointer;
+	color: lightgray;
+
+	&:hover{
+		color: $error;
+	}
+}
+
+.inbox-status{
+	font-weight: bold;
+	font-size: 1.2rem;
+	color:$primary-color;
+}
+
