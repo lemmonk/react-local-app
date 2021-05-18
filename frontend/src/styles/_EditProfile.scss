@@ -29,21 +29,45 @@
 	}
 
 	.radio-title{
-		color: $primary-color;
+		color: $black;
 		font-weight: bold;
 		font-size: 1.2rem;
+
+		&:focus{
+			color: $black;
+		}
+		
 	}
 
 	.edit-radio{
 		margin-left: 30px;
+	
 	}
+
+
+}
+
+
+	
+	
+
+
+.MuiIconButton-label{
+	color:$primary-color;
+
 }
 
 .edit-image{
 	img{
 		width: 90px;
 		height: 90px;
-    border-radius: 50%;
+		border-radius: 50%;
+		background-color: $white;
+		box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+		&:hover{
+			background-color: whitesmoke;
+		}
 	
 	}
 }
@@ -54,6 +78,7 @@
 }
 
 .edit-bio{
+
 	padding: 100px;
 }
 
@@ -66,6 +91,14 @@
 	margin-top: -10px;
 	font-size: 0.8rem;
 
+	.char-err-text{
+		color:$error;
+	}
+	
+	.char-ok-text{
+		color:$primary-color;
+	}
+
 }
 
 .edit-host-info{
@@ -75,6 +108,10 @@ text-align: center	;
 border: solid;
 padding: 5px;
 border-radius: 5px;
+
+h3{
+	color: $black;
+}
 }
 
 .edit-calendar-icon{
@@ -82,10 +119,12 @@ border-radius: 5px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-end;
-	color: grey;
+	color: $gray;
 
 	
 }
+
+
 
 
 .edit-calendar-inner{
@@ -101,10 +140,11 @@ border-radius: 5px;
 .edit-logout{
 
 	width: 100%;
+
 button{
 	display: block;
 	margin: auto;
-	margin-top: 50px;
+	margin-top: 25px;
 	color: lightgray;
 
 	&:hover{
@@ -115,11 +155,12 @@ button{
 }
 
 
+
 .edit-snackbar{
 
 	.MuiSnackbar-root {
 
-		width: 300px;
+		width: 375px;
 	
 		.MuiPaper-root{
 	
@@ -136,7 +177,7 @@ button{
 
 	.MuiSnackbar-root {
 
-		width: 300px;
+		width: 375px;
 	
 		.MuiPaper-root{
 	

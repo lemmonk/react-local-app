@@ -21,25 +21,28 @@ const openChat = f_keys => {
     <div className='inbox-card-inner'>
 
     <div className='inbox-left'>
-    <img src={props.image ? `/images/${props.image}` : '/images/user.png'} alt='img' />
-    
-    </div>
+   
+   <img src={props.host_image ? `/images/${props.host_image}` : '/images/user.png'} alt='img' />
+   <img src={props.user_image ? `/images/${props.user_image}` : '/images/user.png'} alt='img' />
+   </div>
 
     <div className='inbox-center'>
-    
-    <p className='inbox-status'>{props.status ? props.status :  '...'}</p>
-    <p>{props.name ?  props.name :  '...'}</p>
-    <p>{props.city ? props.city :  '...'}</p>
-    <p>{props.date ? ` ${props.date}` :  '...'}</p>
+    <p className='inbox-type'>{props.type ? props.type :  '...'}</p>
+    <p className={props.status_style}>Status: {props.status ? <label>{props.status}</label> :  '...'}</p>
+    <p>Host: {props.host_name ?  props.host_name :  '...'}</p>
+    <p>Guest: {props.user_name ?  props.user_name :  '...'}</p>
+    <p>In: {props.city ? props.city :  '...'}</p>
+    <p>{props.date ? `${props.date} @ ${props.start} - ${props.end}` :  '...'}</p>
+
+  
    
-    
     </div>
+
+   
    
 
     <div className='inbox-right'>
-    
-    <p>{props.start ? `From: ${props.start}` :  '...'}</p>
-    <p>{props.end ? `To: ${props.end}` :  '...'}</p>
+   {/* placeholder */}
     </div>
     
     </div>
@@ -49,9 +52,11 @@ const openChat = f_keys => {
       className='inbox-icon-msg'
       onClick={() => openChat(props.f_keys)}
       />
-      < DeleteIcon className='inbox-icon-delete'
-      onClick={() => props.open(props.id)}
-    /></div>
+     {props.status !== 'Cancelled' ? 
+     < DeleteIcon className='inbox-icon-delete'
+      onClick={() => props.open(props.other)}/>
+      : null }
+    </div>
      
      
     </section>

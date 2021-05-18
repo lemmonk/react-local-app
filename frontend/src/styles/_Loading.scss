@@ -1,0 +1,26 @@
+
+
+.loading-wrapper{
+	z-index: 200;
+	position: fixed;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba($color: #000000, $alpha: 0.9);
+}
+
+.loading{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	font-size: 3rem;
+
+}
+
+

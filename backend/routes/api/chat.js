@@ -18,7 +18,7 @@ const values = [input.host_key, input.user_key];
 		return res.json(data)
 		}
 
-	const vals = [input.host_key, input.user_key, 'Locals App', 'This is the beginning of your direct message history with this person.'];
+	const vals = [input.host_key, input.user_key, 'Locals App', 'This is the beginning of your direct message history.'];
 	
 	createChat(vals)
 	.then((data) => res.json(data))

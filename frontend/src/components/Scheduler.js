@@ -25,6 +25,7 @@ function TransitionUp(props) {
 function Scheduler() {
 
 
+
   const {user} = useContext(UserContext);
   const history = useHistory();
   const [bookings, setBookings] = useState({
@@ -55,13 +56,43 @@ function Scheduler() {
   });
 
 
+  
+  const highlightLocalDay = (mode) => {
+    
+    const d = new Date();
+    const currentDay = d.getDate();
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const sameMonth = mode && Number(mode.month) <= month;
+    const sameYear = mode && Number(mode.year) <= year;
+    const allSpans = document.querySelectorAll(".dayText");
+   
+      for (const span of allSpans){
+
+        if(!mode && span.innerText == currentDay){
+          span.classList.add('currentDay');
+        
+        } else if(sameMonth && sameYear && span.innerText == currentDay){
+          span.classList.add('currentDay');
+        
+        } else {
+          span.classList.remove('currentDay');
+  
+        }
+    }
+
+  }
+ 
+
 	const uiManipulation = mode => {
     window.scrollTo(0, 0);
+    highlightLocalDay(mode);
     const allButtons = document.querySelectorAll("button");
     const h1 = document.querySelectorAll("h1");
     
     const d = new Date();
     const currentMonth = d.getMonth();
+    const currentYear = d.getFullYear();
     
     h1[0].style.opacity = '1';
     allButtons[1].innerHTML = '';
@@ -86,7 +117,7 @@ function Scheduler() {
       allButtons[3].style.display = 'block';
       allButtons[4].style.display = 'block';
 
-    } else if (mode.month  < currentMonth){
+    } else if (mode.month  < currentMonth && mode.year <= currentYear){
 
      return history.push('/edit'),[history]; 
 
@@ -97,14 +128,18 @@ function Scheduler() {
 
       allButtons[3].style.display = 'none';
       allButtons[4].style.display = 'none';
-      // h1[0].style.opacity = '0';
      
     }
 	};
 
+
+
  
  
   useEffect(() => {
+   
+    
+
 
     if(!user) return history.push('/'),[history];
 
@@ -134,7 +169,7 @@ function Scheduler() {
   const events = bookings ? bookings.state.map((each) =>{
 
     if(user.public_key !== each.host_key){
-      each.color = 'green';
+      each.color = 'salmon';
       each.title = 'Travel Booking';
     }
 
@@ -154,12 +189,12 @@ function Scheduler() {
 
 const openCourseOfAction = mode => {
 
-  const d = new Date();
-  if(mode.day <= d.getDate()){
-    const msg = "Bookings cannot be made day of or in the past.";
-    const cc = 'calendar-snackbar-error';
-    return  handleSnack(TransitionUp, msg, cc);
-  }
+  // const d = new Date();
+  // if(mode.day <= d.getDate()){
+  //   const msg = "Bookings cannot be made day of or in the past.";
+  //   const cc = 'calendar-snackbar-error';
+  //   return  handleSnack(TransitionUp, msg, cc);
+  // }
   
   if(mode.mode === 'dailyMode'){
 
@@ -308,11 +343,9 @@ const createBooking = () => {
   const input = {
     host_key: user.public_key,
     user_key: user.public_key,
+    user_email: user.email,
     title:'N/A',
     color:'black',
-    name: null,
-    city: null,
-    image: null,
     start: currentBooking.formattedStartDate,
     end: currentBooking.formattedEndDate,
     stamp: currentBooking.formattedStartDate.substring(0,10),
@@ -320,9 +353,9 @@ const createBooking = () => {
     uid: localStorage.getItem('locals-uid')
   }
 
-  axios.post(`/api/bookings`, { input }).then((res) => {
+  axios.post(`/api/bookings/block`, { input }).then((res) => {
 
-    //  console.log(res.data);
+     console.log(res.data);
     
     triggerUseEffect();
     const msg = 'Saved!'
@@ -469,9 +502,7 @@ for (let i = Number(currentBooking.day); i < num ; i++){
   const all = {
     host_key: user.public_key,
     user_key: user.public_key,
-    name: null,
-    city: null,
-    image: null,
+    user_email: user.email,
     title:'N/A',
     color:'black',
     start: start,
@@ -503,8 +534,9 @@ const createMultiBooking = () => {
    return handleSnack(TransitionUp, msg, cc);
   }
 
-    axios.post(`/api/bookings`, { days }).then((res) => {
+    axios.post(`/api/bookings/multi`, { days }).then((res) => {
 
+      console.log(res.data);
       const msg = 'Saved!';
       const cc = 'calendar-snackbar';
       handleSnack(TransitionUp, msg, cc);
@@ -643,7 +675,7 @@ action='next'
 action_name='Save'
 >
     <DialogContent>
-          <p>Mark part, full, or multiple days as unavailable.</p>
+          <h3>Mark part, full, or multiple days as unavailable.</h3>
        </DialogContent>
 </div>
 
@@ -654,7 +686,7 @@ action_name='Save'
 >
   <DialogContent>       
   <h3>How long will you be unavailable?</h3>       
-  {/* <h3>{currentBooking ? `Start Time: ${currentBooking.hour}:00h` : null}</h3> */}
+ 
   </DialogContent>
       
 </div>
@@ -666,8 +698,8 @@ action_name='Save'
 >
        <DialogContent>
           
-          <p>Mark the following date as unavailable?</p>
-        <h3>{`Date: ${currentBooking.formattedStartDate ? currentBooking.formattedStartDate.substring(0,10) : 'n/a'}`}</h3>
+          <h3>Mark the following date as unavailable?</h3>
+        <p>{`Date: ${currentBooking.formattedStartDate ? currentBooking.formattedStartDate.substring(0,10) : 'n/a'}`}</p>
        
                
       </DialogContent>
@@ -681,8 +713,8 @@ action_name='Save'
 >
     <DialogContent>
           
-   <p>Please select the span of dates you would like to mark as unavailable.</p>
-        <h3>{`Start Date: ${currentBooking.formattedStartDate ? currentBooking.formattedStartDate.substring(0,10) : 'n/a'}`}</h3>
+   <h3>Please select the span of dates you would like to mark as unavailable.</h3>
+        <p>{`Start Date: ${currentBooking.formattedStartDate ? currentBooking.formattedStartDate.substring(0,10) : 'n/a'}`}</p>
           <form  noValidate>
       <TextField
       id="date"
@@ -740,7 +772,7 @@ action_name='Mark as available'
 
 //dialog button handler
 const onNext = action => {
-  //TODO Show payment modal...
+  
 
    switch(action) {
     case 'next':
@@ -783,7 +815,7 @@ const handleSnack = (Transition, msg, cc) => {
 
 }
 
-// console.log(currentDialog.dialog)
+
   return (
    
     <div  className='calendar'>
@@ -795,6 +827,7 @@ const handleSnack = (Transition, msg, cc) => {
         onClickTimeLine={(trig) => openTime(trig)}
         />     
 
+<h3>{user ? ` ${user.first_name} ${user.last_name}${user.city? `, ${user.city}`: ''}`: null}</h3> 
 
 {/* dialog  */}
 

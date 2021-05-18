@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import  UserContext  from './UserContext';
-import NavBar from './NavBar';
+import Loading from './Loading';
 import ChatCard from './ChatCard';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
@@ -10,7 +10,7 @@ import socketIOClient from "socket.io-client";
 
 
 function Chat(props) {
-  const API = 'http://localhost:8080';
+  const API = 'http://localhost:8080'; // <--- TEMP
 
   const [socketConn, setSocket] = useState(null);
 
@@ -56,6 +56,14 @@ function Chat(props) {
 
 
   const sendMessage = () => {
+
+    if(!chatRoom.host_key || !chatRoom.user_key || !user)
+    return history.push('/'),[history];
+
+    if(input.message.length > 1000){
+     return alert("Max message length exceeded (1000 char. limit)");
+    }
+    
     
     const msg = {
       host_key: chatRoom.host_key,
@@ -96,7 +104,7 @@ function Chat(props) {
     socket.on("message", msg => {
 
       if(user.public_key === msg[0] || user.public_key === msg[1]){
-        console.log("CLIENT", msg);
+       
         triggerUseEffect();
       } 
 
@@ -149,7 +157,7 @@ function Chat(props) {
 
 <section >
 
-{chatCard ? chatCard : 'No messages'}
+{chatCard ? chatCard : <Loading/>}
 <div className='divider'></div>
 
 <div className='chat-input-wrapper'>
@@ -160,7 +168,7 @@ function Chat(props) {
           fullWidth
           label="New Message"
           multiline
-          rows={2}
+          rows={3}
           variant="outlined"
          
           value={input.message ? input.message : ''}

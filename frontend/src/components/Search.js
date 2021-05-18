@@ -72,8 +72,7 @@ function Search(props) {
             <FormControl component="fieldset" >
       <FormLabel component="legend">Sort By</FormLabel>
       <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-        <FormControlLabel value="city" control={<Radio />} label="Hometown" />
-        <FormControlLabel value="rating" control={<Radio />} label="Rating" />
+        <FormControlLabel value="city" control={<Radio />} label="Location" />
         <FormControlLabel value="low" control={<Radio />} label="Price (low)" />
         <FormControlLabel value="high" control={<Radio />} label="Price (high)" />
        
@@ -81,12 +80,13 @@ function Search(props) {
     </FormControl>
     </div>
         </DialogContent>
-        <DialogActions onClick={() => handleClose()}>
+        <DialogActions className='full-length-btn' onClick={() => handleClose()}>
          
-          <Button onClick={() => props.search(query, value)} color="primary">
+          <button onClick={() => props.search(query, value)} color="primary">
             Search
-          </Button>
+          </button>
         </DialogActions>
+       <br></br>
       </Dialog>
     </div>
     </section>

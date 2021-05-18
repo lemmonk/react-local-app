@@ -52,7 +52,7 @@ const secret_key = bcrypt.hashSync(public_key, salt);
 const hash = bcrypt.hashSync(submitted.password, salt);
 	
 	
-	const values = [submitted.first_name, submitted.last_name, submitted.email, submitted.phone, public_key, secret_key, hashedUid, hash];
+	const values = [submitted.first_name, submitted.last_name, submitted.email, public_key, secret_key, hashedUid, hash];
 
 	
 		createUser(values)
@@ -198,7 +198,6 @@ router.post('/recover', async (req, res) => {
 router.post('/reset', async (req, res) => {
 
 	const input = req.body.input;
-console.log('INPUT', input);
 
 	getTemp([input.email])
 	.then((data) => {
@@ -239,6 +238,7 @@ router.patch('/edit', (req, res) => {
 
 	const update = req.body.update;
 		validateUser([update.email])
+
 		.then((data) => {
 			
 				bcrypt.compare(update.uid, data.uid, function(err, result) {
@@ -263,6 +263,8 @@ router.patch('/edit', (req, res) => {
 		.catch((err) => console.log('Error at users EDIT route "/"', err));
 
 });
+
+
 			
 
 router.post('/editImg', async (req, res) => {
@@ -331,11 +333,12 @@ router.post('/session', (req, res) => {
 								first_name: user.first_name,
 								last_name: user.last_name,
 								email: user.email,
-								phone: user.phone,
 								city: user.city,
 								bio: user.bio,
 								day_rate: user.day_rate,
 								social_link: user.social_link,
+								connect_id: user.connect_id,
+								customer_id: user.customer_id,
 								uid: req.body.uid,
 								verified: user.verified,
 							}

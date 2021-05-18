@@ -1,26 +1,35 @@
-import React, {useContext, useState, useEffect } from 'react';
+import React, {useContext, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
 
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
+import Loading from './Loading';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& .MuiTextField-root': {
+      outlineColor:'pink',
+    },
+  },
+}));
 
 function CreateUser() {
-
+  
+  const classes = useStyles();
   const {setUser} = useContext(UserContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
  
   const [input, setInput] = useState({
     first_name: '',
     last_name: '',
     email: '',
-    phone: '',
     password: '',
   });
 
@@ -28,7 +37,6 @@ function CreateUser() {
     first_name: false,
     last_name: false,
     email: false,
-    phone: false,
     password: false,
     errorMsg: null
   });
@@ -43,7 +51,6 @@ function CreateUser() {
         first_name: false,
         last_name: false,
         email: false,
-        phone: false,
         password: false,
         errorMsg: null
       })
@@ -92,10 +99,13 @@ function CreateUser() {
 
   const createNewUser = () => {
 
+    setLoading(true);
+
       axios.post(`/api/users/create`, { input }).then((res) => {
 
   
           if (res.data === 'exist'){
+            setLoading(false);
             return  setError((prev) => ({
                 ...prev,
                 email : true,
@@ -107,18 +117,21 @@ function CreateUser() {
             first_name: '',
             last_name: '',
             email: '',
-            phone: '',
             password: '',
           }));
 
 
-         
+          setLoading(false);
           setUser(res.data);
           return history.push('/welcome'),[history];
      
          
         }).catch((err) => {
-         alert('ERROR');
+          setLoading(false);
+          return  setError((prev) => ({
+            ...prev,
+            errorMsg: 'Something went wrong 😧'
+          }));
         });
   
   }; 
@@ -128,13 +141,22 @@ function CreateUser() {
  
  
   return (
-    <div>
-    <DialogTitle id="form-dialog-title">Create Account</DialogTitle>
+    <div >
+    {loading ? <Loading/> : null}
+    <DialogTitle>
+      <div id='alert-dialog-title'>
+      Create Account
+      </div>
+    
+      </DialogTitle>
       <DialogContent>
-      <DialogContentText>
-      Once you create an account you can choose to be a traveller, a host or both.
+      <DialogContentText className='alert-dialog-content'>
+    
+     Once you created an account, choose to be a traveller, a host or both.
+   
     </DialogContentText>
       <TextField
+    
             autoFocus
             margin="dense"
             id="first_name"
@@ -184,23 +206,7 @@ function CreateUser() {
             }))}
           />
 
-          <TextField
-           
-           margin="dense"
-           id="phone"
-           error={error.phone}
-           label="Phone"
-           type="phone"
-           variant='outlined'
-           fullWidth
-
-           value={input.phone ? input.phone : ''}
-           onChange={(event) => setInput((prev) => ({
-           ...prev,
-           phone: event.target.value
-           }))}
-         />
-
+         
         <TextField
           autoComplete="new-password"
            margin="dense"
@@ -219,18 +225,24 @@ function CreateUser() {
          />
 
      
-            <div className='err-msg'>
+      </DialogContent>
+      <DialogActions className='full-length-btn'>
+        <button
+        onClick={() => validateInput()} >
+          Create
+        </button>
+      </DialogActions>
+
+      <div className='err-msg'>
             <h4>{error.errorMsg}</h4>
             </div>
           
-
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => validateInput()} color="primary">
-          Create
-        </Button>
-      </DialogActions>
-
+          <div className='create-terms'>
+           
+          <p>
+             By continuing you confirm that you have read and agree to our <a href='/'>Terms of Service and Privacy Policy.</a>
+           </p>
+          </div>
      
   </div>
   );

@@ -1,18 +1,14 @@
 @import './variables.scss';
 
-
-
 .err-msg{
-
 	text-align: center;
 	color:$error;
-	height: 10px;
 }
 
 .pass-msg{
 	cursor: pointer;
 	text-align: center;
-	color:$accent-color;
+	color: $gray;
 	height: 10px;
 
 	&:hover{
@@ -21,4 +17,52 @@
 }
 
 
+#alert-dialog-title{
+	color: $black;
+	font-weight: bold;
+	font-size: 1.5rem;
 
+}
+
+
+.dialog-inner{
+	display: block;
+	margin: auto;
+	width: 400px;
+
+
+
+	a{
+		color:$accent-color;
+		&:hover{
+			color: $primary-color;
+		}
+	}
+}
+
+.dialog-content{
+	line-height: 1.4;
+	margin-top: -20px;
+	padding: 0px 25px;
+	color: gray;
+}
+
+
+
+.create-terms{
+	line-height: 1.8;
+display: block;
+margin:auto;
+width: 85%;
+font-size: 0.8rem;
+text-align: center;
+color: gray;
+
+a{
+	color:$accent-color;
+
+	&:hover{
+		color: $primary-color;
+	}
+}
+}

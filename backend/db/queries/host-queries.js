@@ -14,11 +14,12 @@ const getHost = () => {
 };
 
 const searchHost = (values) => {
-console.log('vals', values)	
+
 	const text = `
-	SELECT host, first_name, last_name, city, bio, image, day_rate, social_link, public_key
+	SELECT host, first_name, last_name, email, city, bio, image, day_rate, social_link, connect_id, customer_id, public_key
 	FROM users
 	WHERE host IS NOT FALSE
+	AND customer_id IS NOT NULL
 	ORDER BY $1;`;
 
 	return db

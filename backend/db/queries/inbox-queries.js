@@ -3,10 +3,9 @@ const db = require('../../lib/db.js');
 const getInbox = values => {
 
 	const text = `
-	SELECT bookings.id, bookings.start_time, bookings.end_time, bookings.name as user_name, bookings.city as user_city, bookings.image as user_img, users.first_name as host_first_name, users.last_name as host_last_name, users.city as host_city, users.image as host_img, bookings.host_key, bookings.user_key
+	SELECT bookings.id, bookings.start_time, bookings.end_time,
+	bookings.host_key, bookings.host_name, bookings.host_email, bookings.host_city, bookings.host_image, bookings.user_key, bookings.user_name, bookings.user_email, bookings.user_image, bookings.status
 	FROM bookings
-	JOIN users
-	ON bookings.host_key = users.public_key
 	WHERE bookings.user_key = $1
 	AND bookings.color != 'black'
 	AND bookings.stamp >= NOW()
@@ -25,13 +24,16 @@ const getInbox = values => {
 const deleteInboxItem = values => {
 	
 	const text = `
-	DELETE FROM bookings
-	WHERE id = $1
-	RETURNING *`;
+		UPDATE bookings
+		SET status = 'Cancelled'
+		WHERE id = $1
+		RETURNING *;`;
+	
+
 
 	return db
 		.query(text, values)
-		.then((res) => res.rows)
+		.then((res) => res.rows[0])
 		.catch((err) => console.log(`Error at inbox queries 'getInbox'`, err));
 };
 

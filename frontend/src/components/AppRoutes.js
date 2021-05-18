@@ -21,6 +21,7 @@ import EditProfile from "./EditProfile";
 import Bookings from "./Bookings";
 import Scheduler from "./Scheduler";
 import Chat from "./Chat";
+import Connect from "./Connect";
 
 
 function AppRoutes() {
@@ -28,7 +29,12 @@ function AppRoutes() {
 
   const {user, setUser} = useContext(UserContext);
   
+  
+  
+
   useEffect(() => {
+
+
     const uid = localStorage.getItem('locals-uid');
 
     if(!user && uid){
@@ -157,7 +163,10 @@ function AppRoutes() {
             nav={true}
             action={null}
            /> 
-            <Bookings {...props} />
+        
+           <Bookings {...props} />
+         
+            
             </>
           )}
           >
@@ -223,6 +232,16 @@ function AppRoutes() {
           </Route>
             
           
+          <Route exact path="/connect">
+        
+        <NavBar
+      logo={true}
+      title={null}
+      nav={false}
+      action={null}
+      />
+      <Connect />
+    </Route>
 
          
         </Switch>

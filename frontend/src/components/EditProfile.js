@@ -1,8 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
-
 import axios from 'axios';
+import Loading from './Loading';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,6 +18,8 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 
+import DynamicDialog from './DynamicDialog';
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
@@ -26,6 +29,13 @@ function EditProfile() {
 
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
+
+  const [dialog, setDialog] = useState({
+    open: false,
+    title: null,
+    content: null
+  })
 
   const [input, setInput] = useState({
     host: user ? user.host : false,
@@ -106,22 +116,48 @@ function EditProfile() {
       errorMsg: null
     })
 
-    if(input.bio.length > 250){
-      return setError((prev) => ({
-        ...prev,
-        bio: true,
-        errorMsg: 'Your bio must be 250 characters of less'
-      }));
-    }
+    
    
 
     return editUserProfile();
   };
 
 
+  const checkHostDetails = () => {
+
+    const id = user.connect_id;
+    
+    
+    axios.get(`/api/stripe/${id}`)
+    .then(res => {
+  
+    // console.log('HOST',res.data)
+  
+    if(res.data.details_submitted){ // <-- stripe connect details 
+      
+      return validateEditHost();
+  
+    } 
+
+    setDialog({
+      open: true,
+      title: 'Transactions',
+      content: <p>
+        We couldn't find your payment details.  This is either because your session has timed out or you did not complete your Stripe onboarding.
+        In order to be a Local Host you must be able to except payments from your booked clients.<br></br><br></br>  Locals App uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+      </p>
+    })
+
+  
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
 
   const validateEditHost = () => {
-
+   
     for (const item in mandatory) {
 
       setError({
@@ -135,7 +171,7 @@ function EditProfile() {
      
         if (mandatory[item] === null || mandatory[item] === undefined | mandatory[item] === 0) {
 
-          console.log(item)
+        
           return setError((prev) => ({
             ...prev,
             [item]: true,
@@ -145,9 +181,36 @@ function EditProfile() {
 
       }
 
+    if(Number(input.day_rate) > 999){
+      return setError((prev) => ({
+        ...prev,
+        day_rate: true,
+        errorMsg: 'You may be good, but your not that good.'
+      }));
+
+    }
+
+    if(input.city.length > 35){
+      return setError((prev) => ({
+        ...prev,
+        city: true,
+        errorMsg: 'Please find a more concise way to display your location.'
+      }));
+
+    }
+
+    if(input.social_link.length > 100){
+      return setError((prev) => ({
+        ...prev,
+        social_link: true,
+        errorMsg: 'Invalid social link'
+      }));
+
+    }
     
 
     if(input.bio.length > 250){
+    
       return setError((prev) => ({
         ...prev,
         bio: true,
@@ -162,7 +225,7 @@ function EditProfile() {
 
 
   const editUserProfile = () => {
-
+   
     const host = value === "Yes" ? true : false;
 
     const update = {
@@ -175,10 +238,11 @@ function EditProfile() {
       email: user.email,
     }
 
+    setLoading(true);
     axios.patch(`/api/users/edit`, { update }).then((res) => {
 
       // console.log(res.data);
-
+      setLoading(false);
       if (res.data === false) {
         const msg = 'Invalid Credentials';
         const cc = 'edit-snackbar-error';
@@ -191,8 +255,9 @@ function EditProfile() {
       const cc = 'edit-snackbar';
       return handleSnack(TransitionUp, msg, cc);
 
-
+    
     }).catch((err) => {
+      setLoading(false);
       const msg = 'Something went wrong 😧';
       const cc = 'edit-snackbar-error';
       handleSnack(TransitionUp, msg, cc);
@@ -207,7 +272,7 @@ function EditProfile() {
   const save = () => {
 
     if (value === 'Yes') {
-      validateEditHost();
+      checkHostDetails();
     } else {
       validateEditTraveller();
     }
@@ -236,19 +301,15 @@ function EditProfile() {
       
     }
 
-    const msg = 'Saving...';
-      const cc = 'edit-snackbar-error';
-      handleSnack(TransitionUp, msg, cc);
-    //sets image locally
     setImg((URL.createObjectURL(file)))
-
+    
     const FD = new FormData();
     FD.append("image", file);
     FD.append("ref", user.image);
     FD.append("uid", localStorage.getItem('locals-uid'));
     FD.append("email", user.email);
 
-
+    setLoading(true);
     axios.post('/api/users/editImg', FD, {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -256,7 +317,9 @@ function EditProfile() {
     })
       .then((res) => {
         
-        if (res === false){
+        setLoading(false);
+
+      if (res === false){
       const msg = 'Failed to upload image.';
       const cc = 'edit-snackbar-error';
       handleSnack(TransitionUp, msg, cc);
@@ -267,7 +330,11 @@ function EditProfile() {
       const cc = 'edit-snackbar';
       handleSnack(TransitionUp, msg, cc);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        const msg = 'Failed to upload image.';
+        const cc = 'edit-snackbar-error';
+        handleSnack(TransitionUp, msg, cc);
+      });
   }
 
 
@@ -287,14 +354,72 @@ function EditProfile() {
     const [value, setValue] = useState('No');
 
     const handleChange = (event) => {
+
+      setError({
+        city: false,
+        bio: false,
+        day_rate: false,
+        errorMsg: null
+      })
+     
+      if(!user.connect_id){
+     
+        setDialog({
+          open: true,
+          title: 'Transactions',
+          content: <p>
+            In order to be a Local Host you must be able to except payments from your clients.<br></br><br></br>Locals App uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+          </p>
+        })
+
+       
+       return;
+    
+      }
+
       setValue(event.target.value);
+     
     };
+
+    const closeDynamicDialog = () => {
+      setDialog({
+        open:false,
+        title: null,
+        content:null
+      })
+    }
+
+    const stripeOnboarding = () => {
+
+      const input = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        password: null
+       //password required < -------------------TODO
+      }
+
+      setLoading(true);
+    
+      axios.post(`/api/stripe/createAccountLink`, {input})
+      .then(res => {
+    
+      // console.log(res.data)
+      setLoading(false);
+      localStorage.setItem('connect-id', res.data.id);
+      window.open(res.data.link.url);
+    
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    }
   
     
   
   
   const hourly_rate = <div>
-    <h3>Mandatory for Host</h3>
+    <h3>Required</h3>
       <TextField
           margin="dense"
           id="hourly_rate"
@@ -312,42 +437,16 @@ function EditProfile() {
         />
   </div>
   
-  
-  
-    const host_info =
-      <div className={value === 'Yes' ? 'edit-host-info' : null}>
-        
-      
-        {value === 'Yes' ? hourly_rate : null}
-  
-  
-  <TextField
-  
-  margin="dense"
-  id="city"
-  error={error.city}
-  label="Hometown"
-  type="text"
-  variant='outlined'
-  fullWidth
-  
-  value={input.city ? input.city : ''}
-  onChange={(event) => setInput((prev) => ({
-    ...prev,
-    city: event.target.value
-  }))}
-  />
-  
-  
-  
-  <TextField
+
+  const bio = <div>
+    <TextField
   className='edit-bio'
   margin="dense"
   id="bio"
   error={error.bio}
   multiline
-  rows={4}
-  label="Bio (300 char. limit)"
+  rows={8}
+  label="Bio (250 char. limit)"
   type="text"
   variant='outlined'
   fullWidth
@@ -359,11 +458,40 @@ function EditProfile() {
   }))}
   />
   <div className='edit-char-count'>
-  <p>{input.bio ? `remaining: ${300 - input.bio.length}` : `remaining: 300`}</p>
+  <p className={input.bio && 250 - input.bio.length < 0 ? 'char-err-text' : 'char-ok-text'}>{input.bio ? `remaining: ${250 - input.bio.length}` : `remaining: 300`}</p>
   
   </div>
+</div>
   
+  
+    const host_info =
+      <div className={value === 'Yes' ? 'edit-host-info' : null}>
+        
+      
+  {value === 'Yes' ? hourly_rate : null}
+  
+  
+  <TextField
+  
+  margin="dense"
+  id="city"
+  error={error.city}
+  label="Location"
+  type="text"
+  variant='outlined'
+  fullWidth
+  
+  value={input.city ? input.city : ''}
+  onChange={(event) => setInput((prev) => ({
+    ...prev,
+    city: event.target.value
+  }))}
+  />
+  
+  {value === 'Yes' ? bio : null}
       </div>
+
+
 
 
 const social = <div>
@@ -383,6 +511,7 @@ const social = <div>
         }))}
       />
     </div>
+
 
 
   //snackbar anim
@@ -414,7 +543,7 @@ const social = <div>
         ...prev,
        snackbar: false
       }));
-    }, 5000)
+    }, 8000)
   
   }
 
@@ -422,31 +551,36 @@ const social = <div>
     setOpen(false);
   };
 
+
+
+
   const logout = () => {
+    
     const public_key = user.public_key;
     localStorage.clear();
     setUser(null);
 
+    setLoading(true);
     axios.patch(`/api/users/logout`, {public_key})
     .then(res => {
 
     // console.log(res.data)
+    setLoading(false)
     return history.push('/'), [history];
 
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false)
       return history.push('/'), [history];
     });
 
    
   }
 
-const isHost = value === 'Yes' ? true : null;
 
   return (
     <div>
-      
+      {loading ? <Loading/> : null}
       <DialogContent>
 
         <div className='edit-header'>
@@ -476,7 +610,7 @@ const isHost = value === 'Yes' ? true : null;
                 className='radio-title'
               >I am a local host</FormLabel>
               <RadioGroup aria-label="Host" name="Host" value={value} onChange={handleChange}>
-                <FormControlLabel value='Yes' control={<Radio />} label="Yah!" />
+                <FormControlLabel  value='Yes' control={<Radio />} label="Yah!" />
                 <FormControlLabel value='No' control={<Radio />} label="Nah" />
               </RadioGroup>
             </FormControl>
@@ -494,30 +628,35 @@ const isHost = value === 'Yes' ? true : null;
         />
         </div> 
         </div>
-        
 
-
-      
         {host_info}
-        {user ? social : null}
+        {social}
 
-
-
-        <div className='create-err-msg'>
+        <div className='err-msg'>
           <h4>{error.errorMsg}</h4>
         </div>
 
 
-      </DialogContent>
-      <DialogActions>
-        
-        <Button onClick={() => save()} color="primary">
+      </DialogContent >
+      <DialogActions className='full-length-btn'>
+       
+        <button onClick={() => save()} >
           Save
-        </Button>
+        </button>
+      
+       
       </DialogActions>
 
     <div className='edit-logout'><button onClick={() => logout()}>logout</button></div>
       
+
+      <DynamicDialog
+      open={dialog.open}
+      close={closeDynamicDialog}
+      title={dialog.title}
+      content={dialog.content}
+      action={stripeOnboarding}
+      />
 
 <div className={open.class}>
 

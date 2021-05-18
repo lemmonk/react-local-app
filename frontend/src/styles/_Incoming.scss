@@ -1,0 +1,45 @@
+@import './variables.scss';
+
+
+.incoming-wrapper{
+	display:block;
+	margin: auto;
+	width: 95%;
+}
+
+.incoming-content{
+
+	display:block;
+	margin: auto;
+	margin-top: 50px;
+	width: 100%;
+
+	p{
+		line-height: 1.4;
+		text-align: center;
+		color: $gray;
+		font-size: 1.3rem;
+	}
+}
+
+
+.incoming-action{
+
+	width: 100%;
+
+	button{
+		display: block;
+		margin: auto;	
+		margin-top: 0px;
+		width: 85%;
+		font-size: 1.2rem;
+		color: white;
+		background-color: $accent-color;
+		padding: 12px 0px;
+		border-radius:5px;
+
+		&:hover{
+			background-color:$primary-color
+		}
+	}
+}

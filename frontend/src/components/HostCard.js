@@ -39,12 +39,18 @@ const rating =  <div>
 <StarIcon className={props.rating > 14 ? 'star-lite' : 'star-dim'}/>
 </div>
 
+
 const hostInfo = {
   name: props.name,
+  email: props.email,
   city: props.city,
   image: props.image,
+  price: props.day_rate,
+  connect_id: props.connect_id,
+  customer_id: props.customer_id,
   public_key: props.public_key
 }
+
 
 const link = props ? props.social_link : null;
 
@@ -59,9 +65,9 @@ const link = props ? props.social_link : null;
         <img src={props.image ? `${server}${props.image}`: '/images/user.png'} alt='img'/>
         </div>
         <div className='host-header-left'>
-        <h3>{props.name}</h3>
-        <h3>{props.city}</h3>
-        <h3>{`$${props.day_rate}/hour`}</h3>
+        <h2>{props.name}</h2>
+        <p>{props.city}</p>
+        <p>{`$${props.day_rate}/hour`}</p>
         </div>
       </div>
 

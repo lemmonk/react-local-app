@@ -17,31 +17,14 @@ const createUser = (values) => {
 	
 const text = `
 INSERT INTO users
-(first_name, last_name, email, phone, public_key, secret_key, uid, password) 
-VALUES($1, $2, $3, $4, $5, $6, $7, $8)
-RETURNING *;`;
+(first_name, last_name, email, public_key, secret_key, uid, password) 
+VALUES($1, $2, $3, $4, $5, $6, $7)
+RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
 
 return db.query(text, values)
 .then((res) => {
 
-	const profile = {
-		public_key: res.rows[0].public_key,
-		host: res.rows[0].host,
-		image: res.rows[0].image,
-		first_name: res.rows[0].first_name,
-		last_name: res.rows[0].last_name,
-		email: res.rows[0].email,
-		phone: res.rows[0].phone,
-		city: res.rows[0].city,
-		bio: res.rows[0].bio,
-		day_rate: res.rows[0].day_rate,
-		uid: null,
-		verified: res.rows[0].verified,
-	}
-
-	
-
-	return profile;
+	return res.rows[0];
 })
 .catch((err) =>{
 
@@ -98,7 +81,7 @@ const updateUid = (values, uid) => {
 		UPDATE users
 		SET uid = $1
 		WHERE email = $2
-		RETURNING *;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)
@@ -115,6 +98,8 @@ const updateUid = (values, uid) => {
 				city: res.rows[0].city,
 				bio: res.rows[0].bio,
 				day_rate: res.rows[0].day_rate,
+				connect_id: res.rows[0].connect_id,
+				customer_id: res.rows[0].customer_id,
 				uid: uid,
 				verified: res.rows[0].verified,
 			}
@@ -150,7 +135,7 @@ const recoverPassword = (values) => {
 		WHERE email = $1`;
 		
 		return db.query(text, values)
-		.then((res) =>res.rows[0])
+		.then((res) => res.rows[0])
 		.catch((err) =>{
 		console.log(err);
 		})
@@ -194,30 +179,47 @@ const editUser = values => {
 		UPDATE users
 		SET host = $1, city = $2, bio = $3, day_rate = $4, social_link = $5
 		WHERE public_key = $6
-		RETURNING *;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)
 		.then((res) => {
 
-			const profile = {
-				public_key: res.rows[0].public_key,
-				host: res.rows[0].host,
-				image: res.rows[0].image,
-				first_name: res.rows[0].first_name,
-				last_name: res.rows[0].last_name,
-				email: res.rows[0].email,
-				phone: res.rows[0].phone,
-				city: res.rows[0].city,
-				bio: res.rows[0].bio,
-				day_rate: res.rows[0].day_rate,
-				social_link: res.rows[0].social_link,
-				verified: res.rows[0].verified,
-			}
-
-			return profile;
+			return res.rows[0];
 		})
 		.catch((err) => console.log(`Error at users queries 'EDIT'`, err));
+};
+
+const connectHost = values => {
+
+	const text = `
+		UPDATE users
+		SET connect_id = $1, customer_id = $2
+		WHERE email = $3
+		RETURNING public_key, host, first_name, last_name, email, connect_id, customer_id, verified;`;
+
+	return db
+		.query(text, values)
+		.then((res) => {
+
+			return res.rows[0];
+		})
+		.catch((err) => console.log(`Error at users queries 'CONNECT HOST'`, err));
+};
+
+
+const createCustomer = values => {
+
+	const text = `
+		UPDATE users
+		SET customer_id = $1
+		WHERE email = $2
+		RETURNING *;`;
+
+	return db
+		.query(text, values)
+		.then((res) => res.data)
+		.catch((err) => console.log(`Error at users queries 'CREATE CUSTOMER'`, err));
 };
 
 const editUserImg = values => {
@@ -226,27 +228,13 @@ const editUserImg = values => {
 		UPDATE users
 		SET image = $1
 		WHERE public_key = $2
-		RETURNING *;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)
 		.then((res) => {
 
-			const profile = {
-				public_key: res.rows[0].public_key,
-				host: res.rows[0].host,
-				image: res.rows[0].image,
-				first_name: res.rows[0].first_name,
-				last_name: res.rows[0].last_name,
-				email: res.rows[0].email,
-				phone: res.rows[0].phone,
-				city: res.rows[0].city,
-				bio: res.rows[0].bio,
-				day_rate: res.rows[0].day_rate,
-				verified: res.rows[0].verified,
-			}
-
-			return profile;
+			return res.rows[0];
 		})
 		.catch((err) => console.log(`Error at users queries 'EDIT IMG'`, err));
 };
@@ -283,8 +271,7 @@ const logoutUser = values => {
 	const text = `
 		UPDATE users
 		SET uid = $1
-		WHERE public_key = $2
-		RETURNING *;`;
+		WHERE public_key = $2;`;
 
 	return db
 		.query(text, values)
@@ -307,6 +294,8 @@ module.exports = {
 	sessionUser,
 	updateUid,
 	editUser,
+	connectHost,
+	createCustomer,
 	editUserImg,
 	validateUser,
 	logoutUser

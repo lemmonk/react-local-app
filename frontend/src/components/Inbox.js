@@ -4,7 +4,6 @@ import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import InboxCard from './InboxCard';
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -12,9 +11,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
-
-import NavBar from './NavBar';
-
+import Loading from './Loading';
 
 
 function TransitionUp(props) {
@@ -26,8 +23,14 @@ function Inbox(props) {
 
   const {user} = useContext(UserContext);
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
+
   const [inbox, setInbox] = useState(null);
-  const [identifier, setIdentifier] = useState(null);
+  const [identifier, setIdentifier] = useState({
+    id: null,
+    name: null,
+    email: null,
+  });
   const [refresh, setRefresh] = useState(false);
 
 
@@ -37,19 +40,22 @@ function Inbox(props) {
     window.scrollTo(0, 0);
     if(!user)return history.push('/'),[history];
     
-   
+  
     const input = {
       id: user.public_key
     }
   
+    setLoading(true);
     axios.post(`/api/inbox/get`, {input})
     .then(res => {
     // console.log(res.data)
+    setLoading(false);
       setInbox(res.data);
 
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false);
+      //quiet error
     });
 
   },[refresh]);
@@ -58,25 +64,30 @@ function Inbox(props) {
   const confirmDelete = () => {
 
     const input = {
-      id: identifier,
+      id: identifier.id,
+      name: `${user.first_name} ${user.last_name}`,
       email: user.email,
+      other_name: identifier.name,
+      other_email: identifier.email,
       uid: localStorage.getItem('locals-uid')
     }
-   
+    
+    setLoading(true);
     axios.post(`/api/inbox`, { input })
     .then(res => {
     // console.log(res.data)
 
-    if(res.data.length > 0){
+    if(res.data == input.id){
+      setLoading(false);
       triggerUseEffect();
-
-      const msg = "Booking deleted!";
+      const msg = `Deleted.  A cancellation email has been sent to ${input.other_name}.`;
       const cc = 'calendar-snackbar';
      
       handleSnack(TransitionUp, msg, cc);
      
 
     } else {
+      setLoading(false);
       const msg = "Failed to deleted booking.";
       const cc = 'calendar-snackbar-error'
       handleSnack(TransitionUp, msg, cc);
@@ -86,7 +97,10 @@ function Inbox(props) {
 
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false);
+      const msg = "Failed to deleted booking.";
+      const cc = 'calendar-snackbar-error'
+      handleSnack(TransitionUp, msg, cc);
     });
     
   }
@@ -110,13 +124,17 @@ function Inbox(props) {
     class: 'celendar-snackbar'
   });
 
-  const openConfirm = id => {
+  const openConfirm = other => {
     setOpen((prev) => ({
       ...prev,
       dialog:true,
       snackbar:false
     }));
-    setIdentifier(id);
+    setIdentifier({
+      id: other.id,
+      name: other.name,
+      email: other.email,
+    });
   };
 
   const handleClose = () => {
@@ -155,10 +173,18 @@ function Inbox(props) {
 const inboxCard = inbox ? inbox.map((box, index) => {
 
   let style = 'inbox-card-wrapper';
-  let status = 'Travelling';
-  let image = box.host_img;
-  let name = `${box.host_first_name} ${box.host_last_name}`;
-  let city = box.host_city;
+  let type = 'Travelling';
+  let host_image = box.host_image;
+  let user_image = box.user_image;
+  let host_name = box.host_name;
+  let user_name = box.user_name;
+  let host_city = box.host_city;
+
+  let other = {
+    id: box.id,
+    name: box.host_name,
+    email: box.host_email,
+  }
 
   let f_keys = {
    
@@ -168,11 +194,15 @@ const inboxCard = inbox ? inbox.map((box, index) => {
 
  if(box.host_key === user.public_key){
     style = 'inbox-card-wrapper-host';
-    status = 'Hosting';
-    image = box.user_img;
-    name = box.user_name;
-    city = box.host_city;
+    type = 'Hosting';
+ 
 
+    other = {
+      id: box.id,
+      name: box.user_name,
+      email: box.user_email,
+    }
+   
     f_keys = {
      
       host_key: box.host_key,
@@ -180,22 +210,27 @@ const inboxCard = inbox ? inbox.map((box, index) => {
     }
  } 
 
-
-
+ const status_style = box.status === 'Cancelled' ? 'inbox-status-cancelled' : 'inbox-status-pending';
+ 
 
   return (
     <InboxCard
     key={index}
     id={box.id}
     style={style}
-    image={image}
-    name={name}
-    city={city}
-    status={status}
+    host_image={host_image}
+    host_name={host_name}
+    user_name={user_name}
+    user_image={user_image}
+    city={host_city}
+    status={box.status}
+    status_style={status_style}
+    type={type}
     date={box.start_time.substring(0,10)}
     start={`${box.start_time.substring(11,16)}h`}
     end={`${box.end_time.substring(11,16)}h`}
     f_keys={f_keys}
+    other={other}
     open={openConfirm}
     />
   )}
@@ -204,6 +239,7 @@ const inboxCard = inbox ? inbox.map((box, index) => {
 
 
 const isSearched = () => {
+ 
   if(props.location.state.detail && inboxCard){
 
     for (const card of inboxCard){
@@ -217,32 +253,37 @@ const isSearched = () => {
 }
 
 const searchedCard = isSearched();
-const inboxReady = inbox ? inboxCard : null;
+const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-inbox'>Inbox Empty</h3>;
 
   return (
-    <section >
 
- 
-
+  <section>
+    {loading ? <Loading/> : null}
     {searchedCard ? searchedCard : inboxReady}
 
      <Dialog className='search-dialog' open={open.dialog} onClose={handleClose} aria-labelledby="form-dialog-title">
         
         <DialogContent>
+          <h2>Cancel Booking</h2>
           <DialogContentText>
-            Are you sure you want to delete this booking?  This action cannot be undone.
+            Are you sure you want to cancel this booking?  This action cannot be undone and will notify the other party of your departure from your agreement.
           </DialogContentText>
         </DialogContent>
-        <DialogActions>
-        <Button onClick={() => handleClose()} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => confirmDelete()} color="primary">
-            Delete
-          </Button>
+        <DialogActions className='full-length-btn-destroy'>
+          <button onClick={() => confirmDelete()} >
+            Cancel Booking
+          </button>
         </DialogActions>
+
+        <DialogActions className='plain-btn'>
+          <button onClick={() => handleClose()} >
+            No thanks
+          </button>
+        </DialogActions>
+
       </Dialog>
 
+     
 
         {/* snackbar update */}
   <div className={open.class}>

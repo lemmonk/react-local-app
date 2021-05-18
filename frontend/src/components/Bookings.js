@@ -3,7 +3,7 @@ import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import Calendar from 'react-awesome-calendar';
-import NavBar from './NavBar';
+
 
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -18,18 +18,25 @@ import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 
 
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+import CheckoutForm from './CheckoutForm';
+
 
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
 function Bookings(props) {
+  
+
+
 
   const {user} = useContext(UserContext);
   const history = useHistory();
   const [bookings, setBookings] = useState({
     state: [],
-    identifier: props.location.state.detail.public_key
+    identifier: props.location.state.detail.public_key,
   });
 
   const [currentBooking, setCurrentBooking] = useState({
@@ -44,16 +51,45 @@ function Bookings(props) {
     formattedEndDate: null,
     duration: 0,
     next: false,
+    stripePromise: loadStripe('',{
+      stripeAccount: props.location.state.detail.connect_id
+    })
   })
 
   const [refresh, setRefresh] = useState(false);
 
+  const highlightLocalDay = (mode) => {
+  
+    const d = new Date();
+    const currentDay = d.getDate();
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const sameMonth = mode && Number(mode.month) <= month;
+    const sameYear = mode && Number(mode.year) <= year;
+    const allSpans = document.querySelectorAll(".dayText");
+   
+      for (const span of allSpans){
+
+        if(!mode && span.innerText == currentDay){
+          span.classList.add('currentDay');
+        
+        } else if(sameMonth && sameYear && span.innerText == currentDay){
+          span.classList.add('currentDay');
+        
+        } else {
+          span.classList.remove('currentDay');
+
+        }
+    }
+
+  }
+  
   const uiManipulation = mode => {
     window.scrollTo(0, 0);
+    highlightLocalDay(mode);
     const allButtons = document.querySelectorAll("button");
     const d = new Date();
     const currentMonth = d.getMonth();
-    
     
     allButtons[1].innerHTML = '';
     allButtons[0].style.display = 'none';
@@ -61,7 +97,6 @@ function Bookings(props) {
     
     if(!mode || mode.mode === 'monthlyMode'){
     
-     
       allButtons[3].style.display = 'block';
       allButtons[4].style.display = 'block';
    
@@ -76,11 +111,16 @@ function Bookings(props) {
     
       allButtons[3].style.display = 'block';
       allButtons[4].style.display = 'block';
+     
 
-    } else if (mode.month - currentMonth >= 2 || mode.month < currentMonth){
+    } else if (mode.month - currentMonth > 1){
 
-     return history.push('/feed'),[history]; 
+      allButtons[4].style.display = 'none';
+    }
 
+
+    if (mode && mode.month - currentMonth > 2 || mode &&  mode.month - currentMonth < 0){
+      return history.push('/'),[history];
     }
 
 
@@ -90,11 +130,13 @@ function Bookings(props) {
       allButtons[4].style.display = 'none';
 
     }
+   
 	};
 
+
  
-  // const id = props.location.state.detail.public_key;
   useEffect(() => {
+  
    
     uiManipulation(null);
 
@@ -102,11 +144,13 @@ function Bookings(props) {
     return history.push('/create'),[history];
     
     if(!user)return history.push('/'),[history];
-    
+  
+
+
     const input = {
       id: bookings.identifier
     }
-
+    
     axios.post(`/api/bookings/get`, {input})
     .then(res => {
     
@@ -122,16 +166,15 @@ function Bookings(props) {
 
   },[refresh]);
 
-
   //format booking to be read by calendar component
   const events = bookings ? bookings.state.map(each =>{
 
     return {
       id: each.id,
-      color: each.color,
+      color: 'black',
       from: each.start_time,
       to: each.end_time,
-      title: each.title
+      title: 'N/A'
 
     }
 
@@ -243,33 +286,75 @@ const setDuration = duration => {
 
 };
 
-const onNext = () => {
-//TODO Show payment modal...    <--------------------------------
 
-  return createBooking();
+//STRIPE PAYMENTS
+
+const [pay, setPay] = useState({
+ 
+  price: 0,
+  open: false
+});
+
+const closePay = () => {
+  setPay({
+   
+    price: 0,
+    secret: null,
+    open:false
+  })
 }
 
 
-const createBooking = () => {
 
+
+const openStripeCheckout = () => {
+
+const duration = Number(currentBooking.duration);
+const price = Number(props.location.state.detail.price) * duration;
+
+  setPay((prev) => ({
+    ...prev,
+   price: price,
+   open: true
+  }));
+  
+  setOpen((prev) => ({
+    ...prev,
+  dialog: false
+  }));
+}
+
+
+
+
+
+const createBooking = () => {
  
+  const host = props.location.state.detail;
+
   const input = {
-    host_key: currentBooking.ref,
+    host_key: host.public_key,
+    host_name: host.name,
+    host_email: host.email,
+    host_city: host.city,
+    host_image: host.image,
     user_key: user.public_key,
-    name: `${user.first_name} ${user.last_name}`,
-    city: user.city,
-    image: user.image,
-    title:'Hosting Booking',
+    user_name: `${user.first_name} ${user.last_name}`,
+    user_email: user.email,
+    user_city: user.city,
+    user_image: user.image,
+    status: 'Upcoming',
+    amount: pay.price,
+    title:'Hosting',
     color:'#5f8aff',
     start: currentBooking.formattedStartDate,
     end: currentBooking.formattedEndDate,
     stamp: currentBooking.formattedStartDate.substring(0,10),
-    email: user.email,
     uid: localStorage.getItem('locals-uid'),
   }
 
 
-  //TODO create a message chat  
+
   axios.post(`/api/bookings`, { input }).then((res) => {
 
   if(res.data === false){
@@ -280,15 +365,19 @@ const createBooking = () => {
   }
 
    triggerUseEffect();
-   const msg = 'Booking Complete. A confirmation email has been sent to both you and your host.';
+   const msg = 'Success! A notification email has been sent to your host.';
    const cc = 'calendar-snackbar';
-   return handleSnack(TransitionUp, msg, cc);
+  handleSnack(TransitionUp, msg, cc);
   
-    // /return history.push('/inbox'),[history];
-     
+    // console.log(res.data);
+    return history.push({
+      pathname: '/inbox',
+      state: { detail: res.data }
+    }),[history];
+    
     }).catch((err) => {
       console.log(err);
-      const msg = "Something went wrong ";
+      const msg = "Something went wrong 😧";
       const cc = 'calendar-snackbar-error';
       handleSnack(TransitionUp, msg, cc);
     });
@@ -396,21 +485,22 @@ const handleSnack = (Transition, msg, cc) => {
 
 }
 
+// console.log(bookings.stripePromise)
   return (
-   
+    
     <>
     
     <div  className='calendar'>
+  
 
     <Calendar
         events={events}
         onChange={(trig) => openDay(trig)}
         onClickTimeLine={(trig) => openTime(trig)}
-        />   
-
-      <h3>{props.location.state.detail.name ? props.location.state.detail.name: null}</h3> 
-
-      <h3>{props.location.state.detail.city ? props.location.state.detail.city : null}</h3>  
+        />  
+ 
+ <h3>{props ? ` ${props.location.state.detail.name}, ${props.location.state.detail.city}.`: null}</h3> 
+     
 
     <Dialog open={open.dialog} onClose={handleClose} 
     className='calendar-modal'
@@ -418,9 +508,9 @@ const handleSnack = (Transition, msg, cc) => {
             
         <DialogContent>
           
-           <p>Please provide your desired trip duration.</p>
+           <h3>Please provide your desired trip duration.</h3>
           
-          <h3>{currentBooking ? `Start Time: ${currentBooking.hour}:00h` : null}</h3>
+          <p>{currentBooking ? `Start Time: ${currentBooking.hour}:00h` : null}</p>
       
           </DialogContent>
           <FormControl >
@@ -447,12 +537,50 @@ const handleSnack = (Transition, msg, cc) => {
      
        
         <DialogActions>
-          {currentBooking.next ? <Button onClick={() => onNext()} color="primary">Next</Button> : null}
+          {currentBooking.next ? <Button onClick={() => openStripeCheckout()} color="primary">Next</Button> : null}
         </DialogActions>
       </Dialog>
+
     </div>
 
+  
+{/* Stripe element */}
+<Dialog open={pay.open} onClose={closePay} 
+    
+    aria-labelledby="form-dialog-title">
+            
+        <DialogContent id='stripe-modal'>
+        
+        <div className='stripe-price-details'>
+        <h2>Booking Details</h2>
+        {pay.open ? <p>Host: {props.location.state.detail.name}</p> : null}
+        {pay.open ? <p>Location: {props.location.state.detail.city}</p>  : null}
+       {pay.open ?  <p>Date: {currentBooking.formattedStartDate.substring(0,10)}</p> : null}
+       {pay.open ?  <p>Time / Rate: {`${currentBooking.duration} hours @ $${props.location.state.detail.price}`}</p> : null}
+        <p className='stripe-total'>Total Cost: ${pay.price}</p>
+        </div>
 
+
+        
+          {/* Stripe  */}
+      <Elements stripe={currentBooking.stripePromise}>
+      <CheckoutForm
+      connect_id={props.location.state.detail.connect_id}
+      customer_id={user.customer_id}
+      email={user.email}
+      price={pay.price}
+      createBooking={createBooking}
+      />
+     </Elements>
+   
+          
+      
+          </DialogContent>
+         
+         
+      
+      </Dialog>
+    
 
      {/* snackbar update */}
 <div className={open.class}>
@@ -466,7 +594,9 @@ const handleSnack = (Transition, msg, cc) => {
       key={transition ? transition.name : ''}
     />
     </div>
+  
    </>
+
   );
 }
 

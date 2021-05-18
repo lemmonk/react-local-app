@@ -11,11 +11,13 @@ function App() {
 
   return (
     <div className="App">
-  
+ 
+
   <UserContext.Provider value={{user, setUser}}>
     <AppRoutes/>
   </UserContext.Provider>
-  <Footer/>
+   <Footer/>
+  
 
     </div>
   );

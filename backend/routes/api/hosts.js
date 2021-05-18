@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const geoip = require('geoip-lite');
 const {
 	getHost,
 	searchHost,
@@ -14,6 +15,8 @@ router.get('/', (req, res) => {
 
 router.post('/', (req, res) => {
 
+// var geo = geoip.lookup(req.ip);
+
 	const query = req.body.query.search;
 	let search = null;
 	if (query.trim().length > 0) {
@@ -22,7 +25,7 @@ router.post('/', (req, res) => {
 
 	let sortBy = req.body.query.sortBy === 'low' || 
 	req.body.query.sortBy === 'high' 
-	? 'price' :req.body.query.sortBy;
+  ? 'day_rate' : req.body.query.sortBy;
 
 	const values = [sortBy];
 

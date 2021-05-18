@@ -73,6 +73,7 @@ const inboxRouter = require('./routes/api/inbox.js');
 const bookingsRouter = require('./routes/api/bookings.js');
 const chatRouter = require('./routes/api/chat.js');
 const ipRouter = require('./routes/api/ip-address.js');
+const stripeRouter = require('./routes/api/stripe.js');
 
 // Mount all resource routes
 app.use('/api/users', usersRouter);
@@ -81,6 +82,7 @@ app.use('/api/inbox', inboxRouter);
 app.use('/api/bookings', bookingsRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/ip-address', ipRouter);
+app.use('/api/stripe', stripeRouter);
 
 
 // Main routes

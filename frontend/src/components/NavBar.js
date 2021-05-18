@@ -1,5 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
-import  UserContext  from './UserContext';
+import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -13,7 +12,7 @@ function NavBar(props) {
 
   const history = useHistory();
   
-  const [window, setWindow] = React.useState({
+  const [windowState, setWindow] = React.useState({
     anchor: false,
   })
 
@@ -23,7 +22,48 @@ function NavBar(props) {
     history: []
   });
 
+
+//PWA UI
+
+const [os, setOS] = useState(null);
+
+const opSys = () => {
+
+  var userAgent = navigator.userAgent;
+
+  if (/android/i.test(userAgent)) {
+    return "Android";
+}
+
+  if (/iPhone/.test(userAgent) && !window.MSStream) {
+    return "iOS";
+}
+
+ return 'Mobile'
+}
+
+
+const PWA = () => {
+
+  const isInstalled = window.matchMedia('(display-mode: standalone)').matches;
+
+  const supportedOS = /Android/.test(navigator.userAgent) || /iPhone/.test(navigator.userAgent);
+
+   if(!isInstalled && supportedOS){
+  
+    const os = opSys();
+    setOS(os);
+
+   }
+  }
+
+  const mobileApp = <MenuItem onClick={() => console.log("PWA")}>{`${os} App`}</MenuItem>;
+
+
+
   useEffect(() => {
+
+    PWA();
 
     setPrevious(prev => ({
       history: [...prev.history, history.location.pathname]
@@ -97,8 +137,7 @@ function NavBar(props) {
   }
 
 const contactUs = () => {
-
-console.log('how can we help?')
+  window.location.href = "mailto:locals.app@gmail.com?subject=Enquires @ Locals App&body=How can we help?";
 }
   
 
@@ -142,12 +181,16 @@ console.log('how can we help?')
         className='menuModal'
         anchorEl={anchorEl}
         keepMounted
-        open={window.anchor}
+        open={windowState.anchor}
         onClose={handleClose}
       >
+        <MenuItem onClick={() => openInbox()}>Inbox</MenuItem>
         <MenuItem onClick={() => openEdit()}>Profile</MenuItem>
-         <MenuItem onClick={() => openInbox()}>Inbox</MenuItem>
         <MenuItem onClick={() => openSchedule()}>Schedule</MenuItem>
+        {os ? mobileApp : null}
+        <MenuItem></MenuItem>
+        <MenuItem onClick={() => contactUs()}>Contact</MenuItem>
+        
         
       </Menu>
     </div>

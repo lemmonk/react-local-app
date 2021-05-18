@@ -7,6 +7,7 @@ import Loading from './Loading';
 function Confirm() {
 
 const {setUser} = useContext(UserContext);
+
 const history = useHistory();
 const [confirm, setConfirmed] = useState({
   loading: true,
@@ -40,7 +41,7 @@ const isConfirm = url_id => {
   axios.patch('/api/users/confirm', {url_id})
   .then(res => {
    
-    console.log(res.data);
+    // console.log(res.data);
     const confirm = res.data;
     if(confirm.verified){
     
@@ -61,7 +62,9 @@ const isConfirm = url_id => {
     
   })
   .catch(err => {
-    console.log(err);
+    setTimeout(function(){
+      return history.push('/feed'),[history];
+        },6000)
   });
 
 }

@@ -17,8 +17,6 @@
 	left: 0;
 	width: 100% !important;
 
-
-	
 }
 
 .modeButton{
@@ -72,7 +70,7 @@ button{
 
 	&:hover{
 	
-		color: yellow;
+		color: $black;
 	}
 }
 
@@ -94,7 +92,6 @@ button{
 	padding: 10px;
 	margin-bottom: 10px;
 }
-
 
 
 .calendar-modal{
@@ -149,5 +146,70 @@ button{
 }
 
 
+#stripe-modal{
+	width: 300px;
+}
 
+.stripe-wrapper{
+	display: block;
+	margin: auto;
 
+}
+
+.stripe-total{
+	color:$primary-color
+}
+
+.StripeElement {
+	margin-top:5px;
+  height: 20px;
+  padding: 10px 3px;
+  width: 98%;
+  color: #32325d;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus {
+	box-shadow: 0 1px 3px 0 #cfd7df;
+	border-color:$primary-color;
+}
+
+.StripeElement--invalid {
+  border-color:$error;
+}
+
+.stripe-error-msg{
+	p{
+	
+		text-align: center;
+		color: $error;
+	}
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+.stripe-form-wrapper{
+padding: 10px 0px;
+	button{
+		display: block;
+		margin: auto;
+		margin-top: 20px;
+		width: 100%;
+		padding: 12px 0px;
+		color: $white;
+		background-color: $accent-color;
+		font-size: 1.2rem;
+		border-radius: 5px;
+
+		&:hover{
+			background-color: $primary-color;
+		}
+	}
+}

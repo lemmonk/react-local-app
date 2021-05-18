@@ -2,7 +2,6 @@ import React, {useState, useEffect, useContext } from 'react';
 import  UserContext  from './UserContext';
 import axios from 'axios';
 import {useHistory} from 'react-router-dom';
-import Loading from './Loading';
 
 
 function Splash() {
@@ -10,18 +9,16 @@ function Splash() {
   const {setUser} = useContext(UserContext);
   const history = useHistory();
 
-  const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
 
-    setLoading(true)
+   
     const uid = localStorage.getItem('locals-uid');
   
     if (uid) {
     return isSession(uid);
   } 
 
-    setLoading(false);
     localStorage.clear();
     setUser(null);
   
@@ -29,19 +26,26 @@ function Splash() {
 
   const isSession = uid => {
 
+   const esc =  setTimeout(function(){
+      
+        localStorage.clear();
+        setUser(null);
+        return history.push('/'),[history];
+    },12000);
+
     axios.post('/api/users/session', { uid })
     .then(res => {
      
-      // console.log(res.data)
-      setLoading(false);
+    
+      clearTimeout(esc);
 
       if(res.data.verified){
-        setLoading(false);
+       
         setUser(res.data);
         return history.push('/feed'),[history];
 
       } 
-        setLoading(false);
+      
         localStorage.clear();
         setUser(null);
         return history.push('/feed'),[history];
@@ -66,14 +70,22 @@ function Splash() {
 
 
   const splash = <div className='splash'> 
+ 
+  <div className='map-background'>
+    <img
+    className='map-foreground'
+    scale='1'
+    src='https://maps.googleapis.com/maps/api/staticmap?center=Vancouver&zoom=10&size=500x3800&maptype=roadmap&key=AIzaSyBpmIxfal6_kr3Wjvp4kxDXk_vVpu03xSg'></img>
+  </div>
+
     <div className='hook'>
-    <h1>
-    Let a local guide your next trip
-    </h1>
+    <h3>
+    Let a local show you their hometown
+    </h3>
     </div>
     <div className='pitch'>
     <h3>
-     or – be that local. 
+     or – be that local
     </h3>
     </div>
     <div className='call-to-action'>
@@ -83,8 +95,7 @@ function Splash() {
 
   return (
     <section>
-      
-    {loading ? <Loading/> : splash}
+    {splash}
     <div className='divider'></div>
     </section>
   );

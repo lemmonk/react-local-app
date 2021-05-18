@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const nodemail = require('./mailingService/confirmation');
+
 
 const {
 	getInbox,
@@ -34,7 +36,37 @@ router.post('/', (req, res) => {
 				if(result){
 				
 					deleteInboxItem([input.id])
-					.then((data) => res.json(data))
+					.then((data) => {
+				
+						try {
+
+						const details = {
+							from: input.name,
+								to: input.other_name,
+						 email: input.other_email,
+						
+						 host_name: data.host_name,
+						 user_name: data.user_name,
+						 host_city: data.host_city,
+						 date: data.start_time.substring(0,10),
+						 start: data.start_time.substring(11,16),
+						 end: data.end_time.substring(11,16),
+						}
+						
+
+						if(data.id){
+							nodemail.sendCancellation(details)
+						}
+							
+						return	res.json(data.id)
+
+						} catch (error) {
+							console.log(error);
+							return res.json(false);
+						}
+
+						
+					})
 
 				} else {
 					

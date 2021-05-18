@@ -16,10 +16,17 @@ function Loading() {
   const classes = useStyles();
 
   return (
-    <section className="loading">
+    <section className="loading-wrapper">
+
       <div className={classes.root}>
-       
-      <CircularProgress/>
+      
+      <div className='loading'>
+      <CircularProgress
+      
+      className='loadingIcon'
+      />
+      </div>
+     
      
     </div>
     </section>

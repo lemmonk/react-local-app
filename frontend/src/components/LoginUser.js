@@ -9,12 +9,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
+import Loading from './Loading';
 
 function LoginUser() {
 
   const history = useHistory();
   const {setUser} = useContext(UserContext);
+  const [loading, setLoading] = useState(false);
  
   const [input, setInput] = useState({
     email: '',
@@ -73,6 +74,7 @@ function LoginUser() {
 
 
   const loginUser = () => {
+      setLoading(true);
 
       axios.post(`/api/users/login`, { input }).then((res) => {
 
@@ -96,12 +98,14 @@ function LoginUser() {
 
           localStorage.setItem('locals-uid', res.data.uid);
           // console.log(res.data);
+          setLoading(false);
           setUser(res.data);
           return history.push('/feed'),[history];
      
          
         }).catch((err) => {
-          alert('ERROR');
+          setLoading(false);
+          return history.push('/'),[history];
         });
   
   }; 
@@ -113,7 +117,7 @@ function LoginUser() {
       return setError((prev) => ({
         ...prev,
         class: 'pass-msg',
-        errorMsg: 'Send recover email →'
+        errorMsg: 'Send recovery email →'
       }));
     },4000)
 
@@ -144,7 +148,7 @@ function LoginUser() {
 
     axios.post(`/api/users/recovery`, { email }).then((res) => {
 
-      console.log(res.data);
+      // console.log(res.data);
 
         if (res.data === false){
       
@@ -169,7 +173,11 @@ function LoginUser() {
   
   return (
     <div>
-    <DialogTitle id="form-dialog-title">Login</DialogTitle>
+    <DialogTitle>
+      <div id="alert-dialog-title">
+      Login
+      </div>
+     </DialogTitle>
       <DialogContent>
       <DialogContentText>
       Please login to get started.
@@ -208,18 +216,20 @@ function LoginUser() {
            password: event.target.value
            }))}
          />
-        <div className={error.class} onClick={() => openRecovery()}>
+       
+      </DialogContent>
+
+      <DialogActions className='full-length-btn'>
+        
+        <button  onClick={() => validateInput()}>
+          Login
+        </button>
+     
+       
+      </DialogActions>
+      <div className={error.class} onClick={() => openRecovery()}>
         <h4>{error.errorMsg}</h4>
         </div>
-          
-
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={() => validateInput()} color="primary">
-          Login
-        </Button>
-      </DialogActions>
-
      
   </div>
   );
