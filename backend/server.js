@@ -74,6 +74,8 @@ const bookingsRouter = require('./routes/api/bookings.js');
 const chatRouter = require('./routes/api/chat.js');
 const ipRouter = require('./routes/api/ip-address.js');
 const stripeRouter = require('./routes/api/stripe.js');
+const ratingRouter = require('./routes/api/rating.js');
+const cronsRouter = require('./routes/api/crons.js');
 
 // Mount all resource routes
 app.use('/api/users', usersRouter);
@@ -83,7 +85,8 @@ app.use('/api/bookings', bookingsRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/ip-address', ipRouter);
 app.use('/api/stripe', stripeRouter);
-
+app.use('/api/rating', ratingRouter);
+app.use('/api/crons', cronsRouter);
 
 // Main routes
 app.get('/', (req, res) => {

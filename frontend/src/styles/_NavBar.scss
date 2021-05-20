@@ -32,7 +32,8 @@
 	width: 100%;
 
 	h3{
-		font-weight: normal;
+		font-family: cursive;
+		font-weight: bold;
 	}
 
 }
@@ -53,19 +54,33 @@
 	}
 }
 
-.menuModal{
+.nav-title{
+	line-height: 0;
+}
 
+
+.menuModal{
+	
 	background-color: rgba(0,0,0,0.7);
 
 	.MuiMenu-paper{
 		display: flex;
 		justify-content: center;
+		align-items: center;
 		background-color: black;
 		color: white;
-		width: 120px;
+		width: 130px;
 		border-radius: 5px;
+		text-align: center;
 
 		.MuiListItem-root{
+			width: 110px;
+			p{
+				line-height: 0;
+				width: 110px;
+				text-align: left;
+			
+			}
 			&:hover{
 				
 				border-radius: 5px;

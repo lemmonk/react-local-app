@@ -9,19 +9,31 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import { makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme) => ({
+import { withStyles } from '@material-ui/core/styles';
+const InputTextField = withStyles({
   root: {
-    '& .MuiTextField-root': {
-      outlineColor:'pink',
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
     },
   },
-}));
+})(TextField);
 
 function CreateUser() {
   
-  const classes = useStyles();
+
   const {setUser} = useContext(UserContext);
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -99,8 +111,7 @@ function CreateUser() {
 
   const createNewUser = () => {
 
-    setLoading(true);
-
+      setLoading(true);
       axios.post(`/api/users/create`, { input }).then((res) => {
 
   
@@ -152,10 +163,10 @@ function CreateUser() {
       <DialogContent>
       <DialogContentText className='alert-dialog-content'>
     
-     Once you created an account, choose to be a traveller, a host or both.
+    Created an account and choose to be a traveller, a host, or both.
    
     </DialogContentText>
-      <TextField
+      <InputTextField
     
             autoFocus
             margin="dense"
@@ -173,7 +184,7 @@ function CreateUser() {
             }))}
 
           />
-           <TextField
+           <InputTextField
            
             margin="dense"
             id="last_name"
@@ -189,7 +200,7 @@ function CreateUser() {
             last_name: event.target.value
             }))}
           />
-          <TextField
+          <InputTextField
            
             margin="dense"
             id="email"
@@ -207,7 +218,7 @@ function CreateUser() {
           />
 
          
-        <TextField
+        <InputTextField
           autoComplete="new-password"
            margin="dense"
            id="password"
@@ -240,7 +251,7 @@ function CreateUser() {
           <div className='create-terms'>
            
           <p>
-             By continuing you confirm that you have read and agree to our <a href='/'>Terms of Service and Privacy Policy.</a>
+             By continuing you confirm that you have read and agree to our <a href='/terms' target='_blank'>Terms of Service and Privacy Policy.</a>
            </p>
           </div>
      

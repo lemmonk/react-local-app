@@ -21,10 +21,11 @@ function Loading() {
       <div className={classes.root}>
       
       <div className='loading'>
-      <CircularProgress
+      {/* <CircularProgress
       
       className='loadingIcon'
-      />
+      /> */}
+      <div className='main-loader'></div>
       </div>
      
      

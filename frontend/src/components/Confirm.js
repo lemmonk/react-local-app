@@ -3,16 +3,17 @@ import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
 import axios from 'axios';
 import Loading from './Loading';
+import DialogActions from '@material-ui/core/DialogActions';
+
 
 function Confirm() {
+
 
 const {setUser} = useContext(UserContext);
 
 const history = useHistory();
-const [confirm, setConfirmed] = useState({
-  loading: true,
-  confirmed: false
-});
+const [loading, setLoading] = useState(false);
+const [confirm, setConfirmed] = useState(false);
 
 useEffect(() => {
 
@@ -25,58 +26,55 @@ useEffect(() => {
     return isConfirm(url_id);
   }
   
-  
-  localStorage.clear();
   setUser(null);
-  setConfirmed({
-    loading: false,
-    confirmed: false
-  })
+  localStorage.clear();
+  
  
 },[]);
 
 
 const isConfirm = url_id => {
 
+  setLoading(true);
   axios.patch('/api/users/confirm', {url_id})
   .then(res => {
    
     // console.log(res.data);
-    const confirm = res.data;
-    if(confirm.verified){
+    const confirmed = res.data;
+    if(confirmed.verified){
     
-    localStorage.setItem('locals-uid', confirm.uid);
+    localStorage.setItem('locals-uid', confirmed.uid);
    
-    setConfirmed({
-      loading: false,
-      confirmed: true
-    })
+    setLoading(false);
+    setConfirmed(true);
     }
-
-
-   
-   setTimeout(function(){
- return history.push('/feed'),[history];
-   },6000)
-  
-    
+ 
   })
   .catch(err => {
-    setTimeout(function(){
-      return history.push('/feed'),[history];
-        },6000)
-  });
+    setConfirmed(false);
 
+})}
+
+const update = confirm ? "Thank you for confirming your account, you can now book and become a host." : 'Unable to verify your account.';
+
+const onNext = () => {
+
+  return history.push('/feed'),[history];
 }
-
-const update = confirm.confirmed ? "Thank you for confirming your account, you will be redirected momentarily." : 'Unable to verify your account.';
  
   return (
-<section className="splash">
+<section className="incoming-wrapper">
 
-<div className='hook'>
- {confirm.loading ? <Loading/> : update}
+<div className='incoming-content'>
+  <p>
+  {loading ? <Loading/> : update}
+  </p>
 
+ {loading ? null : <DialogActions className='full-length-btn'>
+      <button onClick={() => onNext()} >
+        Next
+      </button>
+    </DialogActions>}
 </div>
 
   

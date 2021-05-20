@@ -106,7 +106,7 @@ const [error, setError] = useState(false);
     <form onSubmit={fetchClientSecret}> 
        <CardElement options={CARD_ELEMENT_OPTIONS} />
      
-      <button disabled={!stripe}>Confirm order</button>
+      <button disabled={!stripe}>Confirm Booking</button>
       <div className='stripe-error-msg'>
       {error ? <p>card error</p> : null}
       </div>

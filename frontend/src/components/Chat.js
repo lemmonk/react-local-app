@@ -8,6 +8,27 @@ import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import socketIOClient from "socket.io-client";
 
+import { withStyles } from '@material-ui/core/styles';
+const ChatTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
+    },
+  },
+})(TextField);
+
 
 function Chat(props) {
   const API = 'http://localhost:8080'; // <--- TEMP
@@ -161,9 +182,12 @@ function Chat(props) {
 <div className='divider'></div>
 
 <div className='chat-input-wrapper'>
+  <div className='chat-input-double-wrap'>
+
+  
 <form className='chat-input-inner'>
 
-<TextField
+<ChatTextField
           id="outlined-multiline-static"
           fullWidth
           label="New Message"
@@ -183,6 +207,7 @@ function Chat(props) {
         </div>
       
 </form>
+</div>
 </div>
 </section>
 

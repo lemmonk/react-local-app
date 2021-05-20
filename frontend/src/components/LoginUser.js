@@ -3,13 +3,33 @@ import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
 
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Loading from './Loading';
+
+import { withStyles } from '@material-ui/core/styles';
+const InputTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
+    },
+  },
+})(TextField);
 
 function LoginUser() {
 
@@ -74,13 +94,14 @@ function LoginUser() {
 
 
   const loginUser = () => {
-      setLoading(true);
 
+      setLoading(true);
       axios.post(`/api/users/login`, { input }).then((res) => {
 
 
           if (res.data === false){
           showPasswordRecovery();
+          setLoading(false);
          return setError((prev) => ({
                 ...prev,
                 email : true,
@@ -126,9 +147,7 @@ function LoginUser() {
 
   const openRecovery = () => {
     if(error.class === 'err-msg')return;
-    // return history.push('/recover'),[history];
    
-    
     if(!input.email.includes('@') || !input.email.includes('.')){
       showPasswordRecovery();
       return setError((prev) => ({
@@ -146,12 +165,13 @@ function LoginUser() {
       password: '',
     }));
 
+    setLoading(true);
     axios.post(`/api/users/recovery`, { email }).then((res) => {
 
       // console.log(res.data);
 
         if (res.data === false){
-      
+          setLoading(false);
           return setError((prev) => ({
                   ...prev,
                   email : true,
@@ -160,11 +180,12 @@ function LoginUser() {
                 }));
         }
 
-
+        setLoading(false);
         return history.push('/recover'),[history];
    
        
       }).catch((err) => {
+        setLoading(false);
         console.log(err);
         return history.push('/'),[history];
       });
@@ -173,6 +194,7 @@ function LoginUser() {
   
   return (
     <div>
+      {loading ? <Loading/> : null}
     <DialogTitle>
       <div id="alert-dialog-title">
       Login
@@ -183,7 +205,7 @@ function LoginUser() {
       Please login to get started.
     </DialogContentText>
      
-          <TextField
+          <InputTextField
           
             margin="dense"
             id="email"
@@ -200,7 +222,7 @@ function LoginUser() {
             }))}
           />
 
-        <TextField
+        <InputTextField
           autoComplete="new-password"
            margin="dense"
            id="password"

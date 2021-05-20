@@ -1,5 +1,6 @@
 const express = require('express');
 const fileupload = require('express-fileupload')
+const path = require('path');
 const fs = require('fs')
 const app = express();
 app.use(fileupload());
@@ -10,6 +11,11 @@ const bcrypt = require('bcrypt');
 const uniqid = require('uniqid');
 const nodemail = require('./mailingService/confirmation');
 
+const {Storage} = require('@google-cloud/storage');
+const storage = new Storage({
+	keyFilename: path.join(__dirname, process.env.SB_PATH),
+	projectId: process.env.SB_ID
+});
 const tinify = require("tinify");
 tinify.key = process.env.TINY_API;
 
@@ -265,12 +271,15 @@ router.patch('/edit', (req, res) => {
 });
 
 
-			
+
+
 
 router.post('/editImg', async (req, res) => {
 
+
 	const file = req.files.image;
-	const ext = req.body.ref !== 'null' ? req.body.ref : `${uniqid()}.jpeg`;
+	// const ext = req.body.ref !== 'null' ? req.body.ref : `${uniqid()}.jpeg`;
+	const ext = `${uniqid()}.jpeg`;
 	const path =  './images/' + ext;
 
 
@@ -280,11 +289,9 @@ router.post('/editImg', async (req, res) => {
       return res.json(false);
     }
 
-		const source = tinify.fromFile(`./images/${ext}`);
-		await source.toFile(`./images/${ext}`);
-	
+
 		validateUser([req.body.email])
-		.then((data) => {
+		.then((data) =>  {
 
 				bcrypt.compare(req.body.uid, data.uid, function(err, result) {
 					
@@ -293,7 +300,39 @@ router.post('/editImg', async (req, res) => {
 						const values = [ext, data.public_key];
 
 							editUserImg(values)
-							.then((data) => res.json(data))
+							.then( async (data) => {
+
+								try {
+
+									const source = tinify.fromFile(`./images/${ext}`);
+									await source.toFile(`./images/${ext}`);
+						
+									const filePath = `./images/${ext}`;
+									const bucketName = 'locals-images';
+						
+									await storage.bucket(bucketName).upload(filePath, {
+										destination: `${ext}`,
+										resumable: false,
+										gzip: true
+									});
+						
+									console.log(`${filePath} uploaded to ${bucketName}`);
+
+									await storage.bucket(bucketName).file(req.body.ref).delete();
+						
+									console.log(`${req.body.ref} deleted from ${bucketName}`);
+
+									fs.unlinkSync(filePath) //<-- blocking function
+						
+									console.log(`File ${filePath} removed`)
+						
+									return res.json(data);
+							
+								} catch (error) {
+									console.log('BUCKET ERROR', error);
+									return res.json(false);
+								}
+							})
 
 					} else {
 

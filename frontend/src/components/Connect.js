@@ -9,8 +9,8 @@ import  UserContext  from './UserContext';
 function Connect() {
   const history = useHistory();
   const [state, setState] = useState(false);
-  const {user} = useContext(UserContext);
-  console.log('USER', user);
+ 
+
 
   useEffect(() => {
 
@@ -25,9 +25,7 @@ if(!id)return;
 
   if(res.data.details_submitted){
     setState(res.data.details_submitted);
-    
- //TODO set local host to true
-
+  
   }
  
 
@@ -41,7 +39,7 @@ const back = () => {
   return history.push('/edit'),[history];
 }
 
-const msg = state ? 'Thank you for connecting your payment details, you may now head back and complete your hosting profile.' : 'It seems you are missing necessary payment details.';
+const msg = state ? 'Thank you for connecting your payment details, you may now head back and complete your hosting profile.' : '...';
 
 
 

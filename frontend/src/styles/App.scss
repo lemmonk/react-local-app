@@ -10,7 +10,9 @@
 @import './Calendar';
 @import './Inbox';
 @import './Chat';
+@import './Pwa';
 @import './Incoming';
+@import './Terms';
 
 
 
@@ -35,6 +37,8 @@ body {
 	background-color: whitesmoke;
 }
 
+
+
 .divider{
 	width: 100%;
 	height: 100px;
@@ -43,6 +47,13 @@ body {
 	
 }
 
+.small-divider{
+	width: 100%;
+	height: 50px;
+	margin: 0;
+	padding: 0;
+	
+}
 
 
 
@@ -99,7 +110,7 @@ body {
 	border-radius:5px;
 
 	&:hover{
-		background-color:whitesmoke;
+		color:$gray;
 	}
 }
 
@@ -110,7 +121,7 @@ body {
 	}
 
 	.App{
-	width: 375px;
+	width: $pixel-width;
 	display: block;
 	margin: auto;
 	background-color: white;

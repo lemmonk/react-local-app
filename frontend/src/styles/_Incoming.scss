@@ -5,14 +5,22 @@
 	display:block;
 	margin: auto;
 	width: 95%;
+	padding: 5px 0px 10px 0px;
+	// border-radius: 5px;
+	// box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
 
 .incoming-content{
 
 	display:block;
 	margin: auto;
-	margin-top: 50px;
+	// margin-top: 50px;
 	width: 100%;
+
+	h2{
+		color: $black;
+		text-align: center;
+	}
 
 	p{
 		line-height: 1.4;

@@ -3,9 +3,11 @@ import axios from "axios";
 import HostCard from "./HostCard";
 import Search from "./Search";
 import Loading from "./Loading";
+import { useHistory } from 'react-router-dom';
 
 function Feed() {
 
+const history = useHistory();
  const [loading, setLoading] = useState(true);
  const [feed, setFeed] = useState({
     hosts: null,
@@ -15,7 +17,7 @@ function Feed() {
 
 
   const onSearch = (query, sort) => {
-  
+    window.scrollTo(0, 0);
     sessionStorage.setItem('locals-search-query', query);
     sessionStorage.setItem('locals-search-sort', sort);
    
@@ -38,8 +40,8 @@ function Feed() {
       search: search,
       sortBy: sort
     }
-    setLoading(true);
 
+    setLoading(true);
     axios.post(`/api/hosts`, {query})
     .then(res => {
 
@@ -55,7 +57,10 @@ function Feed() {
 
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false);
+      //silent error
+      // console.log(err);
+
     });
   
     },[refresh]);
@@ -82,6 +87,7 @@ function Feed() {
           rating={rating}
           connect_id={host.connect_id}
           customer_id={host.customer_id}
+          action={true}
           />
         )
       }
@@ -95,12 +101,12 @@ function Feed() {
   const isQuery = sessionStorage.getItem('locals-search-query');
   const isSorted = sessionStorage.getItem('locals-search-sort');
   let query = isQuery ? sessionStorage.getItem('locals-search-query') : null;
-  let sort = !isSorted || isSorted === 'city' ? 'location' : 'price';
+  let sort = !isSorted || isSorted === 'none' ? 'at random' : 'by price';
 
   if(isQuery){
-    results = `Showing results for ${query} by ${sort}.`;
+    results = `Showing results for ${query}.`;
   } else {
-    results = `Showing host results by ${sort}.`;
+    results = `Showing host results ${sort}.`;
   }
   return results;
 }

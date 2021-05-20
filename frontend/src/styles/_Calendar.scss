@@ -4,6 +4,7 @@
 	position: relative;
 	display: block;
 	margin: auto;
+
 	width: 95%;
 	background-color: white !important;
 	
@@ -70,7 +71,7 @@ button{
 
 	&:hover{
 	
-		color: $black;
+		color: whitesmoke;
 	}
 }
 
@@ -98,6 +99,7 @@ button{
 	display: block;
 	margin: auto;
 	width: 400px;
+	
 }
 
 .calendar-select{
@@ -144,6 +146,8 @@ button{
 	
 	}
 }
+
+
 
 
 #stripe-modal{
@@ -212,4 +216,10 @@ padding: 10px 0px;
 			background-color: $primary-color;
 		}
 	}
+}
+
+.secured-by{
+	width: 100%;
+	text-align: center;
+	color:$gray;
 }

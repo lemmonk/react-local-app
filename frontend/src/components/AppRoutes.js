@@ -17,11 +17,15 @@ import LoginUser from "./LoginUser";
 import Recovery from "./Recovery";
 import Recover from "./Recover";
 import Inbox from "./Inbox";
+import InboxInfo from "./InboxInfo";
 import EditProfile from "./EditProfile";
 import Bookings from "./Bookings";
 import Scheduler from "./Scheduler";
 import Chat from "./Chat";
+import Pwa from "./Pwa";
 import Connect from "./Connect";
+import Rating from "./Rating";
+import Terms from "./Terms";
 
 
 function AppRoutes() {
@@ -51,6 +55,7 @@ function AppRoutes() {
     })
     .catch(err => {
       console.log(err);
+      //silent error
     });
   }
 
@@ -97,8 +102,8 @@ function AppRoutes() {
           <Route exact path="/confirm">
               <NavBar
              logo={true}
-             title='Locals'
-             nav={true}
+             title={null}
+             nav={false}
              action={null}
             />
             <Confirm />
@@ -213,6 +218,22 @@ function AppRoutes() {
           
           </Route>
              
+          
+          <Route exact path="/info"
+          render={(props) => (
+            <>
+            <NavBar
+            logo={false}
+            title={null}
+            nav={false}
+            action='/'
+           /> 
+            <InboxInfo {...props} />
+            </>
+          )}
+          >
+          
+          </Route>
 
           
           <Route exact path="/chat"
@@ -241,6 +262,44 @@ function AppRoutes() {
       action={null}
       />
       <Connect />
+    </Route>
+
+
+      
+    <Route exact path="/rating">
+        
+        <NavBar
+      logo={true}
+      title={null}
+      nav={false}
+      action={null}
+      />
+      <Rating />
+    </Route>
+
+
+    <Route exact path="/pwa">
+            <NavBar
+            logo={false}
+            title={null}
+            nav={false}
+            action={null}
+            />
+
+            <Pwa />
+            
+          </Route>
+
+
+    <Route exact path="/terms">
+        
+        <NavBar
+      logo={true}
+      title={null}
+      nav={false}
+      action={null}
+      />
+      <Terms />
     </Route>
 
          

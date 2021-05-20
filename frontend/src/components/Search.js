@@ -13,6 +13,26 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
+import { withStyles } from '@material-ui/core/styles';
+const SearchTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
+    },
+  },
+})(TextField);
 
 function Search(props) {
 
@@ -31,6 +51,12 @@ function Search(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+
+  
+ 
+
 
 
   return (
@@ -55,7 +81,8 @@ function Search(props) {
           <DialogContentText>
             Find host by location, name, and sorted results.
           </DialogContentText>
-          <TextField
+        
+          <SearchTextField
             autoFocus
             margin="dense"
             id="name"
@@ -67,12 +94,15 @@ function Search(props) {
             value={query ? query : ''}
             onChange={(event) => setQuery(event.target.value)}
           />
+      
+
           <div className='search-radio'>
 
             <FormControl component="fieldset" >
       <FormLabel component="legend">Sort By</FormLabel>
       <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-        <FormControlLabel value="city" control={<Radio />} label="Location" />
+      <FormControlLabel value="none" control={<Radio />} label="Random" />
+       
         <FormControlLabel value="low" control={<Radio />} label="Price (low)" />
         <FormControlLabel value="high" control={<Radio />} label="Price (high)" />
        

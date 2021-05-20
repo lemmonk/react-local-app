@@ -1,15 +1,21 @@
 import React, {  useEffect, useState } from 'react';
 import {useHistory} from 'react-router-dom';
-import axios from 'axios';
+import DialogActions from '@material-ui/core/DialogActions';
+
 
 function Recover() {
 
 const [ui, setUi] = useState({
   welcome: null,
-  message: null
+  message: null,
+  action: null,
 })
 
 const history = useHistory();
+
+const onLogin = () => {
+  return history.push('/login'),[history];
+}
   
 useEffect(() => {
 
@@ -34,28 +40,28 @@ useEffect(() => {
   if(sessionStorage.getItem('locals-rec')){
 
     setUi({
-      welcome: 'Password Reset',
-      message: 'Your password has been successfully reset, you will be redirected to your login momentarily.'
+      welcome: null,
+      message: 'Your password has been reset successfully.',
+      action: <DialogActions className='full-length-btn'>
+      <button onClick={() => onLogin()} >
+        Login
+      </button>
+    </DialogActions>
     })
     sessionStorage.clear();
   
-    setTimeout(function(){
-      return history.push('/login'),[history];
-    },8000)
+  
   
   } else {
 
     setUi({
       welcome: 'Recovery Sent',
-      message: 'Please follow the link sent to your provided email to reset your password.'
+      message: 'Please follow the link sent to your provided email to reset your password.',
+      action: null
     })
 
   }
 
- 
-  
-
- 
 },[]);
 
 
@@ -63,15 +69,16 @@ useEffect(() => {
 
 
   return (
-<section className="splash">
+<section className="incoming-wrapper">
 
-    <div className='hook'>
-    <h1>
+    <div className='incoming-content'>
+    <h2>
     {ui.welcome ? ui.welcome : null}
-    </h1>
+    </h2>
     <p>
     {ui.message ? ui.message : null} 
     </p>
+    {ui.action ? ui.action : null}
     </div>
 
 </section>

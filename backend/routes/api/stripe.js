@@ -44,7 +44,7 @@ router.post('/createAccountLink', async (req, res) => {
    
     const accountLinks = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'http://localhost:3000/reauth',
+      refresh_url: 'http://localhost:3000/connect',
       return_url: 'http://localhost:3000/connect',
       type: 'account_onboarding',
       

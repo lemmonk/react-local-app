@@ -2,5 +2,7 @@
 node_modules/
 .DS_Store
 .gcloudignore
+.globals
+locals-app-314118-673d56eb7bfd.json
 user-stories.txt/
-images/
+.images/

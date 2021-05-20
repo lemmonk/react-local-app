@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
+const uniqid = require('uniqid');
 const nodemail = require('./mailingService/confirmation');
 
 
@@ -10,6 +11,7 @@ const {
 	blockBooking,
 	fetchBooking,
 	deleteBooking,
+	updateBookingsRating,
 } = require('../../db/queries/booking-queries');
 
 const {
@@ -37,8 +39,9 @@ router.post('/', (req, res) => {
 			bcrypt.compare(booking.uid, data.uid, function(err, result) {
 				
 				if(result){
-				
-					const values = [booking.host_key, booking.host_name, booking.host_email, booking.host_city, booking.host_image, booking.user_key, booking.user_name, booking.user_email, booking.user_city, booking.user_image, booking.status, booking.price, booking.title, booking.color, booking.start, booking.end, booking.stamp];
+					const host_rate_ref = uniqid();
+					const user_rate_ref = uniqid();
+					const values = [booking.host_key, booking.host_name, booking.host_email, booking.host_city, booking.user_key, booking.user_name, booking.user_email, booking.user_city, booking.status, booking.amount, booking.title, booking.color, booking.start, booking.end, host_rate_ref, user_rate_ref, booking.stamp];
 
 					createBooking(values)
 					.then((data) => {
@@ -94,7 +97,7 @@ router.post('/block', (req, res) => {
 				
 				if(result){
 				
-					const values = [booking.host_key, booking.user_key, booking.title, booking.color, booking.start, booking.end, booking.stamp];
+					const values = [booking.host_key, booking.user_key, booking.status, booking.title, booking.color, booking.start, booking.end, booking.stamp];
 
 					blockBooking(values)
 					.then((data) => {
@@ -148,8 +151,7 @@ router.post('/multi', (req, res) => {
 		.catch((err) => console.log('Error at users booking POST route "/"', err));
 
 	} // end of for loop 
-	console.log('EXIT LOOP...');
-	console.log('array', arr);
+
 	return res.json(arr);
 });
 
@@ -209,6 +211,29 @@ router.post('/delete', (req, res) => {
 	
 		.catch((err) => console.log('Error at users booking POST route "/"', err));
 
+});
+
+
+
+
+router.post('/rating', (req, res) => {
+
+	const input = req.body.input;
+	const values = [input.id, input.ref];
+	console.log('vals', values);
+	
+	updateHostRef(values)
+		.then((data) => {
+	updateUserRating([data[key], input.rate])
+		.then((data) => {
+
+
+				console.log(data);
+			})
+	
+			
+		})
+		.catch((err) => console.log('Error at bookings GET route "/"', err));
 });
 
 module.exports = router;

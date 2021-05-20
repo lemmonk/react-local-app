@@ -6,6 +6,7 @@ const nodemail = require('./mailingService/confirmation');
 
 const {
 	getInbox,
+	fetchInfo,
 	deleteInboxItem,
 } = require('../../db/queries/inbox-queries');
 
@@ -21,6 +22,16 @@ router.post('/get', (req, res) => {
 	getInbox(values)
 		.then((data) => res.json(data))
 		.catch((err) => console.log('Error at inbox GET route "/"', err));
+});
+
+router.post('/info', (req, res) => {
+
+	const input = req.body.input;
+	const values = [input];
+console.log(values)
+	fetchInfo(values)
+		.then((data) => res.json(data))
+		.catch((err) => console.log('Error at inboxInfo GET route "/"', err));
 });
 
 

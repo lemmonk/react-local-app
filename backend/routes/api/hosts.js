@@ -35,18 +35,61 @@ router.post('/', (req, res) => {
 		
 			const results = [];
 			if (search) {
-				for (const d of data) {
 
-					if (search.includes(d.city) || search.includes(d.first_name) || search.includes(d.last_name)) {
+				// for (const d of data) {
 
-						results.push(d);
+				// 	const filter = `${d.first_name} ${d.last_name} ${d.city}`;
+				// 	const split= filter.split(' ');
+
+				// 	if (filter.search(new RegExp(query, "i")) < 0) {
+
+				// 		console.log('OUT', d.city);
+				// 	} else {
+				// 		console.log('INN', d.city);
+				// 			results.push(d);
+				// 	}
+
+				// }
+
+			
+				const parse = query.replace(/[^\w\s]|_/g, "")
+				.replace(/\s+/g, " ");
+				const split= parse.split(' ');
+		
+				for (const d of data){
+
+					const fn = d.first_name.replace(/[^\w\s]|_/g, "")
+					.replace(/\s+/g, " ");
+
+					const ln = d.last_name.replace(/[^\w\s]|_/g, "")
+					.replace(/\s+/g, " ");
+
+					const city = d.city.replace(/[^\w\s]|_/g, "")
+					.replace(/\s+/g, " ");
+
+					const terms = `${fn} ${ln} ${city}`;
+					const filter = terms.split(' ');
+
+					for(const s of split){
+
+						if(filter.includes(s)){
+							results.push(d);
+							break;
+						}
 					}
-
+					
+					
 				}
+
+
+
+
 
 				return res.json(results)
 			} else {
-				return res.json(data)
+			
+			const shuffledData = data.sort((a, b) => 0.5 - Math.random());
+			return res.json(shuffledData)
 			}
 
 		})

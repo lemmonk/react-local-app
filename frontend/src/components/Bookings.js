@@ -2,10 +2,10 @@ import React, {useState, useEffect, useContext } from 'react';
 import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
+import globals from '../globals';
 import Calendar from 'react-awesome-calendar';
 
 
-import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,6 +27,13 @@ function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
+
+const bookingColors = {
+  blocked: 'black',
+  travel: '#9d00ff',
+  hosting: '#45bdfe'
+}
+
 function Bookings(props) {
   
 
@@ -42,7 +49,7 @@ function Bookings(props) {
   const [currentBooking, setCurrentBooking] = useState({
     ref: null,
     title: 'Hosting Booked',
-    color: '#5f8aff',
+    color: bookingColors.hosting,
     year: null,
     month: null,
     day: null,
@@ -51,7 +58,7 @@ function Bookings(props) {
     formattedEndDate: null,
     duration: 0,
     next: false,
-    stripePromise: loadStripe('',{
+    stripePromise: loadStripe(globals().stripe,{
       stripeAccount: props.location.state.detail.connect_id
     })
   })
@@ -161,7 +168,7 @@ function Bookings(props) {
       }));
     })
     .catch(err => {
-      console.log(err);
+      return history.push('/'),[history];
     });
 
   },[refresh]);
@@ -171,10 +178,10 @@ function Bookings(props) {
 
     return {
       id: each.id,
-      color: 'black',
+      color: bookingColors.blocked,
       from: each.start_time,
       to: each.end_time,
-      title: 'N/A'
+      title: 'Time slot unavailable...'
 
     }
 
@@ -245,7 +252,7 @@ function Bookings(props) {
     return bookedHours;
 }
 
-//TODO refactor
+
 const setDuration = duration => {
  
   const durationArr = [];
@@ -337,16 +344,14 @@ const createBooking = () => {
     host_name: host.name,
     host_email: host.email,
     host_city: host.city,
-    host_image: host.image,
     user_key: user.public_key,
     user_name: `${user.first_name} ${user.last_name}`,
     user_email: user.email,
     user_city: user.city,
-    user_image: user.image,
     status: 'Upcoming',
     amount: pay.price,
     title:'Hosting',
-    color:'#5f8aff',
+    color:bookingColors.hosting,
     start: currentBooking.formattedStartDate,
     end: currentBooking.formattedEndDate,
     stamp: currentBooking.formattedStartDate.substring(0,10),
@@ -354,7 +359,7 @@ const createBooking = () => {
   }
 
 
-
+  
   axios.post(`/api/bookings`, { input }).then((res) => {
 
   if(res.data === false){
@@ -534,11 +539,14 @@ const handleSnack = (Transition, msg, cc) => {
           <MenuItem value={8}>Eight Hours</MenuItem>
         </Select>
       </FormControl>
-     
+     <div className='small-divider'></div>
        
-        <DialogActions>
-          {currentBooking.next ? <Button onClick={() => openStripeCheckout()} color="primary">Next</Button> : null}
+        <DialogActions className='alert-action-btn'>
+          {currentBooking.next ? <button onClick={() => openStripeCheckout()} >Next</button> : null}
         </DialogActions>
+
+        
+        
       </Dialog>
 
     </div>
@@ -556,8 +564,10 @@ const handleSnack = (Transition, msg, cc) => {
         {pay.open ? <p>Host: {props.location.state.detail.name}</p> : null}
         {pay.open ? <p>Location: {props.location.state.detail.city}</p>  : null}
        {pay.open ?  <p>Date: {currentBooking.formattedStartDate.substring(0,10)}</p> : null}
-       {pay.open ?  <p>Time / Rate: {`${currentBooking.duration} hours @ $${props.location.state.detail.price}`}</p> : null}
-        <p className='stripe-total'>Total Cost: ${pay.price}</p>
+       {pay.open ?  <p>Time: {
+       `${currentBooking.formattedStartDate.substring(11,16)}h - ${currentBooking.formattedEndDate.substring(11,16)}h`}</p> : null}
+       {pay.open ?  <p>Rate: {`${currentBooking.duration} hours @ $${props.location.state.detail.price}`}</p> : null}
+        <h3 className='stripe-total'>Total Cost: ${pay.price}</h3>
         </div>
 
 
@@ -573,7 +583,10 @@ const handleSnack = (Transition, msg, cc) => {
       />
      </Elements>
    
-          
+   <div className='secured-by'>
+   <p>Transaction secured by <a href='https://stripe.com' target='_blank'>Stripe</a></p> 
+   </div>
+        
       
           </DialogContent>
          

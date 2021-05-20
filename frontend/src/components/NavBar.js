@@ -25,7 +25,7 @@ function NavBar(props) {
 
 //PWA UI
 
-const [os, setOS] = useState(null);
+const [os, setOS] = useState('Mobile');
 
 const opSys = () => {
 
@@ -52,12 +52,13 @@ const PWA = () => {
    if(!isInstalled && supportedOS){
   
     const os = opSys();
+    sessionStorage.setItem('locals-os', os);
     setOS(os);
 
    }
   }
 
-  const mobileApp = <MenuItem onClick={() => console.log("PWA")}>{`${os} App`}</MenuItem>;
+  
 
 
 
@@ -97,6 +98,11 @@ const PWA = () => {
     
     handleClose();
     return history.push('/scheduler'),[history];
+  }
+
+  const openPwa = () => {
+    handleClose();
+    return history.push('/pwa'),[history];
   }
 
 
@@ -162,7 +168,7 @@ const contactUs = () => {
         : <ArrowBackIosIcon onClick={() => onBack()}/>}
       </div>
 
-      <h3>{props.title ? props.title : null}</h3>
+      <h3 className='nav-title'>{props.title ? props.title : null}</h3>
       <div className='nav-icon'>
 
       {props.nav ? isInn : null}  
@@ -184,12 +190,11 @@ const contactUs = () => {
         open={windowState.anchor}
         onClose={handleClose}
       >
-        <MenuItem onClick={() => openInbox()}>Inbox</MenuItem>
-        <MenuItem onClick={() => openEdit()}>Profile</MenuItem>
-        <MenuItem onClick={() => openSchedule()}>Schedule</MenuItem>
-        {os ? mobileApp : null}
-        <MenuItem></MenuItem>
-        <MenuItem onClick={() => contactUs()}>Contact</MenuItem>
+        <MenuItem onClick={() => openInbox()}><p>Inbox</p></MenuItem>
+        <MenuItem onClick={() => openEdit()}><p>Profile</p></MenuItem>
+        <MenuItem onClick={() => openSchedule()}><p>Schedule</p></MenuItem>
+        <MenuItem onClick={() => openPwa()}><p>{`${os} App`}</p></MenuItem>
+        <MenuItem onClick={() => contactUs()}><p>Contact Us</p></MenuItem>
         
         
       </Menu>

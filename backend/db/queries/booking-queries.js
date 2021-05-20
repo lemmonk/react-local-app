@@ -6,10 +6,10 @@ const getBookings = values => {
 	SELECT id, host_key, user_key, title, color, start_time, end_time 
 	FROM bookings
 	WHERE host_key = $1
-	
+	AND status != 'Cancelled'
 	AND stamp >= NOW()
 	OR user_key = $1
-	
+	AND status != 'Cancelled'
 	AND stamp >= NOW()
 	;`;
 
@@ -20,10 +20,10 @@ const getBookings = values => {
 };
 
 const createBooking = values => {
-	
+	console.log('vals', values)
 	const text = `
 	INSERT INTO bookings
-	(host_key, host_name, host_email, host_city, host_image, user_key, user_name, user_email, user_city, user_image, status, price, title, color, start_time, end_time, stamp) 
+	(host_key, host_name, host_email, host_city, user_key, user_name, user_email, user_city, status, price, title, color, start_time, end_time, host_rate_ref, user_rate_ref, stamp) 
 	VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
 	RETURNING *;`;
 
@@ -37,8 +37,8 @@ const blockBooking = values => {
 	
 	const text = `
 	INSERT INTO bookings
-	(host_key, user_key, title, color, start_time, end_time, stamp) 
-	VALUES($1, $2, $3, $4, $5, $6, $7)
+	(host_key, user_key, status, title, color, start_time, end_time, stamp) 
+	VALUES($1, $2, $3, $4, $5, $6, $7, $8)
 	RETURNING *;`;
 
 	return db
@@ -55,7 +55,7 @@ const fetchBooking = values => {
 	FROM bookings
 	JOIN users
 	ON users.public_key = bookings.user_key
-	WHERE bookings.id = $1`;
+	WHERE bookings.id = $1;`;
 
 	return db
 		.query(text, values)
@@ -68,13 +68,15 @@ const deleteBooking = values => {
 	const text = `
 	DELETE FROM bookings
 	WHERE id = $1
-	RETURNING *`;
+	RETURNING *;`;
 
 	return db
 		.query(text, values)
 		.then((res) => res.rows)
 		.catch((err) => console.log(`Error at booking queries 'createBookings'`, err));
 };
+
+
 
 
 module.exports = {

@@ -21,10 +21,13 @@ function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
+const bookingColors = {
+  blocked: 'black',
+  travel: '#9d00ff',
+  hosting: '#45bdfe'
+}
 
 function Scheduler() {
-
-
 
   const {user} = useContext(UserContext);
   const history = useHistory();
@@ -169,8 +172,8 @@ function Scheduler() {
   const events = bookings ? bookings.state.map((each) =>{
 
     if(user.public_key !== each.host_key){
-      each.color = 'salmon';
-      each.title = 'Travel Booking';
+      each.color = bookingColors.travel;
+      each.title = 'Travelling';
     }
 
     return {
@@ -344,8 +347,9 @@ const createBooking = () => {
     host_key: user.public_key,
     user_key: user.public_key,
     user_email: user.email,
-    title:'N/A',
-    color:'black',
+    status: 'pending',
+    title:'Partial',
+    color:bookingColors.blocked,
     start: currentBooking.formattedStartDate,
     end: currentBooking.formattedEndDate,
     stamp: currentBooking.formattedStartDate.substring(0,10),
@@ -355,7 +359,7 @@ const createBooking = () => {
 
   axios.post(`/api/bookings/block`, { input }).then((res) => {
 
-     console.log(res.data);
+    //  console.log(res.data);
     
     triggerUseEffect();
     const msg = 'Saved!'
@@ -504,7 +508,7 @@ for (let i = Number(currentBooking.day); i < num ; i++){
     user_key: user.public_key,
     user_email: user.email,
     title:'N/A',
-    color:'black',
+    color:bookingColors.blocked,
     start: start,
     end: end,
     stamp: currentBooking.formattedStartDate.substring(0,10),
@@ -883,8 +887,8 @@ const handleSnack = (Transition, msg, cc) => {
 
  
 
-     <DialogActions>
-         {currentBooking.next ? <Button onClick={() => onNext(currentDialog.dialog.props.action)} color="primary">{currentDialog.dialog.props.action_name}</Button> : null}
+     <DialogActions className='alert-action-btn'>
+         {currentBooking.next ? <button onClick={() => onNext(currentDialog.dialog.props.action)} >{currentDialog.dialog.props.action_name}</button> : null}
        </DialogActions>
 
 </Dialog>

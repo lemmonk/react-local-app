@@ -20,6 +20,7 @@ function TransitionUp(props) {
 
 
 function Inbox(props) {
+ 
 
   const {user} = useContext(UserContext);
   const history = useHistory();
@@ -71,7 +72,7 @@ function Inbox(props) {
       other_email: identifier.email,
       uid: localStorage.getItem('locals-uid')
     }
-    
+
     setLoading(true);
     axios.post(`/api/inbox`, { input })
     .then(res => {
@@ -80,7 +81,7 @@ function Inbox(props) {
     if(res.data == input.id){
       setLoading(false);
       triggerUseEffect();
-      const msg = `Deleted.  A cancellation email has been sent to ${input.other_name}.`;
+      const msg = `A cancellation email has been sent to ${input.other_name}.`;
       const cc = 'calendar-snackbar';
      
       handleSnack(TransitionUp, msg, cc);
@@ -257,7 +258,7 @@ const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-
 
   return (
 
-  <section>
+  <section className='inbox-double-wrap'>
     {loading ? <Loading/> : null}
     {searchedCard ? searchedCard : inboxReady}
 
@@ -266,8 +267,15 @@ const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-
         <DialogContent>
           <h2>Cancel Booking</h2>
           <DialogContentText>
-            Are you sure you want to cancel this booking?  This action cannot be undone and will notify the other party of your departure from your agreement.
+            Are you sure you want to cancel this booking?  This action cannot be undone and will notify the other party of your departure from your agreement. 
+            <br></br>
+            <br></br>
+            All refunds are administrated and therfore the sole responsibility of the acting host.
+           
           </DialogContentText>
+         <div className='a-refund'>
+         <a  href='/terms' target='_blank'>Refund Policy</a>
+         </div>
         </DialogContent>
         <DialogActions className='full-length-btn-destroy'>
           <button onClick={() => confirmDelete()} >
@@ -275,11 +283,11 @@ const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-
           </button>
         </DialogActions>
 
-        <DialogActions className='plain-btn'>
+        <div className='plain-btn'>
           <button onClick={() => handleClose()} >
             No thanks
           </button>
-        </DialogActions>
+        </div>
 
       </Dialog>
 

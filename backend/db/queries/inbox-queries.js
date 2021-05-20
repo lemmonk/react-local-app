@@ -4,7 +4,7 @@ const getInbox = values => {
 
 	const text = `
 	SELECT bookings.id, bookings.start_time, bookings.end_time,
-	bookings.host_key, bookings.host_name, bookings.host_email, bookings.host_city, bookings.host_image, bookings.user_key, bookings.user_name, bookings.user_email, bookings.user_image, bookings.status
+	bookings.host_key, bookings.host_name, bookings.host_email, bookings.host_city, bookings.user_key, bookings.user_name, bookings.user_email, bookings.status
 	FROM bookings
 	WHERE bookings.user_key = $1
 	AND bookings.color != 'black'
@@ -12,8 +12,23 @@ const getInbox = values => {
   OR bookings.host_key = $1
 	AND bookings.color != 'black'
 	AND bookings.stamp >= NOW()
-	ORDER BY bookings.stamp ASC;`;
+	ORDER BY bookings.stamp ASC
+	;`;
 
+	return db
+		.query(text, values)
+		.then((res) => res.rows)
+		.catch((err) => console.log(`Error at inbox queries 'getInbox'`, err));
+};
+
+
+const fetchInfo = values => {
+	console.log(values);
+	const text = `
+		SELECT * 
+		FROM users
+		WHERE public_key = $1`;
+	
 	return db
 		.query(text, values)
 		.then((res) => res.rows)
@@ -40,5 +55,6 @@ const deleteInboxItem = values => {
 
 module.exports = {
 	getInbox,
+	fetchInfo,
 	deleteInboxItem,
 };

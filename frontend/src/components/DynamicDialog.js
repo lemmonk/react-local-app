@@ -38,11 +38,11 @@ function DynamicDialog(props) {
         </div>
        
        
-        <DialogActions onClick={() => props.close()}>
+        <DialogActions className='alert-action-btn' onClick={() => props.close()}>
          
-          <Button onClick={() => props.action()} color="primary" autoFocus>
+          <button onClick={() => props.action()} color="primary" autoFocus>
             Next
-          </Button>
+          </button>
         </DialogActions>
       </Dialog>
    

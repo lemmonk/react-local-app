@@ -1,19 +1,37 @@
-import React, {useContext, useState } from 'react';
+import React, {useState } from 'react';
 import {useHistory} from 'react-router-dom';
-import  UserContext  from './UserContext';
-
 import axios from 'axios';
-import Button from '@material-ui/core/Button';
+import Loading from './Loading';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
+import { withStyles } from '@material-ui/core/styles';
+const InputTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
+    },
+  },
+})(TextField);
 
 function Recovery(props) {
 
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
   
   const [input, setInput] = useState({
     id: props.location.state.detail.id,
@@ -43,7 +61,7 @@ function Recovery(props) {
        return setError((prev) => ({
           ...prev,
           password : true,
-          errorMsg: 'Passwords must be at least 8 characters in length'
+          errorMsg: 'Passwords must be at least 8 characters'
         }));
 
       
@@ -56,17 +74,18 @@ function Recovery(props) {
 
   const resetPassword = () => {
 
+      setLoading(true);
       axios.post(`/api/users/reset`, { input }).then((res) => {
 
-        console.log(res.data);
+        // console.log(res.data);
 
           if (res.data === false){
-        
+            setLoading(false);
             return setError((prev) => ({
                     ...prev,
                     email : true,
                     password: true,
-                    errorMsg: 'Failed to reset, please try again.'
+                    errorMsg: 'Session Expired'
                   }));
              
           }
@@ -76,11 +95,13 @@ function Recovery(props) {
             ...prev,
             password: null
           }));
+          setLoading(false);
           sessionStorage.setItem('locals-rec', 'new');
           return history.push('/recover'),[history];
      
          
         }).catch((err) => {
+          setLoading(false);
           return setError((prev) => ({
             ...prev,
             password: false,
@@ -93,14 +114,19 @@ function Recovery(props) {
  
   return (
     <div>
-    <DialogTitle id="form-dialog-title">Password Recovery</DialogTitle>
+      {loading ? <Loading/> : null}
+    <DialogTitle>
+    <div id="alert-dialog-title">
+      New Password
+      </div>
+    </DialogTitle>
       <DialogContent>
       <DialogContentText>
       Please enter your new password.
     </DialogContentText>
      
       
-        <TextField
+        <InputTextField
           autoComplete="new-password"
            margin="dense"
            id="password"
@@ -116,18 +142,18 @@ function Recovery(props) {
            password: event.target.value
            }))}
          />
-        <div className={error.class}>
-        <h4>{error.errorMsg}</h4>
-        </div>
           
 
       </DialogContent>
-      <DialogActions>
-        <Button onClick={() => validateInput()} color="primary">
-          Set Password
-        </Button>
+      <DialogActions className='full-length-btn'>
+        <button onClick={() => validateInput()} >
+          Reset Password
+        </button>
       </DialogActions>
 
+      <div className={error.class}>
+        <h4>{error.errorMsg}</h4>
+        </div>
      
   </div>
   );

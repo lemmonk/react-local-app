@@ -72,12 +72,18 @@
  
 }
 
-.chat-input-inner{
-  z-index: 5;
-  width: 365px;
+.chat-input-double-wrap{
   display: block;
   margin: auto;
-  background-color: white;
+  width: 100%;
+}
+
+.chat-input-inner{
+  z-index: 5;
+  width: 95%;
+  display: block;
+  margin: auto;
+  background-color: $white;
   border-top: solid 5px grey;
   padding-top: 15px;
 }
@@ -99,4 +105,14 @@
 #outlined-multiline-static{
   background-color: white;
  
+}
+
+
+@media only screen and (min-width: 600px) {
+
+  .chat-input-double-wrap{
+    display: block;
+    margin: auto;
+    width: 375px;
+  }
 }

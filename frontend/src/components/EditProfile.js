@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import globals from '../globals';
 import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
 import axios from 'axios';
@@ -20,13 +21,36 @@ import Slide from '@material-ui/core/Slide';
 
 import DynamicDialog from './DynamicDialog';
 
+import { withStyles } from '@material-ui/core/styles';
+const EditTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '#282828',
+    },
+   
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray',
+      },
+      '&:hover fieldset': {
+        borderColor: '#45bdfe',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '#1eabf7',
+      },
+    },
+  },
+})(TextField);
+
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
 function EditProfile() {
-  const server = 'http://localhost:8080/images/'; // <---TEMP.
+  
 
+  
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -48,7 +72,6 @@ function EditProfile() {
 
   const [mandatory, setMandatory] = useState({
     city: user ? user.city : null,
-    bio: user ? user.bio : null,
     day_rate: user ? user.day_rate : null,
   });
 
@@ -98,7 +121,6 @@ function EditProfile() {
 
     setMandatory({
       city: input.city,
-      bio: input.bio,
       day_rate: input.day_rate,
     })
 
@@ -144,14 +166,21 @@ function EditProfile() {
       title: 'Transactions',
       content: <p>
         We couldn't find your payment details.  This is either because your session has timed out or you did not complete your Stripe onboarding.
-        In order to be a Local Host you must be able to except payments from your booked clients.<br></br><br></br>  Locals App uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+        In order to be a Local Host you must be able to except payments from your booked clients.<br></br><br></br>  Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
       </p>
     })
 
   
     })
     .catch(err => {
-      console.log(err);
+      // console.log(err);
+      setError({
+        
+        city: false,
+        bio: false,
+        day_rate: false,
+        errorMsg: "Something went wrong 😧"
+      })
     });
   }
 
@@ -168,10 +197,10 @@ function EditProfile() {
         errorMsg: null
       })
 
-     
-        if (mandatory[item] === null || mandatory[item] === undefined | mandatory[item] === 0) {
+   
+        if (!mandatory[item] || mandatory[item] === null || mandatory[item] === undefined | mandatory[item] === 0) {
 
-        
+        console.log('here')
           return setError((prev) => ({
             ...prev,
             [item]: true,
@@ -190,7 +219,16 @@ function EditProfile() {
 
     }
 
-    if(input.city.length > 35){
+    if(Number(input.day_rate) < 15){
+      return setError((prev) => ({
+        ...prev,
+        day_rate: true,
+        errorMsg: 'Minimum wage is $15 an hour.'
+      }));
+
+    }
+
+    if(input.city.length > 25){
       return setError((prev) => ({
         ...prev,
         city: true,
@@ -199,14 +237,7 @@ function EditProfile() {
 
     }
 
-    if(input.social_link.length > 100){
-      return setError((prev) => ({
-        ...prev,
-        social_link: true,
-        errorMsg: 'Invalid social link'
-      }));
-
-    }
+   
     
 
     if(input.bio.length > 250){
@@ -282,7 +313,7 @@ function EditProfile() {
 
   //upload image
 
-  const [img, setImg] = useState(null)
+ 
 
   const handleImageUpload = file => {
 
@@ -301,7 +332,7 @@ function EditProfile() {
       
     }
 
-    setImg((URL.createObjectURL(file)))
+    // setImg((URL.createObjectURL(file)))
     
     const FD = new FormData();
     FD.append("image", file);
@@ -338,10 +369,7 @@ function EditProfile() {
   }
 
 
-  const isLoaded = user ? user.image : null;
-  const profileImg = isLoaded ? `${server}${user.image}` : '/images/user.png';
-  const currentImg = img ? img : profileImg;
-
+  
 
 
   const gotoCalendar = () =>{
@@ -368,7 +396,7 @@ function EditProfile() {
           open: true,
           title: 'Transactions',
           content: <p>
-            In order to be a Local Host you must be able to except payments from your clients.<br></br><br></br>Locals App uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+            In order to be a Local Host you must be able to except payments from your clients.<br></br><br></br>Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
           </p>
         })
 
@@ -399,12 +427,13 @@ function EditProfile() {
        //password required < -------------------TODO
       }
 
+      console.log(input);
       setLoading(true);
     
       axios.post(`/api/stripe/createAccountLink`, {input})
       .then(res => {
     
-      // console.log(res.data)
+      console.log(res.data)
       setLoading(false);
       localStorage.setItem('connect-id', res.data.id);
       window.open(res.data.link.url);
@@ -420,7 +449,7 @@ function EditProfile() {
   
   const hourly_rate = <div>
     <h3>Required</h3>
-      <TextField
+      <EditTextField
           margin="dense"
           id="hourly_rate"
           error={error.day_rate}
@@ -439,22 +468,26 @@ function EditProfile() {
   
 
   const bio = <div>
-    <TextField
+    <EditTextField
+ 
   className='edit-bio'
   margin="dense"
   id="bio"
   error={error.bio}
   multiline
   rows={8}
-  label="Bio (250 char. limit)"
+  label="About (250 char. limit)"
   type="text"
   variant='outlined'
   fullWidth
+ 
   
   value={input.bio ? input.bio : ''}
   onChange={(event) => setInput((prev) => ({
     ...prev,
     bio: event.target.value
+
+    
   }))}
   />
   <div className='edit-char-count'>
@@ -470,32 +503,31 @@ function EditProfile() {
       
   {value === 'Yes' ? hourly_rate : null}
   
+  <EditTextField
   
-  <TextField
+margin="dense"
+id="city"
+error={error.city}
+label="Location"
+type="text"
+variant='outlined'
+fullWidth
+
+value={input.city ? input.city : ''}
+onChange={(event) => setInput((prev) => ({
+  ...prev,
+  city: event.target.value
+}))}
+/>
   
-  margin="dense"
-  id="city"
-  error={error.city}
-  label="Location"
-  type="text"
-  variant='outlined'
-  fullWidth
-  
-  value={input.city ? input.city : ''}
-  onChange={(event) => setInput((prev) => ({
-    ...prev,
-    city: event.target.value
-  }))}
-  />
-  
-  {value === 'Yes' ? bio : null}
       </div>
 
 
 
 
-const social = <div>
-      <TextField
+
+const social = <div className='text-div'>
+      <EditTextField
   
         margin="dense"
         id="social"
@@ -558,6 +590,7 @@ const social = <div>
     
     const public_key = user.public_key;
     localStorage.clear();
+    sessionStorage.clear();
     setUser(null);
 
     setLoading(true);
@@ -578,29 +611,46 @@ const social = <div>
   }
 
 
+  // ui profile image
+  const [imgLoaded, setImageLoaded] = useState({
+    loaded: 'edit-img-loading',
+    class: 'init-edit-img'
+  });
+  const onImgLoaded = () => {
+  
+    setImageLoaded({
+      loaded: 'edit-img',
+      class: 'loaded-edit-img'
+    });
+  }
+
+ 
   return (
-    <div>
+    <div className='edit-wrapper'>
       {loading ? <Loading/> : null}
+
       <DialogContent>
 
         <div className='edit-header'>
-          <div className='edit-image'>
+       
+        <Button
+          className='edit-profile-pic'
+          variant="contained"
+          component="label"
+        >
+             
+        {user ? 
+        <div className={imgLoaded.loaded}>
+        <img className={imgLoaded.class} src={user.image ? `${globals().server}${user.image}`: '/images/user.png'} alt='n/a' onLoad={() => onImgLoaded()}/>
+        </div>
+        : <img className='loaded-edit-img' src='/images/user.png' alt='img'></img>
+        }
+      
+        <input type="file" hidden
+          onChange={(event) => handleImageUpload(event.target.files[0])}
+        />
 
-
-            <Button
-              className='edit-profile-pic'
-              variant="contained"
-              component="label"
-            >
-              <img src={`${currentImg}`} alt='img' />
-              <input type="file" hidden
-                onChange={(event) => handleImageUpload(event.target.files[0])}
-              />
-
-            </Button>
-
-
-          </div>
+        </Button>
 
           <div>
             <FormControl component="fieldset"
@@ -610,8 +660,8 @@ const social = <div>
                 className='radio-title'
               >I am a local host</FormLabel>
               <RadioGroup aria-label="Host" name="Host" value={value} onChange={handleChange}>
-                <FormControlLabel  value='Yes' control={<Radio />} label="Yah!" />
-                <FormControlLabel value='No' control={<Radio />} label="Nah" />
+                <FormControlLabel  value='Yes' control={<Radio />} label="Yes!" />
+                <FormControlLabel value='No' control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
           </div>
@@ -629,14 +679,20 @@ const social = <div>
         </div> 
         </div>
 
+      
+
         {host_info}
+        {bio}
         {social}
 
-        <div className='err-msg'>
-          <h4>{error.errorMsg}</h4>
-        </div>
-
-
+        {value === 'No' ?
+      <div className='edit-info-blurb'>
+      <p>
+        Profile information for travellers will only be shared with booked host.
+      </p>
+      </div>
+      : null }
+      
       </DialogContent >
       <DialogActions className='full-length-btn'>
        
@@ -644,8 +700,13 @@ const social = <div>
           Save
         </button>
       
-       
       </DialogActions>
+
+      <div className='err-msg'>
+          <h4>{error.errorMsg}</h4>
+        </div>
+
+       
 
     <div className='edit-logout'><button onClick={() => logout()}>logout</button></div>
       

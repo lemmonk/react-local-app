@@ -1,7 +1,7 @@
 var cacheName = 'locals-pwa';
 var filesToCache = [
   '/',
-  '/index.html',
+  // '/index.html',
   // 'styles/App.css',
 ];
 

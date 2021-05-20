@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
+import globals from '../globals';
 import  UserContext  from './UserContext';
 import axios from 'axios';
 import {useHistory} from 'react-router-dom';
@@ -53,6 +54,7 @@ function Splash() {
       
     })
     .catch(err => {
+      //silent error
       console.log(err);
     });
 
@@ -66,8 +68,6 @@ function Splash() {
     
   }
 
-  
-
 
   const splash = <div className='splash'> 
  
@@ -75,7 +75,7 @@ function Splash() {
     <img
     className='map-foreground'
     scale='1'
-    src='https://maps.googleapis.com/maps/api/staticmap?center=Vancouver&zoom=10&size=500x3800&maptype=roadmap&key=AIzaSyBpmIxfal6_kr3Wjvp4kxDXk_vVpu03xSg'></img>
+    src={`https://maps.googleapis.com/maps/api/staticmap?center=Vancouver&zoom=10&size=500x3800&maptype=roadmap&key=${globals().map}`}></img>
   </div>
 
     <div className='hook'>
