@@ -36,7 +36,7 @@ const [error, setError] = useState(false);
     return alert('Invalid credentials');
   }
   setError(false);
-  setLoading(true);
+ 
 
   const input = {
     connect_id: props.connect_id,
@@ -45,6 +45,7 @@ const [error, setError] = useState(false);
     price: props.price
   };
 
+  setLoading(true);
   axios.post(`/api/stripe/secret`, {input})
   .then(res => {
   
@@ -63,8 +64,9 @@ const [error, setError] = useState(false);
 
 
 
-  const stripe = useStripe();
-  const elements = useElements();
+const stripe = useStripe();
+const elements = useElements();
+
  const handleSubmit = async (client_secret) => {
   if (!stripe || !elements) {
     return;
@@ -85,11 +87,10 @@ const [error, setError] = useState(false);
     setLoading(false);
   
   } else {
-    setLoading(false);
+   
     // The payment has been processed!
     if (result.paymentIntent.status === 'succeeded') {
      
-    
       props.createBooking();
     }
   }

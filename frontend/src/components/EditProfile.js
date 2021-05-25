@@ -14,8 +14,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
+import StarIcon from '@material-ui/icons/Star';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
 
@@ -49,8 +48,6 @@ function TransitionUp(props) {
 
 function EditProfile() {
   
-
-  
   const { user, setUser } = useContext(UserContext);
   const history = useHistory();
   const [loading, setLoading] = useState(false);
@@ -58,16 +55,17 @@ function EditProfile() {
   const [dialog, setDialog] = useState({
     open: false,
     title: null,
-    content: null
+    content: null,
+    action: null,
   })
 
   const [input, setInput] = useState({
     host: user ? user.host : false,
     city: user ? user.city : null,
     image: user ? user.image : null,
-    bio: user ? user.bio : null,
+    bio: user ? user.bio : '',
     day_rate: user ? user.day_rate : null,
-    social_link: user ? user.social_link : null
+    social_link: user ? user.social_link : ''
   });
 
   const [mandatory, setMandatory] = useState({
@@ -88,8 +86,9 @@ function EditProfile() {
   useEffect(() => {
     
     if(!user)return history.push('/'),[history];
-
     const uid = localStorage.getItem('locals-uid');
+    
+     setLoading(true);
     axios.post('/api/users/session', { uid })
       .then(res => {
 
@@ -100,9 +99,9 @@ function EditProfile() {
           setInput(res.data);
           const host = res.data.host ? 'Yes' : 'No';
           setValue(host);
-
+          setLoading(false);
         } else {
-
+          setLoading(true);
           localStorage.clear();
           setUser(null);
           return history.push('/create'), [history];
@@ -110,7 +109,9 @@ function EditProfile() {
 
       })
       .catch(err => {
+
         console.log(err);
+        return history.push('/'),[history];
       });
 
 
@@ -166,8 +167,9 @@ function EditProfile() {
       title: 'Transactions',
       content: <p>
         We couldn't find your payment details.  This is either because your session has timed out or you did not complete your Stripe onboarding.
-        In order to be a Local Host you must be able to except payments from your booked clients.<br></br><br></br>  Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
-      </p>
+        In order to be a Local Host you must be able to accept payments from your booked clients.<br></br><br></br>  Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+      </p>,
+       action: stripeOnboarding
     })
 
   
@@ -219,11 +221,11 @@ function EditProfile() {
 
     }
 
-    if(Number(input.day_rate) < 15){
+    if(Number(input.day_rate) < 7){
       return setError((prev) => ({
         ...prev,
         day_rate: true,
-        errorMsg: 'Minimum wage is $15 an hour.'
+        errorMsg: 'Minimum wage is $7 an hour.'
       }));
 
     }
@@ -240,12 +242,12 @@ function EditProfile() {
    
     
 
-    if(input.bio.length > 250){
+    if(input.bio.length > 300){
     
       return setError((prev) => ({
         ...prev,
         bio: true,
-        errorMsg: 'Your bio must be 250 characters of less'
+        errorMsg: 'Your bio must be 300 characters of less'
       }));
     }
 
@@ -274,7 +276,7 @@ function EditProfile() {
 
       // console.log(res.data);
       setLoading(false);
-      if (res.data === false) {
+      if (!res.data) {
         const msg = 'Invalid Credentials';
         const cc = 'edit-snackbar-error';
        return handleSnack(TransitionUp, msg, cc);
@@ -313,7 +315,7 @@ function EditProfile() {
 
   //upload image
 
- 
+ const [tempImg, setTempImg] = useState(null);
 
   const handleImageUpload = file => {
 
@@ -332,7 +334,7 @@ function EditProfile() {
       
     }
 
-    // setImg((URL.createObjectURL(file)))
+    setTempImg((URL.createObjectURL(file)))
     
     const FD = new FormData();
     FD.append("image", file);
@@ -349,14 +351,15 @@ function EditProfile() {
       .then((res) => {
         
         setLoading(false);
+        console.log(res.data)
 
-      if (res === false){
+      if (!res.data){
       const msg = 'Failed to upload image.';
       const cc = 'edit-snackbar-error';
-      handleSnack(TransitionUp, msg, cc);
+     return handleSnack(TransitionUp, msg, cc);
         }
 
-      setUser(res.data);
+      // setUser(res.data);
       const msg = 'Image Saved.';
       const cc = 'edit-snackbar';
       handleSnack(TransitionUp, msg, cc);
@@ -396,8 +399,9 @@ function EditProfile() {
           open: true,
           title: 'Transactions',
           content: <p>
-            In order to be a Local Host you must be able to except payments from your clients.<br></br><br></br>Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
-          </p>
+            In order to be a Local Host you must be able to accept payments from your guest.<br></br><br></br>Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+          </p>,
+          action: stripeOnboarding
         })
 
        
@@ -410,11 +414,11 @@ function EditProfile() {
     };
 
     const closeDynamicDialog = () => {
-      setDialog({
+      setDialog((prev) =>({
+        ...prev,
         open:false,
-        title: null,
-        content:null
-      })
+       
+      }))
     }
 
     const stripeOnboarding = () => {
@@ -476,7 +480,7 @@ function EditProfile() {
   error={error.bio}
   multiline
   rows={8}
-  label="About (250 char. limit)"
+  label="About (300 char. limit)"
   type="text"
   variant='outlined'
   fullWidth
@@ -491,7 +495,7 @@ function EditProfile() {
   }))}
   />
   <div className='edit-char-count'>
-  <p className={input.bio && 250 - input.bio.length < 0 ? 'char-err-text' : 'char-ok-text'}>{input.bio ? `remaining: ${250 - input.bio.length}` : `remaining: 300`}</p>
+  <p className={input.bio && 300 - input.bio.length < 0 ? 'char-err-text' : 'char-ok-text'}>{input.bio ? `remaining: ${300 - input.bio.length}` : `remaining: 300`}</p>
   
   </div>
 </div>
@@ -544,6 +548,52 @@ const social = <div className='text-div'>
       />
     </div>
 
+
+//profile rating ui and calc
+
+const [showRating, setRating] = useState(false);
+const calcRating = () => {
+
+  let rating = 0;
+  if(user){
+
+    let total = user.thumbs_up + user.thumbs_down;
+   
+    if(total > 10){
+    setRating(true);
+    rating = Math.ceil(user.thumbs_up / total * 100);
+    rating = Number.isNaN(rating) ? 0 : rating;
+    }
+  }
+  return rating;
+}
+
+const rating =  <div>
+<StarIcon  className={calcRating() > 84 ? 'star-lite' : 'star-dim'}/>
+<StarIcon  className={calcRating() > 74 ? 'star-lite' : 'star-dim'}/>
+<StarIcon  className={calcRating() > 64 ? 'star-lite' : 'star-dim'}/>
+<StarIcon  className={calcRating() > 54 ? 'star-lite' : 'star-dim'}/>
+<StarIcon  className={calcRating() > 4 ? 'star-lite' : 'star-dim'}/>
+</div>
+
+
+const onRatingClicked = () => {
+
+  let msg = 'You currently do not have enough data to display an accurate rating. In the meantime your rating will be displayed as "No rating available".  Once your account has accumulated enough data for an accurate rating the results will be shown here and on your public facing profile, both as a host and as a guest.'
+
+  if(showRating){
+    msg = 'This is your accumulated rating from your encounters with host and guest alike.'
+  }
+
+
+  setDialog({
+    open: true,
+    title: 'Your Rating',
+    content: <p>{msg}</p>,
+    action: closeDynamicDialog
+  })
+
+}
 
 
   //snackbar anim
@@ -614,14 +664,27 @@ const social = <div className='text-div'>
   // ui profile image
   const [imgLoaded, setImageLoaded] = useState({
     loaded: 'edit-img-loading',
-    class: 'init-edit-img'
+    class: 'init-edit-img',
+    img: '/images/user.png',
   });
   const onImgLoaded = () => {
   
     setImageLoaded({
       loaded: 'edit-img',
-      class: 'loaded-edit-img'
+      class: 'loaded-edit-img',
+      img: user.image ? `${globals().server}${user.image}`
+      : '/images/user.png',
     });
+  }
+
+  const onImgError = () => {
+
+    setImageLoaded({
+      loaded: 'edit-img',
+      class: 'loaded-edit-img',
+      img: '/images/user.png',
+    });
+
   }
 
  
@@ -639,12 +702,17 @@ const social = <div className='text-div'>
           component="label"
         >
              
-        {user ? 
-        <div className={imgLoaded.loaded}>
-        <img className={imgLoaded.class} src={user.image ? `${globals().server}${user.image}`: '/images/user.png'} alt='n/a' onLoad={() => onImgLoaded()}/>
-        </div>
-        : <img className='loaded-edit-img' src='/images/user.png' alt='img'></img>
-        }
+{user ? 
+<div className={imgLoaded.loaded}>
+
+{tempImg ? <img className={imgLoaded.class} src={tempImg}></img> 
+:
+<img className={imgLoaded.class} src={imgLoaded.img} alt='n/a' onLoad={() => onImgLoaded()} onError={() => onImgError()}></img>
+}
+</div>
+: <img className='loaded-edit-img' src='/images/user.png' alt='img'></img>
+}
+
       
         <input type="file" hidden
           onChange={(event) => handleImageUpload(event.target.files[0])}
@@ -656,11 +724,11 @@ const social = <div className='text-div'>
             <FormControl component="fieldset"
               className='edit-radio'
             >
-              <FormLabel component="legend"
+              <h2
                 className='radio-title'
-              >I am a local host</FormLabel>
+              >I am a local host</h2>
               <RadioGroup aria-label="Host" name="Host" value={value} onChange={handleChange}>
-                <FormControlLabel  value='Yes' control={<Radio />} label="Yes!" />
+                <FormControlLabel  value='Yes' control={<Radio />} label="Yes" />
                 <FormControlLabel value='No' control={<Radio />} label="No" />
               </RadioGroup>
             </FormControl>
@@ -670,20 +738,31 @@ const social = <div className='text-div'>
         <h3>{user ? `${user.first_name} ${user.last_name}` : null}</h3>
         <p>{user ? user.email : null}</p>
 
-        <div className='edit-calendar-icon'
-        onClick={() => gotoCalendar()}
+        
+
+        <div className={showRating ? 'edit-calendar-icon-all' : 'edit-calendar-icon'}
+       
         > 
-        <div className='edit-calendar-inner'> <EventIcon
+
+<div className='edit-icons' onClick={() => onRatingClicked()} >
+       {showRating ?  rating : <StarIcon fontSize='large'/>}
+       </div>
+
+        <div className='edit-icons'> 
+        <EventIcon
+        onClick={() => gotoCalendar()}
         fontSize='large'
         />
         </div> 
         </div>
 
+       
       
 
         {host_info}
         {bio}
         {social}
+       
 
         {value === 'No' ?
       <div className='edit-info-blurb'>
@@ -716,12 +795,13 @@ const social = <div className='text-div'>
       close={closeDynamicDialog}
       title={dialog.title}
       content={dialog.content}
-      action={stripeOnboarding}
+      action={dialog.action}
       />
 
 <div className={open.class}>
 
       <Snackbar
+      
         open={open.snackbar}
         onClose={handleClose}
         TransitionComponent={transition}

@@ -37,14 +37,14 @@ const {
 	logoutUser,
 } = require('../../db/queries/user-queries');
 
-router.get('/', (req, res) => {
+// router.get('/', (req, res) => {
 
-	getUsers()
-		.then((data) => res.json(data))
-		.catch((err) => console.log('Error at users GET route "/"', err));
-});
+// 	getUsers()
+// 		.then((data) => res.json())
+// 		.catch((err) => console.log('Error at users GET route "/"', err));
+// });
 
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
 
 const submitted = req.body.input;
 	
@@ -62,7 +62,7 @@ const hash = bcrypt.hashSync(submitted.password, salt);
 
 	
 		createUser(values)
-		.then((data) => {
+		.then( async (data) => {
 
 			const details = {
 				name: submitted.first_name,
@@ -70,15 +70,25 @@ const hash = bcrypt.hashSync(submitted.password, salt);
 				public_key: public_key
 			}
 
-			if(data !== 'exist'){
-				nodemail.sendConfirmation(details)
-			}
-
+		if(data === 'exist'){
 			return res.json(data);
+		}
 
+	
+		nodemail.sendConfirmation(details).then((mail) => {
+			
+			if(mail){
+				return res.json(data);
+			} 
+			return res.json(false);
+		})
 		})
 
-		.catch((err) => console.log('Error at users CREATE route "/"', err));
+
+		.catch((err) => {
+			console.log('Error at users CREATE route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -94,7 +104,10 @@ router.patch('/confirm', (req, res) => {
 
 		confirmUser(values, uid)
 		.then((data) => res.json(data))
-		.catch((err) => console.log('Error at users CONFIRM route "/"', err));
+		.catch((err) => {
+			console.log('Error at users CONFIRM route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -130,7 +143,10 @@ router.post('/login', (req, res) => {
 		});
 	
 		})
-		.catch((err) => console.log('Error at users LOGIN route "/"', err));
+		.catch((err) => {
+			console.log('Error at users LOGIN route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -146,26 +162,29 @@ router.post('/recovery', async (req, res) => {
 		recoverPassword(values)
 		.then((data) => {
   
-			if(data){
+			if(!data){
+				return res.json(false);
+			}
 
 			const details = {
 				email: email,
 				uid: uid
 			}
+		
+			nodemail.sendRecovery(details).then((mail) => {
 
-			try {
-				 nodemail.sendRecovery(details);
-				 return res.json(true);
-
-			} catch (error) {
-				console.log(error);
+				if(mail){
+					return res.json(true);
+				} 
 				return res.json(false);
-			
-			}	
-			}
 
 		})
-		.catch((err) => console.log('Error at users CONFIRM route "/"', err));
+
+		})
+		.catch((err) => {
+			console.log('Error at users CONFIRM route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -175,7 +194,6 @@ router.post('/recover', async (req, res) => {
 	
 	getTemp([input.email])
 	.then((data) => {
-	console.log('DATA',data);
 	
 	bcrypt.compare(input.id, data.hash, function(err, result){
 		
@@ -266,7 +284,10 @@ router.patch('/edit', (req, res) => {
 
 		})
 	
-		.catch((err) => console.log('Error at users EDIT route "/"', err));
+		.catch((err) => {
+			console.log('Error at users EDIT route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -277,10 +298,13 @@ router.patch('/edit', (req, res) => {
 router.post('/editImg', async (req, res) => {
 
 
+
 	const file = req.files.image;
-	// const ext = req.body.ref !== 'null' ? req.body.ref : `${uniqid()}.jpeg`;
+	const tmp = process.env.NODE_ENV === 'production' ? '/tmp/' : './tmp/';
+	console.log(tmp)
 	const ext = `${uniqid()}.jpeg`;
-	const path =  './images/' + ext;
+	const path =  tmp + ext;
+
 
 
   file.mv(path, async (error) => {
@@ -304,10 +328,10 @@ router.post('/editImg', async (req, res) => {
 
 								try {
 
-									const source = tinify.fromFile(`./images/${ext}`);
-									await source.toFile(`./images/${ext}`);
+									const source = tinify.fromFile(path);
+									await source.toFile(path);
 						
-									const filePath = `./images/${ext}`;
+									const filePath = path;
 									const bucketName = 'locals-images';
 						
 									await storage.bucket(bucketName).upload(filePath, {
@@ -318,25 +342,32 @@ router.post('/editImg', async (req, res) => {
 						
 									console.log(`${filePath} uploaded to ${bucketName}`);
 
-									await storage.bucket(bucketName).file(req.body.ref).delete();
-						
-									console.log(`${req.body.ref} deleted from ${bucketName}`);
-
+									//safty for this has a way of failing on a whim
+									try {
 									fs.unlinkSync(filePath) //<-- blocking function
-						
 									console.log(`File ${filePath} removed`)
+									await storage.bucket(bucketName).file(req.body.ref).delete();
+									console.log(`${req.body.ref} deleted from ${bucketName}`);
+								
 						
+									} catch (error) {
+										console.log('silently failed to delete')
+									}
+									
 									return res.json(data);
 							
 								} catch (error) {
 									console.log('BUCKET ERROR', error);
-									return res.json(false);
+									return res.json(error);
 								}
 							})
 
+
+
+
 					} else {
 
-						return res.json(false);
+						return res.json('failed to validate user');
 					}
 
 				});
@@ -344,7 +375,9 @@ router.post('/editImg', async (req, res) => {
 		})
 
 		
-		.catch((err) => console.log('Error at users EDIT IMG	 route "/"', err));
+		.catch((err) => {
+			return res.json(false);
+		});
 	
   })
 
@@ -376,6 +409,8 @@ router.post('/session', (req, res) => {
 								bio: user.bio,
 								day_rate: user.day_rate,
 								social_link: user.social_link,
+								thumbs_up: user.thumbs_up,
+								thumbs_down: user.thumbs_down,
 								connect_id: user.connect_id,
 								customer_id: user.customer_id,
 								uid: req.body.uid,
@@ -389,7 +424,10 @@ router.post('/session', (req, res) => {
 			}
 			
 		})
-		.catch((err) => console.log('Error at users SESSION route "/"', err));
+		.catch((err) => {
+			console.log('Error at users SESSION route "/"', err);
+			return res.json(false);
+		});
 
 });
 

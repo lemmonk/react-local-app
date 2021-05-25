@@ -21,17 +21,23 @@ router.post('/get', (req, res) => {
 
 	getInbox(values)
 		.then((data) => res.json(data))
-		.catch((err) => console.log('Error at inbox GET route "/"', err));
+		.catch((err) => {
+			console.log('Error at inbox GET route "/"', err);
+			return res.json(false);
+		});
 });
 
 router.post('/info', (req, res) => {
 
 	const input = req.body.input;
 	const values = [input];
-console.log(values)
+
 	fetchInfo(values)
 		.then((data) => res.json(data))
-		.catch((err) => console.log('Error at inboxInfo GET route "/"', err));
+		.catch((err) => {
+			console.log('Error at inboxInfo GET route "/"', err);
+			return res.json(false);
+		});
 });
 
 
@@ -48,9 +54,12 @@ router.post('/', (req, res) => {
 				
 					deleteInboxItem([input.id])
 					.then((data) => {
-				
-						try {
 
+						if(!data){
+							return res.json(false);
+						}
+
+						
 						const details = {
 							from: input.name,
 								to: input.other_name,
@@ -65,22 +74,18 @@ router.post('/', (req, res) => {
 						}
 						
 
-						if(data.id){
-							nodemail.sendCancellation(details)
-						}
-							
-						return	res.json(data.id)
+						nodemail.sendCancellation(details).then((mail) => {
 
-						} catch (error) {
-							console.log(error);
+							if(mail){
+								return res.json(data.id);
+							} 
 							return res.json(false);
-						}
-
-						
+			
+						})
+			
 					})
 
 				} else {
-					
 					return res.json(false);
 				}
 
@@ -88,7 +93,10 @@ router.post('/', (req, res) => {
 
 		})
 
-	.catch((err) => console.log('Error at inbox GET route "/"', err));
+	.catch((err) => {
+		console.log('Error at inbox GET route "/"', err);
+		return res.json(false);
+	});
 		
 });
 

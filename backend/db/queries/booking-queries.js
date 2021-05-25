@@ -7,9 +7,11 @@ const getBookings = values => {
 	FROM bookings
 	WHERE host_key = $1
 	AND status != 'Cancelled'
+	AND status != 'Complete'
 	AND stamp >= NOW()
 	OR user_key = $1
 	AND status != 'Cancelled'
+	AND status != 'Complete'
 	AND stamp >= NOW()
 	;`;
 
@@ -20,7 +22,7 @@ const getBookings = values => {
 };
 
 const createBooking = values => {
-	console.log('vals', values)
+
 	const text = `
 	INSERT INTO bookings
 	(host_key, host_name, host_email, host_city, user_key, user_name, user_email, user_city, status, price, title, color, start_time, end_time, host_rate_ref, user_rate_ref, stamp) 

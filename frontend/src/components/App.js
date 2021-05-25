@@ -7,7 +7,7 @@ import Footer from './Footer';
 function App() {
 
   const [user, setUser] = useState('');
-
+  // console.log = function() {}
 
   return (
     <div className="App">

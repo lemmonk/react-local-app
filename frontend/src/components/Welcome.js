@@ -12,7 +12,7 @@ const history = useHistory();
 if(!user)return history.push('/'),[history];
 
 
-const message = ` Please follow the link sent to ${user ? user.email :  'your provided email'} to confirm your account before logging in.`;
+const message = ` Please follow the link sent to ${user ? user.email :  'your provided email'} to confirm your account before getting started.`;
 
  
   return (

@@ -6,6 +6,8 @@
 	bottom: 0;
 	right: 0;
 	width: 100%;
+
+
 	
 
 }
@@ -35,8 +37,8 @@
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 
 	&:hover{
-		// color: $black;
-		background-color: $primary-color;
+	
+		background-color: rgb(72, 72, 72);
 	}
 }
 
@@ -44,7 +46,20 @@
 .search-dialog{
 	display: block;
 	margin: auto;
-	width: 400px;
+	width: 95%;
+
+	h3{
+		color:$black;
+	}
+
+	h4{
+		color:$black;
+	}
+
+}
+
+.search-dialog-inner{
+	width: 100%;
 }
 
 .search-radio{
@@ -57,13 +72,21 @@
 }
 
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: $pixel-width) {
+
+	.search-dialog{
+		display: block;
+		margin: auto;
+		width: 500px;
+	
+	
+	}
 
 	.search-icon-inner{
 		display: flex;
 		margin: auto;
 		justify-content: flex-end;
-		width: 375px;
+		width: $pixel-width;
 		background-color: transparent;
 	}
 

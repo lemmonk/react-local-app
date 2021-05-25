@@ -1,9 +1,11 @@
 var cacheName = 'locals-pwa';
 var filesToCache = [
-  '/',
+  // '/',
   // '/index.html',
   // 'styles/App.css',
 ];
+
+
 
 /* Start the service worker and cache all of the app's content */
 self.addEventListener('install', function(e) {

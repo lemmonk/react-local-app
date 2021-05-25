@@ -15,7 +15,7 @@ const {
 router.post('/host', (req, res) => {
 
 	const input = req.body.input;
-	const values = [input.id, input.ref];
+	const values = [input.id, input.ref, input.rating];
 	
 	updateHostRef(values)
 		.then((data) => {
@@ -38,7 +38,7 @@ router.post('/host', (req, res) => {
 router.post('/user', (req, res) => {
 
 	const input = req.body.input;
-	const values = [input.id, input.ref];
+	const values = [input.id, input.ref, input.rating];
 	
 	updateUserRef(values)
 		.then((data) => {

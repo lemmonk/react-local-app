@@ -12,9 +12,12 @@ function Terms() {
 
   <div className='terms-inner'>
     
+    <div className='terms-title'>
     <h1>TERMS OF USE</h1>
     <p>Last updated November 14, 2020</p>
 
+    </div>
+    
     
         <h3>AGREEMENT TO TERMS</h3>
         <p>

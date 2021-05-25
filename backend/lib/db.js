@@ -11,6 +11,8 @@ if (process.env.NODE_ENV === 'production'){
 		database: process.env.DB_NAME_LIVE,
 	};
 
+	
+
 } else {
 
 	dbParams = {

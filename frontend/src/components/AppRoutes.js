@@ -26,6 +26,7 @@ import Pwa from "./Pwa";
 import Connect from "./Connect";
 import Rating from "./Rating";
 import Terms from "./Terms";
+import Offline from "./Offline";
 
 
 function AppRoutes() {
@@ -33,19 +34,19 @@ function AppRoutes() {
 
   const {user, setUser} = useContext(UserContext);
   
-  
+
   
 
   useEffect(() => {
 
-
+    
     const uid = localStorage.getItem('locals-uid');
 
     if(!user && uid){
 
     axios.post('/api/users/session', { uid })
     .then(res => {
-     
+      
       if(res.data.verified){
      
         setUser(res.data);
@@ -75,7 +76,7 @@ function AppRoutes() {
             nav={true}
             action={null}
             />
-            <Splash />
+           
             <Feed />
           </Route>
 
@@ -115,7 +116,7 @@ function AppRoutes() {
             logo={false}
             title={null}
             nav={false}
-            action={null}
+            action='/'
             />
             <LoginUser />
           </Route>
@@ -226,7 +227,7 @@ function AppRoutes() {
             logo={false}
             title={null}
             nav={false}
-            action='/'
+            action='/inbox'
            /> 
             <InboxInfo {...props} />
             </>
@@ -239,12 +240,7 @@ function AppRoutes() {
           <Route exact path="/chat"
           render={(props) => (
             <>
-            <NavBar
-            logo={false}
-            title={null}
-            nav={false}
-            action='/'
-           /> 
+          
             <Chat {...props} />
             </>
           )}
@@ -280,9 +276,9 @@ function AppRoutes() {
 
     <Route exact path="/pwa">
             <NavBar
-            logo={false}
-            title={null}
-            nav={false}
+            logo={true}
+            title='Locals'
+            nav={true}
             action={null}
             />
 
@@ -301,6 +297,20 @@ function AppRoutes() {
       />
       <Terms />
     </Route>
+
+
+
+    <Route exact path="/offline">
+            <NavBar
+            logo={true}
+            title={null}
+            nav={false}
+            action={null}
+            />
+
+            <Offline />
+            
+          </Route>
 
          
         </Switch>

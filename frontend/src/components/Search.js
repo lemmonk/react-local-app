@@ -6,7 +6,6 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -53,12 +52,6 @@ function Search(props) {
   };
 
 
-
-  
- 
-
-
-
   return (
     <section >
     <div className='search-icon-wrapper'>
@@ -76,11 +69,11 @@ function Search(props) {
     <div>
       
       <Dialog className='search-dialog' open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        
+      
         <DialogContent>
-          <DialogContentText>
-            Find host by location, name, and sorted results.
-          </DialogContentText>
+          
+           <h3> Find host by location, name, and filtered results.  </h3>
+       
         
           <SearchTextField
             autoFocus
@@ -99,9 +92,10 @@ function Search(props) {
           <div className='search-radio'>
 
             <FormControl component="fieldset" >
-      <FormLabel component="legend">Sort By</FormLabel>
+      <FormLabel component="legend"><h4>Filtered By</h4></FormLabel>
       <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-      <FormControlLabel value="none" control={<Radio />} label="Random" />
+      <FormControlLabel value='' control={<Radio />} label="Random" />
+      <FormControlLabel value="rating" control={<Radio />} label="Rating" />
        
         <FormControlLabel value="low" control={<Radio />} label="Price (low)" />
         <FormControlLabel value="high" control={<Radio />} label="Price (high)" />
@@ -117,6 +111,7 @@ function Search(props) {
           </button>
         </DialogActions>
        <br></br>
+     
       </Dialog>
     </div>
     </section>

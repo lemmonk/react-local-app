@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import axios from "axios";
+import Splash from './Splash';
 import HostCard from "./HostCard";
 import Search from "./Search";
 import Loading from "./Loading";
@@ -11,6 +12,7 @@ const history = useHistory();
  const [loading, setLoading] = useState(true);
  const [feed, setFeed] = useState({
     hosts: null,
+    query: 'at random'
   })
 
   const [refresh, setRefresh] = useState(false);
@@ -38,19 +40,30 @@ const history = useHistory();
    
     const query = {
       search: search,
-      sortBy: sort
+      ui: `Showing host results ${exist ? `for ${exist}` : 'at random'}`
     }
 
+    let url = '/api/hosts';
+    
+    if(sort === 'rating'){
+      url = '/api/hosts/rating'
+      query.ui = `Showing host results ${query.search ? `for ${query.search}` : ''} by rating`
+    } else if (sort === 'low' || sort === 'high'){
+      url = '/api/hosts/price'
+      query.ui = `Showing host results ${query.search ? `for ${query.search}` : ''} by ${sort}est price`
+    }
+   
+
     setLoading(true);
-    axios.post(`/api/hosts`, {query})
+    axios.post(url, {query})
     .then(res => {
 
-    // console.log(res.data)
+    // filter by search results
+    const result = sort === 'high' ? res.data.reverse() : res.data;
 
-    const result = query.sortBy === 'low' ? res.data.reverse() : res.data;
-   
     setFeed({
-      hosts: result
+      hosts: result,
+      query: query.ui
     })
     
     setLoading(false);
@@ -58,8 +71,7 @@ const history = useHistory();
     })
     .catch(err => {
       setLoading(false);
-      //silent error
-      // console.log(err);
+      return history.push('/'),[history];
 
     });
   
@@ -68,11 +80,15 @@ const history = useHistory();
    
     
     const hostCard = feed.hosts ? feed.hosts.map((host, index) =>{
+     
       const total = host.thumbs_up + host.thumbs_down;
-      let rating = Math.ceil(host.thumbs_up / total * 100);
+      let rating = 0
+      if(total > 10){
+       rating = Math.ceil(host.thumbs_up / total * 100);
       rating = Number.isNaN(rating) ? 0 : rating;
-    
-
+      }
+      
+  
         return (
           <HostCard
           key={index}
@@ -95,35 +111,22 @@ const history = useHistory();
     ) : null;
 
 
- const setResults = () => {
+    
 
-  let results = null;
-  const isQuery = sessionStorage.getItem('locals-search-query');
-  const isSorted = sessionStorage.getItem('locals-search-sort');
-  let query = isQuery ? sessionStorage.getItem('locals-search-query') : null;
-  let sort = !isSorted || isSorted === 'none' ? 'at random' : 'by price';
-
-  if(isQuery){
-    results = `Showing results for ${query}.`;
-  } else {
-    results = `Showing host results ${sort}.`;
-  }
-  return results;
-}
 
 const uid = localStorage.getItem('locals-uid');
-const results = uid ? setResults() : null;
 
-
-
-
- 
   return (
     <section className="feed">
      {loading ? <Loading/> : null}
+    {!loading && !uid ? <Splash/> : null}
 
-     <div className='results-blurb'>{feed.hosts ? results : null}</div>
-      {hostCard}
+    <div className='results-blurb'>
+    {uid && !loading ? feed.query : null}
+
+    </div>
+    
+      {hostCard ? hostCard : null}
       <Search search={onSearch}/>
     </section>
   );

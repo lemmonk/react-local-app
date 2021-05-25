@@ -1,25 +1,46 @@
 const nodemail = require('./mailer');
 const brand = 'Locals';
-const url = 'http://localhost:3000'
+
+let url = process.env.HOST_URL;
+
+if (process.env.NODE_ENV === 'production'){
+  url = process.env.LIVE_URL
+}
 
 const methods = {};
 
   methods.sendConfirmation = async (details) => {
 
-  const subject = "Locals Confirmation";
+  const subject = `${brand} Confirmation`;
 
   const params = `?i=${details.public_key}`;
   const link = `${url}/confirm${params}`;
 
-  const body = `Hello ${details.name}, please follow this <a href=${link}>link</a> to confirm your account and start using the ${brand} app.`;
+  const body = `
+  <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
+  <h3>
+   Hello ${details.name}!<br><br>
+   We're very excited to welcome you to our network of travellers, and host.
+  <br> 
+  Please follow this <a style='color:#1eabf7' href=${link}>link</a> to
+   confirm your account before getting started.
+  <br><br> 
+  Thank you for choosing ${brand}.
+  </h3>
+  </div>
+  `;
   
-  try{
-  await nodemail.letter(details.name, details.email, subject, body);
-    console.log("email sent");
-  } catch(err) {
-    console.log('Failed to send invite: ', err);
+ 
+  try {
+   let mail = await nodemail.letter(details.name, details.email, subject, body);
+ 
   
+     return mail;
+
+  } catch (err) {
+    return false;
   }
+    
 
   }
 
@@ -31,15 +52,33 @@ const methods = {};
     const params = `?e=${details.email}&r=${details.uid}`;
     const link = `${url}/recover${params}`;
   
-    const body = `Hello ${details.email}, we have recently recieved a request to reset your ${brand} app password.  If this was not you please file a report by replying to this email, otherwise follow this <a href=${link}>link</a> to proceed.`;
+    const body = `
+     <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
+     <h3>
+    Hello,<br><br>
+    We recently recieved a request to reset your ${brand} app password.
+    <br>
+      If this was not you please file a report by replying to this email, otherwise follow this <a style='color:#1eabf7' href=${link}>link</a> to proceed with the reset. 
+    <br><br> 
+    Thank you for choosing ${brand}.
+    </h3>
+    </div>
+    `;
     
-    try{
-    await nodemail.letter(details.email, details.email, subject, body);
-      console.log("email sent");
-    } catch(err) {
-      console.log('Failed to send invite: ', err);
     
-    }
+
+    try {
+      
+      let mail = await nodemail.letter(`${brand} App`, details.email, subject, body);
+    
+      if(mail){
+        return mail;
+      }
+      return mail;
+   
+     } catch (err) {
+       return mail;
+     }
   
     }
 
@@ -49,7 +88,13 @@ const methods = {};
 
       const subject = "New Booking!";
     
-      const body = `Hello ${details.host_name}, you have a new ${brand} app booking.
+      const body = `
+      <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
+      <h3>
+
+      Hello ${details.host_name}, 
+      <br><br>
+      You have a new ${brand} app booking!
       <br><br>
       Guest: ${details.user_name}
       <br>
@@ -57,15 +102,27 @@ const methods = {};
       <br>
       On: ${details.date.substring(0,10)} @ ${details.date.substring(11,16)} hours.
       <br><br> 
-      Please see your <a href=${url}>inbox</a> for further details and to communicate with your client.`;
+      Please see your <a style='color:#1eabf7' href=${url}>inbox</a> for further details and to communicate further with your guest.
+      <br><br> 
+      Thank you for choosing ${brand}.
+      </h3>
+      </div>
+      `;
+
       
-      try{
-      await nodemail.letter(details.host_name, details.host_email, subject, body);
-        console.log("email sent");
-      } catch(err) {
-        console.log('Failed to send invite: ', err);
+      try {
       
-      }
+       let mail = await nodemail.letter(details.host_name, details.host_email, subject, body);
+      
+        if(mail){
+          return mail;
+        }
+        return mail;
+     
+       } catch (err) {
+         return mail;
+       }
+     
     
       }
 
@@ -75,24 +132,41 @@ const methods = {};
 
         const subject = `${brand} Booking Cancelled`;
       
-        const body = `Hello ${details.to}, the following ${brand} app booking has been cancelled by ${details.from}.
+        const body = `
+        <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #fc5d5d; border-radius: 5px; padding:2px 0px 2px 15px;'>
+        <h3>
+
+        Hello ${details.to}, 
+        <br><br>
+        The following ${brand} app booking has been cancelled by ${details.from}.
         <br><br>
         Host: ${details.host_name}<br>
         Guest: ${details.user_name}<br>
-        In: ${details.host_city}<br>
+        Location: ${details.host_city}<br>
         ${details.date} @ ${details.start}h - ${details.end}h.
         <br><br>
-        Please see your <a href=${url}>schedule</a> to view the changes.
-        <br><br>
-        - ${brand}`;
+        Please see your <a style='color:#1eabf7' href=${url}>schedule</a> to view the changes.
+
+        <br><br> 
+        Thank you for choosing ${brand}.
+        </h3>
+        </div>`;
+
         
-        try{
-        await nodemail.letter(details.to, details.email, subject, body);
-          console.log("email sent");
-        } catch(err) {
-          console.log('Failed to send invite: ', err);
+        try {
+      
+          let mail = await nodemail.letter(details.to, details.email, subject, body);
+       
+         
+           if(mail){
+             return mail;
+           }
+           return mail;
         
-        }
+          } catch (err) {
+            return mail;
+          }
+       
       
         }
 
@@ -106,26 +180,36 @@ const methods = {};
           const link_n = `${url}/rating${params}&rate=thumbs_down`;
         
           const body = `
-          <div style='text-align:center; line-height: 1.5; margin-top:25px;' >
-          <h3>  
+          <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
+          <h3>
+          We noticed you just had a booking complete!
+          <br><br>
           Rate your experience with ${details.name} in ${details.host_city}.
           <br><br>
-         <div style='font-size: 2rem'>
-          <a href=${link_y}>👍</a> | <a href=${link_n}>👎</a> 
-          </div>
-          <br><br>
-          <br><br>
-          Thank you for using ${brand}.
+       
+          <a style='font-size: 2rem; text-decoration:none;' href=${link_y}>👍 —— </a> or <a style='font-size: 2rem; text-decoration:none;' href=${link_n}> —— 👎</a> 
+        
+           <br><br> 
+          Thank you for choosing ${brand}.
           </h3>
-          </div>`;
-          
-          try{
-          await nodemail.letter(subject, details.email, details.name, body);
-            console.log("email sent");
-          } catch(err) {
-            console.log('Failed to send invite: ', err);
-          
-          }
+          </div>
+          `;
+
+         
+    try {
+      
+      let mail =  await nodemail.letter(subject, details.email, details.name, body);
+    
+      
+        if(mail){
+          return mail;
+        }
+        return mail;
+    
+      } catch (err) {
+        return mail;
+      }
+         
         
           }
 

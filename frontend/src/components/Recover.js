@@ -1,7 +1,6 @@
 import React, {  useEffect, useState } from 'react';
 import {useHistory} from 'react-router-dom';
-import DialogActions from '@material-ui/core/DialogActions';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function Recover() {
 
@@ -22,11 +21,16 @@ useEffect(() => {
   
   const url_string = window.location.href;
   const url = new URL(url_string);
+  window.history.replaceState({}, document.title, "/" + "");
+
+  
   
   const params = {
     id: url.searchParams.get("r"),
     email: url.searchParams.get("e")
   }
+
+ 
  
   if(params && params.id){
    
@@ -42,11 +46,13 @@ useEffect(() => {
     setUi({
       welcome: null,
       message: 'Your password has been reset successfully.',
-      action: <DialogActions className='full-length-btn'>
-      <button onClick={() => onLogin()} >
-        Login
-      </button>
-    </DialogActions>
+      action:  <div className='incoming-icons'>
+      <ExitToAppIcon
+      onClick={() => onLogin()}
+      fontSize='large'
+      />
+     </div>
+ 
     })
     sessionStorage.clear();
   
@@ -55,7 +61,7 @@ useEffect(() => {
   } else {
 
     setUi({
-      welcome: 'Recovery Sent',
+      welcome: null,
       message: 'Please follow the link sent to your provided email to reset your password.',
       action: null
     })

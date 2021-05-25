@@ -3,7 +3,7 @@ const db = require('../../lib/db.js');
 const getChat = values => {
 	
 	const text = `
-	SELECT id, name, message, stamp 
+	SELECT id, name, message, has_link, stamp 
 	FROM chat
 	WHERE chat.host_key = $1
 	AND chat.user_key = $2
@@ -36,9 +36,9 @@ const updateChat = values => {
 	
 	const text = `
 	INSERT INTO chat
-	(host_key, user_key, name, message) 
-	VALUES($1, $2, $3, $4)
-	RETURNING id, host_key, user_key, name, message, stamp`;
+	(host_key, user_key, name, message, has_link) 
+	VALUES($1, $2, $3, $4, $5)
+	RETURNING id, host_key, user_key, name, message, has_link, stamp`;
 
 	return db
 		.query(text, values)

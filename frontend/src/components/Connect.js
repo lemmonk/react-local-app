@@ -1,15 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import {useHistory} from 'react-router-dom';
-import  UserContext  from './UserContext';
-
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Loading from './Loading';
 
 
 function Connect() {
   const history = useHistory();
   const [state, setState] = useState(false);
- 
+ const [loading, setLoading] = useState(true);
 
 
   useEffect(() => {
@@ -21,8 +20,8 @@ if(!id)return;
   axios.get(`/api/stripe/${id}`)
   .then(res => {
 
-  console.log(res.data)
-
+  // console.log(res.data)
+    setLoading(false);
   if(res.data.details_submitted){
     setState(res.data.details_submitted);
   
@@ -31,11 +30,12 @@ if(!id)return;
 
   })
   .catch(err => {
+    setLoading(false);
     console.log(err);
   });
 },[]);
 
-const back = () => {
+const onBack = () => {
   return history.push('/edit'),[history];
 }
 
@@ -46,17 +46,20 @@ const msg = state ? 'Thank you for connecting your payment details, you may now 
   return (
     <section className='incoming-wrapper'>
 
+      {loading ? <Loading/> : null}
+
     <div className='incoming-content'>
     <p>{msg}</p>
     </div>
 
 
 
-<div className='incoming-action'>
-        
-  <button  onClick={() => back()}>Back to profile</button>
-     
-      </div>
+    <div className='incoming-icons'>
+    <ExitToAppIcon
+    onClick={() => onBack()}
+    fontSize='large'
+    />
+   </div>
    
    
   

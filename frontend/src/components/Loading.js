@@ -19,14 +19,13 @@ function Loading() {
     <section className="loading-wrapper">
 
       <div className={classes.root}>
-      
+      <div className='loading-double-wrap'>
       <div className='loading'>
-      {/* <CircularProgress
-      
-      className='loadingIcon'
-      /> */}
       <div className='main-loader'></div>
       </div>
+      </div>
+     
+     
      
      
     </div>

@@ -12,11 +12,11 @@ function NavBar(props) {
 
   const history = useHistory();
   
-  const [windowState, setWindow] = React.useState({
+  const [windowState, setWindow] = useState({
     anchor: false,
   })
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
  
   const [previous, setPrevious] = useState({
     history: []
@@ -24,6 +24,17 @@ function NavBar(props) {
 
 
 //PWA UI
+
+useEffect(() => {
+
+  if(window.navigator.onLine){
+  console.log('Locals App')
+  } else {
+    return history.push('/offline'),[history];
+  }
+  
+},[window.navigator.onLine]);
+ 
 
 const [os, setOS] = useState('Mobile');
 
@@ -78,7 +89,6 @@ const PWA = () => {
   const refresh = () => {
     handleClose();
     return history.push('/'),[history];
-    
   }
 
  
@@ -132,9 +142,11 @@ const PWA = () => {
   };
 
  
-  const onBack = () => {
-   let path = previous.history[previous.history.length - 2];
-   path = !path || path === '/chat' ? '/' : path;
+  const onBack = path => {
+
+  if(props.extra){
+    props.extra();
+  }
   
     return history.push({
       pathname: path,
@@ -165,7 +177,7 @@ const contactUs = () => {
       <div className='nav-logo' >
         {props.logo 
         ? <DynamicFeedIcon onClick={() => refresh()}/> 
-        : <ArrowBackIosIcon onClick={() => onBack()}/>}
+        : <ArrowBackIosIcon onClick={() => onBack(props.action)}/>}
       </div>
 
       <h3 className='nav-title'>{props.title ? props.title : null}</h3>

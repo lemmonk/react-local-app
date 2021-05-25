@@ -1,7 +1,9 @@
 @import './variables.scss';
 
-.empty-inbox{
+.inbox-empty{
+margin-top: 30%;
 text-align: center;
+width: 100%;
 }
 
 .inbox-double-wrap{
@@ -37,7 +39,7 @@ text-align: center;
 	border-radius: 5px;
 	padding: 10px 0px;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-	border: solid 3px $accent-color;
+	border: solid 1px lightgray;
 
 	h3{
 		text-align: center;
@@ -111,20 +113,52 @@ z-index: 1;
 	color:$primary-color;
 }
 
-.inbox-status-pending{
-	label{
-		color: $accent-color
+.inbox-filter{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 90%;
+	margin: auto;
+	margin-bottom: 25px;
+	border-bottom: solid 2px lightgray;
+	padding: 0px 10px 5px 10px;
+
+
+}
+
+.inbox-status-unfocused{
+	cursor: pointer;
+	color: $gray;
+	font-weight: bold;
+	&:hover{
+		color:$black;
 	}
+}
+
+.inbox-status-upcoming{
+	label, p{
+		color:$accent-color;
+		font-weight: bold;
+	
+	}
+	
+	
 }
 .inbox-status-complete{
-	label{
-		color: $success
-	}
+	label, p{
+		color: $accent-color;
+		font-weight: bold;
+		
 }
+}
+
 .inbox-status-cancelled{
 	
-	label{
-		color: $error
+	label, p{
+		color: $error;
+		font-weight: bold;
+	
 	}
 }
 

@@ -2,6 +2,12 @@ const express = require('express');
 const router = express.Router();
 const Stripe = require('stripe');
 const stripe = Stripe(process.env.STRIPE_KEY);
+
+let stripe_url = `${process.env.HOST_URL}/connect`;
+
+if (process.env.NODE_ENV === 'production'){
+  stripe_url = `${process.env.LIVE_URL}/connect`
+}
                    
 const {
   connectHost,
@@ -44,8 +50,8 @@ router.post('/createAccountLink', async (req, res) => {
    
     const accountLinks = await stripe.accountLinks.create({
       account: account.id,
-      refresh_url: 'http://localhost:3000/connect',
-      return_url: 'http://localhost:3000/connect',
+      refresh_url: stripe_url,
+      return_url: stripe_url,
       type: 'account_onboarding',
       
     });
@@ -59,9 +65,7 @@ router.post('/createAccountLink', async (req, res) => {
 
     connectHost(values)
     .then((data) =>{
-      console.log('DATA', data);
-
-    
+      
       const connectUser = { 
         id: data.connect_id,
         link: accountLinks,
@@ -93,7 +97,7 @@ router.post('/secret', async (req, res) => {
       {email: input.email},
     );
 
-    createCustomer([customer.id]);
+    createCustomer([customer.id, input.email]);
   }
 
 
@@ -121,10 +125,5 @@ if(intent.client_secret){
 }
 
 });
-
-
-
-
-
 
 module.exports = router;

@@ -4,10 +4,11 @@ const updateHostRef = (values) => {
 	
 	const text = `
 	UPDATE bookings
-	SET host_rate_ref = NULL
+	SET host_rate_ref = $3
 	WHERE id = $1
 	AND host_rate_ref = $2
-	AND host_rate_ref IS NOT NULL
+	AND host_rate_ref != 'thumbs_up'
+	AND host_rate_ref != 'thumbs_down'
 	RETURNING user_key;`;
 
 	return db
@@ -21,10 +22,12 @@ const updateUserRef = (values) => {
 	
 	const text = `
 	UPDATE bookings
-	SET user_rate_ref = NULL
+	SET user_rate_ref = $3
 	WHERE id = $1
 	AND user_rate_ref = $2
-	AND user_rate_ref IS NOT NULL
+	AND user_rate_ref != 'thumbs_up'
+	AND user_rate_ref != 'thumbs_down'
+
 	RETURNING host_key;`;
 
 	return db

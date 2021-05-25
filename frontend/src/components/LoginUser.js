@@ -126,7 +126,12 @@ function LoginUser() {
          
         }).catch((err) => {
           setLoading(false);
-          return history.push('/'),[history];
+          return setError((prev) => ({
+            ...prev,
+            email : false,
+            password: false,
+            errorMsg: 'Unknown error'
+          }));
         });
   
   }; 

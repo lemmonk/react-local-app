@@ -26,7 +26,7 @@ function Inbox(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
 
-  const [inbox, setInbox] = useState(null);
+  // const [inbox, setInbox] = useState(null);
   const [identifier, setIdentifier] = useState({
     id: null,
     name: null,
@@ -35,6 +35,12 @@ function Inbox(props) {
   const [refresh, setRefresh] = useState(false);
 
 
+  const [inbox, setInbox] = useState({
+    filter: 'upcoming',
+    upcoming: [],
+    complete: [],
+    cancelled: [],
+  });
   
   
   useEffect(() => {
@@ -51,7 +57,41 @@ function Inbox(props) {
     .then(res => {
     // console.log(res.data)
     setLoading(false);
-      setInbox(res.data);
+    
+    const upcoming = [];
+    const complete = [];
+    const cancelled = [];
+    for (const item of res.data){
+
+      if(item.status === 'Upcoming'){
+
+       upcoming.push(item);
+
+      } else if(item.status === 'Complete' ){
+       
+        complete.push(item);
+
+      }else if(item.status === 'Cancelled'){
+
+        cancelled.push(item);
+      
+      }
+
+    }
+
+    setInbox({
+      filter: 'upcoming',
+      upcoming: upcoming,
+      complete: complete,
+      cancelled: cancelled
+    })
+
+    setFilterColors({
+      upcoming: 'inbox-status-upcoming',
+      complete: 'inbox-status-unfocused',
+      cancelled: 'inbox-status-unfocused'
+    })
+
 
     })
     .catch(err => {
@@ -60,6 +100,7 @@ function Inbox(props) {
     });
 
   },[refresh]);
+
 
 
   const confirmDelete = () => {
@@ -73,6 +114,7 @@ function Inbox(props) {
       uid: localStorage.getItem('locals-uid')
     }
 
+    handleClose();
     setLoading(true);
     axios.post(`/api/inbox`, { input })
     .then(res => {
@@ -89,7 +131,7 @@ function Inbox(props) {
 
     } else {
       setLoading(false);
-      const msg = "Failed to deleted booking.";
+      const msg = "Failed to cancel booking.";
       const cc = 'calendar-snackbar-error'
       handleSnack(TransitionUp, msg, cc);
 
@@ -171,7 +213,8 @@ function Inbox(props) {
 
 
 
-const inboxCard = inbox ? inbox.map((box, index) => {
+
+const inboxCard = inbox ? inbox[inbox.filter].map((box, index) => {
 
   let style = 'inbox-card-wrapper';
   let type = 'Travelling';
@@ -211,7 +254,13 @@ const inboxCard = inbox ? inbox.map((box, index) => {
     }
  } 
 
- const status_style = box.status === 'Cancelled' ? 'inbox-status-cancelled' : 'inbox-status-pending';
+
+ let status_style = 'inbox-status-upcoming';
+ if(box.status === 'Cancelled'){
+  status_style = 'inbox-status-cancelled';
+ } else if (box.status === 'Complete'){
+  status_style = 'inbox-status-complete';
+ }
  
 
   return (
@@ -253,13 +302,83 @@ const isSearched = () => {
   return null;
 }
 
+
 const searchedCard = isSearched();
-const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-inbox'>Inbox Empty</h3>;
+const inboxReady = inbox ? inbox[inbox.filter].length ? inboxCard : <h3 className='inbox-empty'>Folder Empty</h3> : null;
+
+
+const [filterColors, setFilterColors] = useState({
+
+  upcoming: 'inbox-status-upcoming',
+  complete: 'inbox-status-unfocused',
+  cancelled: 'inbox-status-unfocused'
+})
+
+const onUpcoming = () => {
+
+  setInbox((prev) => ({
+    ...prev,
+    filter: 'upcoming'
+  }))
+
+  setFilterColors({
+    upcoming: 'inbox-status-upcoming',
+    complete: 'inbox-status-unfocused',
+    cancelled: 'inbox-status-unfocused'
+  })
+
+}
+
+const onComplete = () => {
+
+  setInbox((prev) => ({
+    ...prev,
+    filter: 'complete'
+  }))
+
+  setFilterColors({
+    upcoming: 'inbox-status-unfocused',
+    complete: 'inbox-status-complete',
+    cancelled: 'inbox-status-unfocused'
+  })
+}
+
+
+const onCancelled = () => {
+
+  setInbox((prev) => ({
+    ...prev,
+    filter: 'cancelled'
+  }))
+
+
+  setFilterColors({
+    upcoming: 'inbox-status-unfocused',
+    complete: 'inbox-status-unfocused',
+    cancelled: 'inbox-status-cancelled'
+  })
+}
+
+const filterOptions = <div className='inbox-filter'>
+<div className={filterColors.upcoming}>
+<p onClick={() => onUpcoming()}>Upcoming</p>
+</div>
+<div className={filterColors.complete}>
+<p onClick={() => onComplete()}>Complete</p>
+</div>
+<div className={filterColors.cancelled}>
+<p onClick={() => onCancelled()}>Cancelled</p>
+</div>
+</div>
 
   return (
 
   <section className='inbox-double-wrap'>
     {loading ? <Loading/> : null}
+
+
+    {searchedCard ? null : filterOptions}
+   
     {searchedCard ? searchedCard : inboxReady}
 
      <Dialog className='search-dialog' open={open.dialog} onClose={handleClose} aria-labelledby="form-dialog-title">
@@ -270,7 +389,7 @@ const inboxReady = inbox && inbox.length > 0 ? inboxCard : <h3 className='empty-
             Are you sure you want to cancel this booking?  This action cannot be undone and will notify the other party of your departure from your agreement. 
             <br></br>
             <br></br>
-            All refunds are administrated and therfore the sole responsibility of the acting host.
+            All refunds are administrated and therefore the sole responsibility of the acting host.
            
           </DialogContentText>
          <div className='a-refund'>

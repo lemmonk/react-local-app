@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import globals from '../globals';
 import  UserContext  from './UserContext';
 import axios from 'axios';
@@ -9,13 +9,22 @@ function Splash() {
 
   const {setUser} = useContext(UserContext);
   const history = useHistory();
+  const [mapCity, setMapCity] = useState('Vancouver');
 
- 
+  const randomCity = () => {
+    const cityList = ['New York', 'Vancouver', 'London', 'Mexico City', 'Rio de Janeiro', 'Sydney', 'Auckland', 'Cape Town', 'Rome'];
+
+    const index = Math.floor(Math.random() * cityList.length);
+    setMapCity(cityList[index])
+  }
+
+  const uid = localStorage.getItem('locals-uid');
+  
   useEffect(() => {
 
+   randomCity();
    
-    const uid = localStorage.getItem('locals-uid');
-  
+   
     if (uid) {
     return isSession(uid);
   } 
@@ -27,6 +36,8 @@ function Splash() {
 
   const isSession = uid => {
 
+
+    //safety net
    const esc =  setTimeout(function(){
       
         localStorage.clear();
@@ -37,7 +48,7 @@ function Splash() {
     axios.post('/api/users/session', { uid })
     .then(res => {
      
-    
+      console.log(res.data);
       clearTimeout(esc);
 
       if(res.data.verified){
@@ -75,12 +86,12 @@ function Splash() {
     <img
     className='map-foreground'
     scale='1'
-    src={`https://maps.googleapis.com/maps/api/staticmap?center=Vancouver&zoom=10&size=500x3800&maptype=roadmap&key=${globals().map}`}></img>
+    src={`https://maps.googleapis.com/maps/api/staticmap?center=${mapCity}&zoom=10&size=500x3800&maptype=roadmap&key=${globals().map}`}></img>
   </div>
 
     <div className='hook'>
     <h3>
-    Let a local show you their hometown
+    Experience the places you visit through a local lense
     </h3>
     </div>
     <div className='pitch'>

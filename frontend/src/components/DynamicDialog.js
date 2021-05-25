@@ -22,14 +22,14 @@ function DynamicDialog(props) {
 
  
   return (
-<section className="dialog-wrapper">
+
 
 <Dialog
-        className='dialog-inner'
+         maxWidth='xs'
         open={open}
         onClose={() => props.close()}
         aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+       
       >
         <DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
         
@@ -41,12 +41,12 @@ function DynamicDialog(props) {
         <DialogActions className='alert-action-btn' onClick={() => props.close()}>
          
           <button onClick={() => props.action()} color="primary" autoFocus>
-            Next
+            Okay
           </button>
         </DialogActions>
       </Dialog>
    
-</section>
+
   );
 }
 

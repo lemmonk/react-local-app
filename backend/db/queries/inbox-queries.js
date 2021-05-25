@@ -25,7 +25,7 @@ const getInbox = values => {
 const fetchInfo = values => {
 	console.log(values);
 	const text = `
-		SELECT * 
+		SELECT first_name, last_name, email, city, bio, image, day_rate, social_link, thumbs_up, thumbs_down, connect_id, customer_id, public_key
 		FROM users
 		WHERE public_key = $1`;
 	

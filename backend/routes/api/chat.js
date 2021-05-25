@@ -24,7 +24,10 @@ const values = [input.host_key, input.user_key];
 	.then((data) => res.json(data))
 
 		})
-		.catch((err) => console.log('Error at chat GET route "/"', err));
+		.catch((err) => {
+			console.log('Error at chat GET route "/"', err);
+			return res.json(false);
+		});
 });
 
 
@@ -32,11 +35,14 @@ router.patch('/', (req, res) => {
 
 
 	const msg = req.body.msg;
-	const values = [msg.host_key, msg.user_key, msg.name, msg.message];
+	const values = [msg.host_key, msg.user_key, msg.name, msg.message, msg.has_link];
 
 		updateChat(values)
 		.then((data) => res.json(data))
-			.catch((err) => console.log('Error at chat PATCH route "/"', err));
+			.catch((err) => {
+				console.log('Error at chat PATCH route "/"', err);
+				return res.json(false);
+			});
 	});
 
 module.exports = router;

@@ -36,8 +36,8 @@ margin: auto;
 
 .hook{
 	z-index: 1;
-	margin-top: 60px;
-	line-height: 1.4;
+	margin-top: 40px;
+	line-height: 1.6;
 	text-align: center;
 	width: 75%;
 	color: $black;
@@ -49,11 +49,11 @@ margin: auto;
 	z-index: 1;
 	line-height: 1.4;
 	text-align: center;
-	margin-top: -50px;
+	 margin-top: -30px;
 	width: 80%;
 	color: $black;
-	font-size: 1.2rem;
-
+	font-size: 1.3rem;
+	
 }
 
 .call-to-action{
@@ -68,13 +68,15 @@ margin: auto;
 	button{
 	
 		width: 200px;
-		font-size: 1.2rem;
+		font-size: 1.3rem;
 		border: none;
 		padding: 20px 0px;
 		color: $white;
 		background-color: $primary-color;
 		border-radius: 5px;
 		box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+
+		
 
 	&:hover{
 		background-color: $accent-color;
@@ -85,9 +87,9 @@ margin: auto;
 
 
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: $pixel-width) {
 
 	.map-foreground{
-		width: 375px;
+		width: $pixel-width;
 	}
 }

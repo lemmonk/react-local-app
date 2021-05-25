@@ -54,17 +54,20 @@ const android = <div className='install-box'>
 <h1>Progressive Web App</h1>
 <h3>Locals is a PWA.
   <br></br><br></br>
-   In layman's terms this means you can quickly and easily install our mobile app onto your phone directly from this site.</h3>
+   In short, this means you can quickly and easily install our mobile app onto your phone directly from this site.</h3>
 
 
 {os === 'Android' ? android : ios}
 {os === 'Android' ? ios : android}
-
+<br></br>
 <h1>Why a PWA?</h1>
-<h3>There are many benifits to choosing to build a PWA instead of a more traditional app, including performance, ease of use, and accessability, but by and large the biggest reason is its ability to provide our customers with a fair and honest pricing model.  PWA's allow developers to circumvent the app stores and their hefty platform fees.
+<h3>There are many benifits to choosing to build a PWA rather then a more traditional mobile app - including performance, ease of use, accessability, and cost.  
 <br></br>
 <br></br>
-    We invite you to read the following article if you wish to learn more about how we came to our decision, and progressive web apps as a whole.  Thank you for using Locals, your ongoing support is what keeps us going.
+For us it came down to being able to provide our customers with a fair and honest pricing model. We invite you to read the following article if you wish to learn more about how we came to our decision.
+    <br></br>
+<br></br>
+     Thank you for choosing Locals, your ongoing support is what keeps us going.
 <br></br>
 <br></br>
 <a href='https://danboterhoven.medium.com/the-case-for-progressive-web-apps-ef40754e3fd6' target='_blank'>A case for progressive web apps</a>

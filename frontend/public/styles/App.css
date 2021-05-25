@@ -9,6 +9,16 @@
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.loading-double-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  width: 500px;
+  height: 100vh;
+  background-color: white;
   background-color: rgba(0, 0, 0, 0.7);
 }
 
@@ -57,7 +67,7 @@
 
 .nav-inner {
   width: 100%;
-  background-color: #45bdfe;
+  background-color: #1eabf7;
   padding: 10px 0px;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
 }
@@ -131,9 +141,9 @@
   opacity: 0;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
   .nav-inner {
-    width: 375px;
+    width: 500px;
   }
 }
 
@@ -168,13 +178,25 @@
 }
 
 .search-icon:hover {
-  background-color: #45bdfe;
+  background-color: #484848;
 }
 
 .search-dialog {
   display: block;
   margin: auto;
-  width: 400px;
+  width: 95%;
+}
+
+.search-dialog h3 {
+  color: #282828;
+}
+
+.search-dialog h4 {
+  color: #282828;
+}
+
+.search-dialog-inner {
+  width: 100%;
 }
 
 .search-radio {
@@ -185,12 +207,17 @@
   color: #45bdfe;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
+  .search-dialog {
+    display: block;
+    margin: auto;
+    width: 500px;
+  }
   .search-icon-inner {
     display: flex;
     margin: auto;
     justify-content: flex-end;
-    width: 375px;
+    width: 500px;
     background-color: transparent;
   }
 }
@@ -226,8 +253,8 @@
 
 .hook {
   z-index: 1;
-  margin-top: 60px;
-  line-height: 1.4;
+  margin-top: 40px;
+  line-height: 1.6;
   text-align: center;
   width: 75%;
   color: #282828;
@@ -238,10 +265,10 @@
   z-index: 1;
   line-height: 1.4;
   text-align: center;
-  margin-top: -50px;
+  margin-top: -30px;
   width: 80%;
   color: #282828;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
 }
 
 .call-to-action {
@@ -255,7 +282,7 @@
 
 .call-to-action button {
   width: 200px;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   border: none;
   padding: 20px 0px;
   color: white;
@@ -268,105 +295,24 @@
   background-color: #1eabf7;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
   .map-foreground {
-    width: 375px;
+    width: 500px;
   }
 }
 
 .feed {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
-}
-
-.calendar-icon {
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 5px;
-  color: #45bdfe;
 }
 
 .results-blurb {
   line-height: 1.4;
-  width: 95%;
+  width: 98%;
+  display: block;
+  margin: auto;
   text-align: center;
   color: gray;
   padding: 5px 0px;
-}
-
-.host-card {
-  position: relative;
-  margin: 30px 0px;
-  width: 95%;
-  height: 360px;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-}
-
-.host-card button {
-  position: absolute;
-  width: 100%;
-  padding: 15px;
-  bottom: 0;
-  left: 0;
-  font-size: 1.5rem;
-  color: white;
-  background-color: #45bdfe;
-  border: none;
-  border-radius: 0px 0px 10px 10px;
-}
-
-.host-card button:hover {
-  background-color: #1eabf7;
-}
-
-.host-wrapper {
-  padding: 20px;
-}
-
-.host-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-.host-header img {
-  width: 110px;
-  height: 110px;
-}
-
-.host-header h3 {
-  margin-left: 25px;
-}
-
-.host-body {
-  margin-top: -12px;
-  padding: 0px 5px;
-  height: 80px;
-  background-color: whitesmoke;
-}
-
-.host-footer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.star-lite {
-  color: #1eabf7;
-}
-
-.star-dim {
-  color: grey;
 }
 
 .host-card-wrapper {
@@ -396,21 +342,22 @@
   width: 95%;
   height: auto;
   background-color: white;
-  border-radius: 10px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  border-radius: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -12px, rgba(0, 0, 0, 0.3) 0px 8px 16px -12px;
+  border: solid 1px lightgray;
 }
 
 .host-card button {
   position: absolute;
   width: 100%;
   padding: 15px;
-  bottom: 0;
+  bottom: -2px;
   left: 0;
   font-size: 1.3rem;
   color: white;
   background-color: #1eabf7;
   border: none;
-  border-radius: 0px 0px 10px 10px;
+  border-radius: 0px 0px 5px 5px;
 }
 
 .host-card button:hover {
@@ -426,6 +373,16 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
+  color: #282828;
+}
+
+.host-header img {
+  width: 110px;
+  height: 110px;
+}
+
+.host-header h3 {
+  margin-left: 25px;
 }
 
 .host-img {
@@ -433,8 +390,8 @@
   overflow: hidden;
   background-color: white;
   margin-top: 0px;
-  width: 85px;
-  height: 85px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
@@ -513,7 +470,7 @@
 }
 
 .host-hourly-icon {
-  color: #00ab00;
+  color: #08bb08;
 }
 
 .host-hourly {
@@ -526,18 +483,21 @@
 
 .host-body {
   line-height: 1.5;
+  text-align: left;
   font-weight: normal;
   height: auto;
   min-height: 100px;
-  background-color: whitesmoke;
   border: none;
+  border: solid 1px lightgray;
   border-top: solid 3px #1eabf7;
   margin-top: 20px;
+  margin-bottom: 10px;
   border-radius: 5px;
+  background-color: whitesmoke;
 }
 
 .host-body p {
-  padding: 0px 5px 18px 5px;
+  padding: 0px 10px;
 }
 
 .host-footer {
@@ -545,7 +505,7 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 60px;
 }
 
 .star-lite {
@@ -573,24 +533,17 @@
 }
 
 #alert-dialog-title {
-  color: #282828;
+  color: #282828 !important;
   font-weight: bold;
   font-size: 1.5rem;
-  color: #9d00ff;
 }
 
-.dialog-inner {
-  display: block;
-  margin: auto;
-  width: 400px;
+.MuiDialog-container {
+  width: 100%;
 }
 
-.dialog-inner a {
-  color: #1eabf7;
-}
-
-.dialog-inner a:hover {
-  color: #45bdfe;
+.MuiDialog-paper {
+  width: 95%;
 }
 
 .dialog-content {
@@ -687,9 +640,9 @@
 }
 
 .edit-header .radio-title {
+  line-height: 0;
   color: #282828;
   font-weight: bold;
-  font-size: 1.2rem;
 }
 
 .edit-header .radio-title:focus {
@@ -698,6 +651,10 @@
 
 .edit-header .edit-radio {
   margin-left: 30px;
+}
+
+.MuiInputBase-root {
+  background-color: whitesmoke !important;
 }
 
 .MuiIconButton-label {
@@ -709,8 +666,8 @@
   overflow: hidden;
   background-color: white;
   margin-top: -15px;
-  width: 85px;
-  height: 85px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
 }
@@ -747,8 +704,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 85px;
-  height: 85px;
+  width: 110px;
+  height: 110px;
   transform: translate(-50%, -50%);
   border-radius: 50%;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
@@ -799,11 +756,27 @@
 }
 
 .edit-calendar-icon {
-  cursor: pointer;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+  margin: 10px 5px;
   color: gray;
+}
+
+.edit-calendar-icon-all {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 10px 0px;
+  color: gray;
+}
+
+.edit-icons {
+  cursor: pointer;
+}
+
+.edit-icons:hover {
+  color: #1eabf7;
 }
 
 .edit-info-blurb {
@@ -813,17 +786,6 @@
   width: 90%;
   color: gray;
   text-align: center;
-}
-
-.edit-calendar-inner {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  margin-bottom: 5px;
-}
-
-.edit-calendar-inner:hover {
-  color: #1eabf7;
 }
 
 .edit-logout {
@@ -841,17 +803,9 @@
   color: #fc5d5d;
 }
 
-.edit-snackbar .MuiSnackbar-root {
-  width: 375px;
-}
-
 .edit-snackbar .MuiSnackbar-root .MuiPaper-root {
-  background-color: #00ab00;
+  background-color: #08bb08;
   color: white;
-}
-
-.edit-snackbar-error .MuiSnackbar-root {
-  width: 375px;
 }
 
 .edit-snackbar-error .MuiSnackbar-root .MuiPaper-root {
@@ -864,7 +818,17 @@
   display: block;
   margin: auto;
   width: 95%;
-  background-color: white !important;
+  background-color: transparent !important;
+  border-radius: 5px;
+  padding: 5px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -12px, rgba(0, 0, 0, 0.3) 0px 8px 16px -12px;
+}
+
+.calendarWrapper {
+  position: relative;
+  display: block;
+  margin: auto;
+  width: 90%;
 }
 
 .modeWrapper {
@@ -885,7 +849,7 @@
 }
 
 .calendarHeader {
-  margin-top: -25px;
+  margin-top: -30px;
   position: relative;
   z-index: 1 !important;
   background-color: white !important;
@@ -905,6 +869,14 @@
   color: white;
   background-color: lightgray;
   border-radius: 5px;
+}
+
+.calendarDayOfWeek div {
+  text-align: center !important;
+}
+
+#dayHeader {
+  text-align: center !important;
 }
 
 .dailyHourWrapper {
@@ -947,13 +919,16 @@
 .calendar-modal {
   display: block;
   margin: auto;
-  width: 400px;
 }
 
 .calendar-select {
   display: block;
   margin: 5px auto;
-  width: 80%;
+  width: 90%;
+}
+
+.MuiFormControl-root div {
+  background-color: white !important;
 }
 
 .select-div {
@@ -961,12 +936,8 @@
   background-color: #fc5d5d;
 }
 
-.calendar-snackbar .MuiSnackbar-root {
-  width: 300px;
-}
-
 .calendar-snackbar .MuiSnackbar-root .MuiPaper-root {
-  background-color: #00ab00;
+  background-color: #08bb08;
   color: white;
 }
 
@@ -983,12 +954,18 @@
   width: 300px;
 }
 
+.stripe-card-wrapper {
+  display: block;
+  margin: auto;
+}
+
 .stripe-wrapper {
   display: block;
   margin: auto;
 }
 
 .stripe-total {
+  text-align: right;
   color: #45bdfe;
 }
 
@@ -1049,8 +1026,10 @@
   color: gray;
 }
 
-.empty-inbox {
+.inbox-empty {
+  margin-top: 30%;
   text-align: center;
+  width: 100%;
 }
 
 .inbox-double-wrap {
@@ -1083,7 +1062,7 @@
   border-radius: 5px;
   padding: 10px 0px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-  border: solid 3px #1eabf7;
+  border: solid 1px lightgray;
 }
 
 .inbox-card-wrapper-host h3 {
@@ -1143,16 +1122,41 @@
   color: #45bdfe;
 }
 
-.inbox-status-pending label {
+.inbox-filter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: auto;
+  margin-bottom: 25px;
+  border-bottom: solid 2px lightgray;
+  padding: 0px 10px 5px 10px;
+}
+
+.inbox-status-unfocused {
+  cursor: pointer;
+  color: gray;
+  font-weight: bold;
+}
+
+.inbox-status-unfocused:hover {
+  color: #282828;
+}
+
+.inbox-status-upcoming label, .inbox-status-upcoming p {
   color: #1eabf7;
+  font-weight: bold;
 }
 
-.inbox-status-complete label {
-  color: #00ab00;
+.inbox-status-complete label, .inbox-status-complete p {
+  color: #1eabf7;
+  font-weight: bold;
 }
 
-.inbox-status-cancelled label {
+.inbox-status-cancelled label, .inbox-status-cancelled p {
   color: #fc5d5d;
+  font-weight: bold;
 }
 
 .a-refund {
@@ -1167,6 +1171,19 @@
 
 .a-refund a:hover {
   color: #45bdfe;
+}
+
+.inline-msg {
+  display: inline;
+  line-height: 1.4;
+}
+
+.inline-msg a {
+  color: #cfa4f7;
+}
+
+.inline-msg a:hover {
+  color: #b367fa;
 }
 
 .chat-card-wrapper {
@@ -1222,6 +1239,10 @@
   margin-top: 20px;
 }
 
+.MuiInputBase-input {
+  background-color: white !important;
+}
+
 .chat-input-wrapper {
   position: fixed;
   bottom: 0;
@@ -1233,16 +1254,17 @@
   display: block;
   margin: auto;
   width: 100%;
+  background-color: white;
 }
 
 .chat-input-inner {
   z-index: 5;
-  width: 95%;
+  width: 93%;
   display: block;
   margin: auto;
   background-color: white;
-  border-top: solid 5px grey;
-  padding-top: 15px;
+  border-top: solid 3px #1eabf7;
+  padding: 5px 0px 30px 0px;
 }
 
 .chat-send-icon {
@@ -1251,7 +1273,7 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
-  padding: 10px;
+  padding: 5px 5px 15px 5px;
   color: #1eabf7;
 }
 
@@ -1263,11 +1285,11 @@
   background-color: white;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
   .chat-input-double-wrap {
     display: block;
     margin: auto;
-    width: 375px;
+    width: 500px;
   }
 }
 
@@ -1338,14 +1360,17 @@
 .incoming-wrapper {
   display: block;
   margin: auto;
-  width: 95%;
-  padding: 5px 0px 10px 0px;
+  width: 90%;
+  padding: 5px 10px 15px 0px;
+  border: solid 1px lightgray;
+  border-left: solid 3px #1eabf7;
+  border-radius: 5px;
 }
 
 .incoming-content {
   display: block;
   margin: auto;
-  width: 100%;
+  width: 85%;
 }
 
 .incoming-content h2 {
@@ -1360,6 +1385,19 @@
   font-size: 1.3rem;
 }
 
+.incoming-icons {
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  color: #1eabf7;
+}
+
+.incoming-icons:hover {
+  color: #45bdfe;
+}
+
 .incoming-action {
   width: 100%;
 }
@@ -1367,8 +1405,8 @@
 .incoming-action button {
   display: block;
   margin: auto;
-  margin-top: 0px;
-  width: 85%;
+  margin-top: 20px;
+  width: 200px;
   font-size: 1.2rem;
   color: white;
   background-color: #1eabf7;
@@ -1385,15 +1423,21 @@
   text-align: center;
 }
 
+.terms-title {
+  text-align: center;
+}
+
 .terms-inner {
   line-height: 1.8;
 }
 
 .terms-inner h1 {
+  text-align: center;
   color: #282828;
 }
 
 .terms-inner h3 {
+  text-align: center;
   color: #1eabf7;
 }
 
@@ -1416,14 +1460,22 @@ body {
   align-items: center;
   margin: 0;
   padding: 0;
-  background-color: whitesmoke;
+  background-color: white;
+  overflow: hidden;
+  box-shadow: none;
 }
 
 .divider {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
   width: 100%;
   height: 100px;
   margin: 0;
   padding: 0;
+  color: gray;
+  font-size: 0.7rem;
 }
 
 .small-divider {
@@ -1437,7 +1489,7 @@ body {
   display: block;
   margin: auto;
   margin-top: 0px;
-  width: 92%;
+  width: 94%;
   font-size: 1.2rem;
   color: white;
   background-color: #1eabf7;
@@ -1453,7 +1505,7 @@ body {
   display: block;
   margin: auto;
   margin-top: 0px;
-  width: 92%;
+  width: 95%;
   font-size: 1.2rem;
   color: white;
   background-color: #282828;
@@ -1482,14 +1534,13 @@ body {
   color: gray;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 500px) {
   body {
-    background-color: whitesmoke;
+    background-color: #282828;
   }
   .App {
-    width: 375px;
+    width: 500px;
     display: block;
     margin: auto;
-    background-color: white;
   }
 }

@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import axios from 'axios';
 import globals from '../globals';
 import Calendar from 'react-awesome-calendar';
+import Loading from './Loading';
 
 
 import Dialog from '@material-ui/core/Dialog';
@@ -23,15 +24,15 @@ import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
 
 
+
 function TransitionUp(props) {
   return <Slide {...props} direction="up" />;
 }
 
-
 const bookingColors = {
   blocked: 'black',
   travel: '#9d00ff',
-  hosting: '#45bdfe'
+  hosting: '#ff00ae'
 }
 
 function Bookings(props) {
@@ -41,6 +42,9 @@ function Bookings(props) {
 
   const {user} = useContext(UserContext);
   const history = useHistory();
+
+  const [loading, setLoading] = useState(false);
+
   const [bookings, setBookings] = useState({
     state: [],
     identifier: props.location.state.detail.public_key,
@@ -158,16 +162,19 @@ function Bookings(props) {
       id: bookings.identifier
     }
     
+    setLoading(true);
     axios.post(`/api/bookings/get`, {input})
     .then(res => {
     
       // console.log(res.data);
+      setLoading(false);
       setBookings((prev) => ({
         ...prev,
         state: res.data,
       }));
     })
     .catch(err => {
+      setLoading(true);
       return history.push('/'),[history];
     });
 
@@ -181,7 +188,7 @@ function Bookings(props) {
       color: bookingColors.blocked,
       from: each.start_time,
       to: each.end_time,
-      title: 'Time slot unavailable...'
+      title: 'Time slot N/A'
 
     }
 
@@ -359,11 +366,11 @@ const createBooking = () => {
   }
 
 
-  
+  setLoading(true);
   axios.post(`/api/bookings`, { input }).then((res) => {
 
   if(res.data === false){
-
+    setLoading(false);
     const msg = 'Invaild Credentials';
     const cc = 'calendar-snackbar-error';
    return handleSnack(TransitionUp, msg, cc);
@@ -382,6 +389,7 @@ const createBooking = () => {
     
     }).catch((err) => {
       console.log(err);
+      setLoading(false);
       const msg = "Something went wrong 😧";
       const cc = 'calendar-snackbar-error';
       handleSnack(TransitionUp, msg, cc);
@@ -494,7 +502,7 @@ const handleSnack = (Transition, msg, cc) => {
   return (
     
     <>
-    
+    {loading ? <Loading/> : null}
     <div  className='calendar'>
   
 
@@ -508,7 +516,7 @@ const handleSnack = (Transition, msg, cc) => {
      
 
     <Dialog open={open.dialog} onClose={handleClose} 
-    className='calendar-modal'
+    maxWidth='xs'
     aria-labelledby="form-dialog-title">
             
         <DialogContent>
@@ -554,7 +562,7 @@ const handleSnack = (Transition, msg, cc) => {
   
 {/* Stripe element */}
 <Dialog open={pay.open} onClose={closePay} 
-    
+    maxWidth='xs'
     aria-labelledby="form-dialog-title">
             
         <DialogContent id='stripe-modal'>
@@ -573,6 +581,7 @@ const handleSnack = (Transition, msg, cc) => {
 
         
           {/* Stripe  */}
+        <div className='stripe-card-wrapper'>
       <Elements stripe={currentBooking.stripePromise}>
       <CheckoutForm
       connect_id={props.location.state.detail.connect_id}
@@ -586,7 +595,7 @@ const handleSnack = (Transition, msg, cc) => {
    <div className='secured-by'>
    <p>Transaction secured by <a href='https://stripe.com' target='_blank'>Stripe</a></p> 
    </div>
-        
+        </div>
       
           </DialogContent>
          

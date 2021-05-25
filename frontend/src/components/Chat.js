@@ -7,6 +7,9 @@ import ChatCard from './ChatCard';
 import TextField from '@material-ui/core/TextField';
 import SendIcon from '@material-ui/icons/Send';
 import socketIOClient from "socket.io-client";
+import IsValidDomain from 'is-valid-domain';
+import globals from '../globals';
+import NavBar from './NavBar';
 
 import { withStyles } from '@material-ui/core/styles';
 const ChatTextField = withStyles({
@@ -31,15 +34,16 @@ const ChatTextField = withStyles({
 
 
 function Chat(props) {
-  const API = 'http://localhost:8080'; // <--- TEMP
+  const API = `${globals().socket}`; 
 
+  const [loading, setLoading] = useState(false);
   const [socketConn, setSocket] = useState(null);
 
   const {user} = useContext(UserContext);
   const history = useHistory();
 
   const [input, setInput] = useState({
-    message: ''
+    message: '',
   });
 
   const [chatRoom, setChatRoom] = useState({
@@ -61,19 +65,45 @@ function Chat(props) {
       user_key: chatRoom.user_key,
     }
   
-
+    setLoading(false);
     axios.post('/api/chat', { input })
     .then(res => {
     //  console.log(res.data);
+
+     setLoading(true);
      setMessages(res.data);
      createSocketConn();
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false);
+      return history.push('/'),[history];
     });
   
 
   },[refresh]);
+
+
+  const containsLink = msg => {
+    let result = false;
+    let words = msg.split(' ');
+
+    for (const word of words){
+   
+    //validates weather a word is a hyperlink
+    try {
+
+      let url = new URL(word);
+      result = true;
+    } catch (err) {
+
+      if(IsValidDomain(word) || word.substring(0,4).toLowerCase() === 'www.'){
+        result = true;
+      } 
+    
+    }
+  }
+  return result;
+  }
 
 
   const sendMessage = () => {
@@ -85,26 +115,31 @@ function Chat(props) {
      return alert("Max message length exceeded (1000 char. limit)");
     }
     
-    
+    const has_link = containsLink(input.message);
+     
     const msg = {
       host_key: chatRoom.host_key,
       user_key: chatRoom.user_key,
       name: `${user.first_name} ${user.last_name}`,
       message: input.message,
+      has_link: has_link
     }
 
     setInput({
       message: '',
     })
 
+    
     axios.patch('/api/chat', { msg })
     .then(res => {
-    //  console.log(res.data[0]);
+     console.log('chat: ',res.data);
     sendSocketMessage([res.data.host_key, res.data.user_key]);
     
     })
     .catch(err => {
-      console.log(err);
+     
+    alert('Message failed to send.')
+   
     });
   }
 
@@ -123,6 +158,7 @@ function Chat(props) {
     setSocket(socket);
 
     socket.on("message", msg => {
+     
 
       if(user.public_key === msg[0] || user.public_key === msg[1]){
        
@@ -137,10 +173,7 @@ function Chat(props) {
 
   const sendSocketMessage = msg => {
   
-    if(window.location.hostname !== 'localhost'){
-      return;
-    }
-  
+   
       let socket = socketConn; 
       
       if (!socket){
@@ -154,12 +187,67 @@ function Chat(props) {
       } 
       
     }
-  
-  const chatCard = messages ? messages.map((msg, index) => {
+
+
+    const socketDisconnect = () => {
+    
+      let socket = socketConn; 
+      
+      if (socket){
+      socket.disconnect('disconnect');
+      }  
+    }
+
+    
+    const mapWords = msg => {
+
+      let words = msg.split(' ');
+
+      const wordMap = words.map((word, index) => {
+
+      let url;
+      
+
+      //validates weather a word is a hyperlink
+      try {
+
+        url = new URL(word);
+        word = <a href={url.href} target='_blank'>{url.href}</a>
+      } catch (err) {
+
+        if(IsValidDomain(word) || word.substring(0,4).toLowerCase() === 'www.'){
+          word = <a href={`https://${word}`} target='_blank'>{word}</a>
+        
+        } else {
+          word = ` ${word} `
+        }
+      
+      }
+
+        return (
+          <div className='inline-msg'
+          key={index}   
+          >
+          {word}
+          </div>
+        )
+      })
+
+      return wordMap;
+    }
+
+
+ 
+    const chatCard = messages ? messages.map((msg, index) => {
   
     const style = msg.name === `${user.first_name} ${user.last_name}` ? 'chat-card-wrapper' : 'chat-card-wrapper-other';
-    
+  
+    let linked = null;
+    if (msg.has_link){
+       linked = mapWords(msg.message); 
+    }
 
+ 
     return (
       <ChatCard
       key={index}
@@ -167,7 +255,7 @@ function Chat(props) {
       style={style}
       stamp={msg.stamp.substring(0,10)}
       name={msg.name}
-      msg={msg.message}
+      msg={linked ? linked : msg.message}
       />
     )}
     ) : null;
@@ -177,6 +265,14 @@ function Chat(props) {
   return (
 
 <section >
+    <NavBar
+          
+    logo={false}
+    title={null}
+    nav={false}
+    action='/inbox'
+    extra={socketDisconnect}
+  /> 
 
 {chatCard ? chatCard : <Loading/>}
 <div className='divider'></div>
@@ -186,8 +282,12 @@ function Chat(props) {
 
   
 <form className='chat-input-inner'>
-
-<ChatTextField
+<div className='chat-send-icon'>
+        <SendIcon onClick={() => sendMessage()} 
+       
+        />
+        </div>
+      <ChatTextField
           id="outlined-multiline-static"
           fullWidth
           label="New Message"
@@ -202,9 +302,7 @@ function Chat(props) {
         }))}
       
         />
-        <div className='chat-send-icon'>
-        <SendIcon onClick={() => sendMessage()} />
-        </div>
+       
       
 </form>
 </div>

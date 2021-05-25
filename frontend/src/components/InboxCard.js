@@ -52,7 +52,7 @@ const openInfo = f_keys => {
     <p className={props.status_style}>Status: {props.status ? <label>{props.status}</label> :  '...'}</p>
     <p>Host: {props.host_name ?  props.host_name :  '...'}</p>
     <p>Guest: {props.user_name ?  props.user_name :  '...'}</p>
-    <p>In: {props.city ? props.city :  '...'}</p>
+    <p>Location: {props.city ? props.city :  '...'}</p>
     <p>{props.date ? `${props.date} @ ${props.start} - ${props.end}` :  '...'}</p>
 
   
@@ -62,7 +62,7 @@ const openInfo = f_keys => {
    
    <div className='inbox-icons'>
    <div>
-    {props.status !== 'Cancelled' ? 
+    {props.status === 'Upcoming'  ? 
         < DeleteIcon className='inbox-icon-delete'
           onClick={() => props.open(props.other)}/>
           : null }

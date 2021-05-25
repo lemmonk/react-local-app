@@ -73,14 +73,26 @@ const closeMap = () => {
 
 const [imgLoaded, setImageLoaded] = useState({
   loaded: 'host-img-loading',
-  class: 'init-host-img'
+  class: 'init-host-img',
+  img: '/images/user.png',
 });
 const onImgLoaded = () => {
   
   setImageLoaded({
     loaded: 'host-img',
-    class: 'loaded-host-img'
+    class: 'loaded-host-img',
+    img: props.image ? `${globals().server}${props.image}`: '/images/user.png'
   });
+}
+
+const onImgError = () => {
+
+  setImageLoaded({
+    loaded: 'edit-img',
+    class: 'loaded-edit-img',
+    img: '/images/user.png',
+  });
+
 }
 
 const link = props ? props.social_link : null;
@@ -94,7 +106,7 @@ const link = props ? props.social_link : null;
         <div className='host-header'>
         <div className='host-header-left'>
         <div className={imgLoaded.loaded}>
-        <img className={imgLoaded.class} src={props.image ? `${globals().server}${props.image}`: '/images/user.png'} alt='n/a' onLoad={() => onImgLoaded()}/>
+        <img className={imgLoaded.class} src={imgLoaded.img} alt='n/a' onLoad={() => onImgLoaded()} onError={() => onImgError()} />
         </div>
        
 
@@ -105,7 +117,7 @@ const link = props ? props.social_link : null;
         <RoomIcon className='host-map-icon'
         fontSize='default'
         />
-        <p  onClick={() => onCity(props.city)}>{props.city ? props.city : 'N/A'}</p>
+        <p  onClick={() => onCity(props.city)}>{props.city ? props.city : 'n/a'}</p>
         </div>
 
         {props.day_rate ? 
@@ -128,7 +140,7 @@ const link = props ? props.social_link : null;
       </div>
 
       <div className='host-footer'>
-       {props.rating < 15 ? 'No rating available' : rating}
+       {props.rating < 1 ? 'No rating available' : rating}
       </div>
 
      
@@ -140,6 +152,7 @@ const link = props ? props.social_link : null;
      
 
       <Dialog
+       maxWidth='xs'
         className='map-dialog'
         open={open}
         onClose={() => closeMap()}

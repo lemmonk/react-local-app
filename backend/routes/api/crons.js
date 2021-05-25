@@ -5,20 +5,28 @@ const nodemail = require('./mailingService/confirmation');
 
 const {
   getRatingCron,
-  updateBookingStatus
+  updateBookingStatus,
+  deleteAllRecovery,
 } = require('../../db/queries/cron-queries');
 
 
-router.get('/', (req, res) => {
+router.get('/ratings', async (req, res) => {
 
 	getRatingCron()
-		.then((data) => {
-      // console.log(data);
+		.then( async (data) => {
+     
+    if(data.length === 0){
+      return res.json();
+    }
 
+    for(const d of data){
+    
+      updateBookingStatus([d.id])
+      .then( async (d) => {
+    
       try {
           
-        for (const d of data){
-
+      
           //send to traveller
           let details = {
             id: d.id,
@@ -30,7 +38,7 @@ router.get('/', (req, res) => {
           }
 
           if(d.user_email){
-            nodemail.sendRating(details);
+          await nodemail.sendRating(details);
           }
 
           //send to host
@@ -45,26 +53,38 @@ router.get('/', (req, res) => {
        
     
           if(d.host_email){
-            nodemail.sendRating(details);
+           await nodemail.sendRating(details);
           }
 
-        }
+        
 
-      
-
-
-
-        return res.json(data);
+        return res.json();
       } catch (error) {
         console.log(error)
         return res.json(false);
       }
-
-
-      res.json(data[0].id)
+    
     })
-		.catch((err) => console.log('Error at cron GET ratings route "/"', err));
+
+  }// end of loop
+   
+})
+
+		.catch((err) => {
+      console.log('error at status update')
+      return res.json(false);
+    });
+  
 });
+
+
+router.get('/recovery', (req, res) => {
+
+	deleteAllRecovery()
+		.then((data) => res.json(data))
+		.catch((err) => console.log('Error at users GET route "/"', err));
+});
+
 
 
 

@@ -19,7 +19,7 @@ const text = `
 INSERT INTO users
 (first_name, last_name, email, public_key, secret_key, uid, password) 
 VALUES($1, $2, $3, $4, $5, $6, $7)
-RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
+RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, thumbs_up, thumbs_down, connect_id, customer_id, verified;`;
 
 return db.query(text, values)
 .then((res) => {
@@ -43,12 +43,15 @@ const confirmUser = (values, uid) => {
 		UPDATE users
 		SET verified = TRUE, uid = $2
 		WHERE public_key = $1
+		AND verified = FALSE
 		RETURNING verified;`;
 
 	return db
 		.query(text, values)
 		.then((res) => {
 
+
+			
 			const confirm = {
 				verified: res.rows[0].verified,
 				uid: uid
@@ -56,7 +59,11 @@ const confirmUser = (values, uid) => {
 		
 			return confirm;
 		})
-		.catch((err) => console.log(`Error at users queries 'CONFIRM USER'`, err));
+		.catch((err) => {
+			console.log(`Error at users queries 'CONFIRM USER'`, err)
+			return false;
+		
+		});
 };
 
 const loginUser = values => {
@@ -81,7 +88,7 @@ const updateUid = (values, uid) => {
 		UPDATE users
 		SET uid = $1
 		WHERE email = $2
-		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, thumbs_up, thumbs_down, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)
@@ -98,6 +105,9 @@ const updateUid = (values, uid) => {
 				city: res.rows[0].city,
 				bio: res.rows[0].bio,
 				day_rate: res.rows[0].day_rate,
+				social_link: res.rows[0].social_link,
+				thumbs_up: res.rows[0].thumbs_up,
+				thumbs_down: res.rows[0].thumbs_down,
 				connect_id: res.rows[0].connect_id,
 				customer_id: res.rows[0].customer_id,
 				uid: uid,
@@ -179,7 +189,7 @@ const editUser = values => {
 		UPDATE users
 		SET host = $1, city = $2, bio = $3, day_rate = $4, social_link = $5
 		WHERE public_key = $6
-		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, thumbs_up, thumbs_down, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)
@@ -228,7 +238,7 @@ const editUserImg = values => {
 		UPDATE users
 		SET image = $1
 		WHERE public_key = $2
-		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, connect_id, customer_id, verified;`;
+		RETURNING public_key, host, image, first_name, last_name, email,city, bio, day_rate, social_link, thumbs_up, thumbs_down, connect_id, customer_id, verified;`;
 
 	return db
 		.query(text, values)

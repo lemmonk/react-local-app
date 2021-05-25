@@ -52,10 +52,14 @@ const history = useHistory();
    
     
     const infoCard = info ? info.map((inn, index) =>{
+      
       const total = inn.thumbs_up + inn.thumbs_down;
-      let rating = Math.ceil(inn.thumbs_up / total * 100);
+      let rating = 0;
+      if(total > 10){
+      rating = Math.ceil(inn.thumbs_up / total * 100);
       rating = Number.isNaN(rating) ? 0 : rating;
-    
+      }
+      
 
         return (
           <HostCard

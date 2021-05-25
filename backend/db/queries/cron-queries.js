@@ -3,10 +3,10 @@ const db = require('../../lib/db.js');
 const getRatingCron = () => {
 	
 	const text = `
-  SELECT * 
+  SELECT id 
   FROM bookings
-  WHERE stamp > NOW()
-  AND status = 'Upcoming'`;
+  WHERE stamp < NOW()
+  AND status = 'Upcoming';`;
 
 	return db
 		.query(text)
@@ -32,8 +32,24 @@ const updateBookingStatus = values => {
 };
 
 
+const deleteAllRecovery = values => {
+	
+  const text = `
+  DELETE 
+  FROM recovery
+  RETURNING *`;
+  
+  return db.query(text, values)
+  .then((res) => res.rows)
+  .catch((err) =>{
+  console.log(err);
+  })
+  };
+
+
 module.exports = {
   getRatingCron,
   updateBookingStatus,
+  deleteAllRecovery,
 
 };

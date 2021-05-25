@@ -14,6 +14,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
+import Loading from './Loading';
+
 
 
 
@@ -24,13 +26,16 @@ function TransitionUp(props) {
 const bookingColors = {
   blocked: 'black',
   travel: '#9d00ff',
-  hosting: '#45bdfe'
+  hosting: '##ff00ae'
 }
 
 function Scheduler() {
 
   const {user} = useContext(UserContext);
   const history = useHistory();
+
+  const [loading, setLoading] = useState(false);
+
   const [bookings, setBookings] = useState({
     state: [],
     identifier: user ? user.public_key : null
@@ -152,17 +157,20 @@ function Scheduler() {
       id: bookings.identifier
     }
 
+    setLoading(true);
     axios.post(`/api/bookings/get`, {input})
     .then(res => {
    
       // console.log(res.data);
+      setLoading(false);
       setBookings((prev) => ({
         ...prev,
         state: res.data,
       }));
     })
     .catch(err => {
-      console.log(err);
+      setLoading(false);
+      return history.push('/'),[history];
     });
 
   },[refresh]);
@@ -192,12 +200,7 @@ function Scheduler() {
 
 const openCourseOfAction = mode => {
 
-  // const d = new Date();
-  // if(mode.day <= d.getDate()){
-  //   const msg = "Bookings cannot be made day of or in the past.";
-  //   const cc = 'calendar-snackbar-error';
-  //   return  handleSnack(TransitionUp, msg, cc);
-  // }
+ 
   
   if(mode.mode === 'dailyMode'){
 
@@ -348,7 +351,7 @@ const createBooking = () => {
     user_key: user.public_key,
     user_email: user.email,
     status: 'pending',
-    title:'Partial',
+    title:'Time Slot N/A',
     color:bookingColors.blocked,
     start: currentBooking.formattedStartDate,
     end: currentBooking.formattedEndDate,
@@ -507,7 +510,8 @@ for (let i = Number(currentBooking.day); i < num ; i++){
     host_key: user.public_key,
     user_key: user.public_key,
     user_email: user.email,
-    title:'N/A',
+    status: 'pending',
+    title:'Time Slot N/A',
     color:bookingColors.blocked,
     start: start,
     end: end,
@@ -515,6 +519,8 @@ for (let i = Number(currentBooking.day); i < num ; i++){
     email: user.email,
     uid: localStorage.getItem('locals-uid')
   }
+
+ 
 
   multidayArray.push(all);
 }
@@ -836,6 +842,8 @@ const handleSnack = (Transition, msg, cc) => {
 {/* dialog  */}
 
 <Dialog open={open.dialog} onClose={handleClose} 
+maxWidth='xs'
+
     className='calendar-modal'
     aria-labelledby="form-dialog-title">
 
@@ -864,7 +872,8 @@ const handleSnack = (Transition, msg, cc) => {
       </Select>
     </FormControl> : null}
 
-    {currentDialog.dialog.key === 'selectDuration' ?    <FormControl className='duration-picker'>
+    {currentDialog.dialog.key === 'selectDuration' ?    <FormControl  >
+      
        <Select
         className='calendar-select'
          labelId="demo-controlled-open-select-label"

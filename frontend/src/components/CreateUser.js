@@ -114,6 +114,13 @@ function CreateUser() {
       setLoading(true);
       axios.post(`/api/users/create`, { input }).then((res) => {
 
+        if(!res.data){
+          setLoading(false);
+          return  setError((prev) => ({
+            ...prev,
+            errorMsg: 'Failed to create account, please try again.'
+          }));
+        }
   
           if (res.data === 'exist'){
             setLoading(false);
@@ -163,7 +170,7 @@ function CreateUser() {
       <DialogContent>
       <DialogContentText className='alert-dialog-content'>
     
-    Created an account and choose to be a traveller, a host, or both.
+    Create an account and choose to be a traveller, a host, or both.
    
     </DialogContentText>
       <InputTextField
@@ -251,7 +258,9 @@ function CreateUser() {
           <div className='create-terms'>
            
           <p>
-             By continuing you confirm that you have read and agree to our <a href='/terms' target='_blank'>Terms of Service and Privacy Policy.</a>
+             By continuing you confirm that you have read and agree to our
+             <br></br>
+              <a href='/terms'>Terms of Service and Privacy Policy.</a>
            </p>
           </div>
      

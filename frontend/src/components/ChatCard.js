@@ -1,6 +1,7 @@
 
 function ChatCard(props) {
 
+
   return (
     <section className={props.style}>
 

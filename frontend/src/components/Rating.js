@@ -40,7 +40,7 @@ function Rating() {
     setLoading(false);
 
     if(res.data){
-      setMessage('Your rating has been successfully collected, thank you for using and continuing to use Locals.');
+      setMessage('Your rating has been successfully collected, thank you for choosing and continuing to choose Locals.');
     } else {
       setMessage('You may only input one rating per booking.');
     }

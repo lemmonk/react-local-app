@@ -25,7 +25,11 @@ router.post('/get', (req, res) => {
 	const values = [input.id];
 	getBookings(values)
 		.then((data) => res.json(data))
-		.catch((err) => console.log('Error at bookings GET route "/"', err));
+		.catch((err) => {
+			console.log('Error at bookings GET route "/"', err)
+			return res.json(false);
+		
+		});
 });
 
 router.post('/', (req, res) => {
@@ -45,8 +49,12 @@ router.post('/', (req, res) => {
 
 					createBooking(values)
 					.then((data) => {
+
+						if(!data){
+							return res.josb(false);
+						}
 				
-					try {
+				
 						
 						const details = {
 						
@@ -58,30 +66,30 @@ router.post('/', (req, res) => {
 						}
 					
 			
-						if(data.id){
-							nodemail.sendBooking(details)
-						}
-
-
-
-						return res.json(data);
-					} catch (error) {
-						console.log(error)
-						return res.json(false);
-					}
-				
-					})
-
-				} else {
 					
-					return res.json(false);
-				}
+				nodemail.sendBooking(details).then((mail) => {
 
-			});
+					if(mail){
+						return res.json(data);
+					} 
+					return res.json(false);
 
 		})
+			})
+			
+		} else {
+			return res.json(false);
+		} 
+
+		});
+			})
 	
-		.catch((err) => console.log('Error at booking POST route "/"', err));
+		.catch((err) => {
+
+			console.log('Error at booking POST route "/"', err)
+			return res.json(false);
+			
+		});
 });
 
 
@@ -96,7 +104,7 @@ router.post('/block', (req, res) => {
 			bcrypt.compare(booking.uid, data.uid, function(err, result) {
 				
 				if(result){
-				
+			
 					const values = [booking.host_key, booking.user_key, booking.status, booking.title, booking.color, booking.start, booking.end, booking.stamp];
 
 					blockBooking(values)
@@ -115,8 +123,13 @@ router.post('/block', (req, res) => {
 
 		})
 	
-		.catch((err) => console.log('Error at booking POST route "/"', err));
+		.catch((err) => {
+			console.log('Error at booking POST route "/"', err)
+			return res.json(false);
+		
+		});
 });
+
 
 router.post('/multi', (req, res) => {
 
@@ -131,11 +144,11 @@ router.post('/multi', (req, res) => {
 				
 				if(result){
 				
-					const values = [booking.host_key, booking.user_key, booking.title, booking.color, booking.start, booking.end, booking.stamp];
+					const values = [booking.host_key, booking.user_key,booking.status, booking.title,  booking.color, booking.start, booking.end, booking.stamp];
 
 					blockBooking(values)
 					.then((data) => {
-						console.log(data);
+					
 						arr.push(data)
 					})
 
@@ -148,7 +161,11 @@ router.post('/multi', (req, res) => {
 
 		})
 	
-		.catch((err) => console.log('Error at users booking POST route "/"', err));
+		.catch((err) => {
+			console.log('Error at users booking POST route "/"', err)
+			return res.json(false);
+		
+		});
 
 	} // end of for loop 
 
@@ -180,7 +197,10 @@ router.post('/single', (req, res) => {
 
 		})
 	
-		.catch((err) => console.log('Error at users booking POST route "/"', err));
+		.catch((err) => {
+			console.log('Error at users booking POST route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -209,7 +229,10 @@ router.post('/delete', (req, res) => {
 
 		})
 	
-		.catch((err) => console.log('Error at users booking POST route "/"', err));
+		.catch((err) => {
+			console.log('Error at users booking POST route "/"', err);
+			return res.json(false);
+		});
 
 });
 
@@ -220,8 +243,7 @@ router.post('/rating', (req, res) => {
 
 	const input = req.body.input;
 	const values = [input.id, input.ref];
-	console.log('vals', values);
-	
+
 	updateHostRef(values)
 		.then((data) => {
 	updateUserRating([data[key], input.rate])

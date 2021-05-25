@@ -11,6 +11,18 @@
 	left: 0;
 	width: 100%;
 	height: 100%;
+	// background-color: rgba($color: #000000, $alpha: 0.9);
+}
+
+.loading-double-wrap{
+
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: auto;
+	width:$pixel-width;
+	height: 100vh;
+	background-color: $white;
 	background-color: rgba($color: #000000, $alpha: 0.7);
 }
 

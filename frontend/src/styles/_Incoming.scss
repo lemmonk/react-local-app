@@ -4,18 +4,18 @@
 .incoming-wrapper{
 	display:block;
 	margin: auto;
-	width: 95%;
-	padding: 5px 0px 10px 0px;
-	// border-radius: 5px;
-	// box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+	width: 90%;
+	padding: 5px 10px 15px 0px;
+	border: solid 1px lightgray;
+	border-left: solid 3px $accent-color;
+	border-radius: 5px;
 }
 
 .incoming-content{
 
 	display:block;
 	margin: auto;
-	// margin-top: 50px;
-	width: 100%;
+	width: 85%;
 
 	h2{
 		color: $black;
@@ -30,6 +30,20 @@
 	}
 }
 
+.incoming-icons{
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	color: $accent-color;
+	
+
+	&:hover{
+		color: $primary-color;
+	}
+}
+
 
 .incoming-action{
 
@@ -38,8 +52,8 @@
 	button{
 		display: block;
 		margin: auto;	
-		margin-top: 0px;
-		width: 85%;
+		margin-top: 20px;
+		width: 200px;
 		font-size: 1.2rem;
 		color: white;
 		background-color: $accent-color;

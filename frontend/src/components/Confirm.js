@@ -3,8 +3,7 @@ import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
 import axios from 'axios';
 import Loading from './Loading';
-import DialogActions from '@material-ui/core/DialogActions';
-
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 function Confirm() {
 
@@ -21,7 +20,8 @@ useEffect(() => {
   const url_string = window.location.href;
   const url = new URL(url_string);
   const url_id = url.searchParams.get("i");
- 
+  window.history.replaceState({}, document.title, "/" + "");
+    
   if(url_id){
     return isConfirm(url_id);
   }
@@ -39,7 +39,10 @@ const isConfirm = url_id => {
   axios.patch('/api/users/confirm', {url_id})
   .then(res => {
    
-    // console.log(res.data);
+    if(!res.data){
+      return setLoading(false);;
+    }
+   
     const confirmed = res.data;
     if(confirmed.verified){
     
@@ -59,7 +62,7 @@ const update = confirm ? "Thank you for confirming your account, you can now boo
 
 const onNext = () => {
 
-  return history.push('/feed'),[history];
+  return history.push('/'),[history];
 }
  
   return (
@@ -70,11 +73,12 @@ const onNext = () => {
   {loading ? <Loading/> : update}
   </p>
 
- {loading ? null : <DialogActions className='full-length-btn'>
-      <button onClick={() => onNext()} >
-        Next
-      </button>
-    </DialogActions>}
+ {loading ? null :  <div className='incoming-icons'>
+    <ExitToAppIcon
+    onClick={() => onNext()}
+    fontSize='large'
+    />
+   </div>}
 </div>
 
   

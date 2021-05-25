@@ -18,26 +18,35 @@
 
 
 #alert-dialog-title{
-	color: $black;
+	color: $black !important;
 	font-weight: bold;
 	font-size: 1.5rem;
-color:#9d00ff
+
 }
 
 
-.dialog-inner{
-	display: block;
-	margin: auto;
-	width: 400px;
+
+// .dialog-inner{
+// 	display: block;
+// 	margin: auto;
+// 	width: 400px;
 
 
 
-	a{
-		color:$accent-color;
-		&:hover{
-			color: $primary-color;
-		}
-	}
+// 	a{
+// 		color:$accent-color;
+// 		&:hover{
+// 			color: $primary-color;
+// 		}
+// 	}
+// }
+
+.MuiDialog-container{
+	width: 100%;
+}
+
+.MuiDialog-paper{
+	width: 95%;
 }
 
 .dialog-content{
