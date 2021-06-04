@@ -20,7 +20,6 @@ if(!id)return;
   axios.get(`/api/stripe/${id}`)
   .then(res => {
 
-  // console.log(res.data)
     setLoading(false);
   if(res.data.details_submitted){
     setState(res.data.details_submitted);

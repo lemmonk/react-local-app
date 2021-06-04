@@ -26,20 +26,7 @@
 
 
 
-// .dialog-inner{
-// 	display: block;
-// 	margin: auto;
-// 	width: 400px;
 
-
-
-// 	a{
-// 		color:$accent-color;
-// 		&:hover{
-// 			color: $primary-color;
-// 		}
-// 	}
-// }
 
 .MuiDialog-container{
 	width: 100%;
@@ -116,4 +103,14 @@ a{
 		color: $primary-color;
 	}
 }
+}
+
+
+
+a{
+		color:$accent-color;
+
+	&:hover{
+		color: $primary-color;
+	}
 }

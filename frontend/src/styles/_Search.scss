@@ -6,7 +6,7 @@
 	bottom: 0;
 	right: 0;
 	width: 100%;
-
+	pointer-events: none;
 
 	
 
@@ -19,10 +19,11 @@
 	justify-content: flex-end;
 	width: 100%;
 	background-color: transparent;
+	
 }
 
 .search-icon{
-	
+	pointer-events: all;
 	cursor: pointer;
 	margin: 10px 20px;
 	width: 55px;

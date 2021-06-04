@@ -1,7 +1,6 @@
 import React, {useContext, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
-
 import axios from 'axios';
 import Loading from './Loading';
 import TextField from '@material-ui/core/TextField';
@@ -9,8 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContentText from '@material-ui/core/DialogContentText';
-
 import { withStyles } from '@material-ui/core/styles';
+
 const InputTextField = withStyles({
   root: {
     '& label.Mui-focused': {
@@ -260,7 +259,7 @@ function CreateUser() {
           <p>
              By continuing you confirm that you have read and agree to our
              <br></br>
-              <a href='/terms'>Terms of Service and Privacy Policy.</a>
+              <a href='/terms' target="_blank">Terms of Service and Privacy Policy.</a>
            </p>
           </div>
      

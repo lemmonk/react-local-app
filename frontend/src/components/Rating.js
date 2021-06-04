@@ -62,12 +62,13 @@ function Rating() {
 <section className="incoming-wrapper">
 
     {loading ? <Loading/> : null}
+    {!loading ? 
     <div className='incoming-content'>
     <p>
-    {message ? message : 'Ratings Page'} 
+    {message ? message : '...'} 
     </p>
     </div>
-
+    : null }
 </section>
   );
 }

@@ -1,5 +1,6 @@
 
 import React, {useState, useEffect, useContext } from 'react';
+import useReference from '../hooks/useReference';
 import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
@@ -26,7 +27,6 @@ function Inbox(props) {
   const history = useHistory();
   const [loading, setLoading] = useState(false);
 
-  // const [inbox, setInbox] = useState(null);
   const [identifier, setIdentifier] = useState({
     id: null,
     name: null,
@@ -43,7 +43,9 @@ function Inbox(props) {
   });
   
   
+  const mounted = useReference();
   useEffect(() => {
+    if(!mounted)return;
     window.scrollTo(0, 0);
     if(!user)return history.push('/'),[history];
     
@@ -55,7 +57,7 @@ function Inbox(props) {
     setLoading(true);
     axios.post(`/api/inbox/get`, {input})
     .then(res => {
-    // console.log(res.data)
+      
     setLoading(false);
     
     const upcoming = [];
@@ -118,7 +120,7 @@ function Inbox(props) {
     setLoading(true);
     axios.post(`/api/inbox`, { input })
     .then(res => {
-    // console.log(res.data)
+   
 
     if(res.data == input.id){
       setLoading(false);
@@ -389,7 +391,8 @@ const filterOptions = <div className='inbox-filter'>
             Are you sure you want to cancel this booking?  This action cannot be undone and will notify the other party of your departure from your agreement. 
             <br></br>
             <br></br>
-            All refunds are administrated and therefore the sole responsibility of the acting host.
+            All refunds are administered and therefore the sole responsibility of the acting host.
+            
            
           </DialogContentText>
          <div className='a-refund'>

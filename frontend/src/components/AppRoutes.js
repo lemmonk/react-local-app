@@ -3,12 +3,8 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import React, { useContext, useEffect } from 'react';
-import  UserContext  from './UserContext';
-import axios from 'axios';
-
+import React from 'react';
 import NavBar from "./NavBar";
-import Splash from "./Splash";
 import Welcome from "./Welcome";
 import Confirm from "./Confirm";
 import Feed from "./Feed";
@@ -30,38 +26,6 @@ import Offline from "./Offline";
 
 
 function AppRoutes() {
-  window.scrollTo(0, 0);
-
-  const {user, setUser} = useContext(UserContext);
-  
-
-  
-
-  useEffect(() => {
-
-    
-    const uid = localStorage.getItem('locals-uid');
-
-    if(!user && uid){
-
-    axios.post('/api/users/session', { uid })
-    .then(res => {
-      
-      if(res.data.verified){
-     
-        setUser(res.data);
-
-      } 
-      
-    })
-    .catch(err => {
-      console.log(err);
-      //silent error
-    });
-  }
-
-  },[]);
-
  
   return (
     <div className="App">
@@ -76,8 +40,8 @@ function AppRoutes() {
             nav={true}
             action={null}
             />
-           
             <Feed />
+
           </Route>
 
           <Route exact path="/create">
@@ -134,7 +98,6 @@ function AppRoutes() {
             </>
           )}
           >
-
           </Route>
 
           <Route exact path="/recover">
@@ -179,8 +142,7 @@ function AppRoutes() {
           
           </Route>
 
-
-          <Route exact path="/edit">
+          <Route exact path="/profile">
               <NavBar
              logo={true}
              title='Profile'
@@ -216,10 +178,8 @@ function AppRoutes() {
             </>
           )}
           >
-          
           </Route>
              
-          
           <Route exact path="/info"
           render={(props) => (
             <>

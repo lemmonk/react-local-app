@@ -17,6 +17,9 @@ const history = useHistory();
  
   useEffect(() => {
     window.scrollTo(0, 0);
+
+    if(!user)return history.push('/'),[history];
+
     let input = null;
     if(user.public_key === props.location.state.detail.host_key){
       input = props.location.state.detail.user_key;
@@ -33,17 +36,15 @@ const history = useHistory();
     axios.post(`/api/inbox/info`, {input})
     .then(res => {
 
-    // console.log(res.data)
-
-   setInfo(res.data);
-    
+    setInfo(res.data);
     setLoading(false);
 
     })
     .catch(err => {
       setLoading(false);
+      return history.push('/'),[history];
       //silent error
-      console.log(err);
+      // console.log(err);
 
     });
   

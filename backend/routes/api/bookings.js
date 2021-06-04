@@ -11,7 +11,6 @@ const {
 	blockBooking,
 	fetchBooking,
 	deleteBooking,
-	updateBookingsRating,
 } = require('../../db/queries/booking-queries');
 
 const {
@@ -76,7 +75,7 @@ router.post('/', (req, res) => {
 
 		})
 			})
-			
+
 		} else {
 			return res.json(false);
 		} 

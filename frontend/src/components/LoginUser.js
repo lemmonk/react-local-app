@@ -118,6 +118,8 @@ function LoginUser() {
 
 
           localStorage.setItem('locals-uid', res.data.uid);
+          localStorage.setItem('locals-public-key', res.data.public_key);
+          
           // console.log(res.data);
           setLoading(false);
           setUser(res.data);
@@ -130,7 +132,7 @@ function LoginUser() {
             ...prev,
             email : false,
             password: false,
-            errorMsg: 'Unknown error'
+            errorMsg: 'Invalid credentials'
           }));
         });
   

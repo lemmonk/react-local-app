@@ -46,8 +46,6 @@ const isConfirm = url_id => {
     const confirmed = res.data;
     if(confirmed.verified){
     
-    localStorage.setItem('locals-uid', confirmed.uid);
-   
     setLoading(false);
     setConfirmed(true);
     }
@@ -62,7 +60,7 @@ const update = confirm ? "Thank you for confirming your account, you can now boo
 
 const onNext = () => {
 
-  return history.push('/'),[history];
+  return history.push('/login'),[history];
 }
  
   return (

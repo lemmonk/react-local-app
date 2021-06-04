@@ -2,7 +2,7 @@
 require('dotenv').config();
 
 // Web server config
-const PORT = 8080;
+const PORT = process.env.NODE_ENV === 'production' ? 8080 : 8081;
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -14,6 +14,11 @@ const methodOverride = require('method-override');
 const server = require('http').createServer(app);
 const cors = require('cors');
 app.use(cors());
+
+
+//notifications
+const webpush = require('web-push');
+app.use(bodyParser.json());
 
 
 let environment = process.env.HOST_URL; 
@@ -31,11 +36,13 @@ const io = require('socket.io')(server, {
 //create a socket.io connection
 io.on('connection', (socket) => {
 	const message = 'message';
+	const push = 'push';
 
 	//listen for changes
 	socket.on('input', (input) => {
-		console.log('SOCKET MSG:',input);
+	
 		io.emit(message, input);
+		io.emit(push, input)
 	});
 
 	// disconnects socket with update message
@@ -43,6 +50,28 @@ io.on('connection', (socket) => {
 		console.log('socket disconnect')
 	});
 });
+
+
+//push notifications
+const publicVapidKey = process.env.PUBLIC_VAPID;
+const privateVapidKey = process.env.PRIVATE_VAPID;
+const emailVapid = process.env.EMAIL_VAPID;
+
+webpush.setVapidDetails(emailVapid, publicVapidKey, privateVapidKey);
+
+app.post('/subscribe', async (req, res) => {
+
+const input = req.body.input;
+const subscription = input.subscription;
+const name = input.fullName;
+
+	res.status(201).json();
+
+	const payload = name;
+	await webpush.sendNotification(subscription, payload);
+
+})
+
 
 
 //terminal in color
@@ -62,7 +91,7 @@ app.use(methodOverride('_method'));
 
 // Main routes
 app.get('/', (req, res) => {
-	res.send('socket host: '+environment);
+	res.send('xyz');
 });
 
 

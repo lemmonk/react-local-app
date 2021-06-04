@@ -30,10 +30,14 @@ router.post('/createAccountLink', async (req, res) => {
 
   const input = req.body.input;
 
+  try {
+    
+ 
+
   const account = await stripe.accounts.create({
     type: 'express',
     requested_capabilities: ['card_payments', 'transfers'],
-    business_name: 'Local\'s App Host',
+    business_name: 'Locals App Host',
     email: input.email,
     legal_entity: {
       business_name: `Local Hosting - ${input.first_name} ${input.last_name}`,
@@ -64,7 +68,7 @@ router.post('/createAccountLink', async (req, res) => {
     const values = [account.id, customer.id, input.email]; 
 
     connectHost(values)
-    .then((data) =>{
+    .then((data) => {
       
       const connectUser = { 
         id: data.connect_id,
@@ -80,7 +84,11 @@ router.post('/createAccountLink', async (req, res) => {
   }
 
 
- 
+} catch (error) {
+  console.log(error);
+  return res.json(false);
+}
+
 });
 
 

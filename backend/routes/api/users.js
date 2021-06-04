@@ -300,10 +300,9 @@ router.post('/editImg', async (req, res) => {
 
 
 	const file = req.files.image;
-	const tmp = process.env.NODE_ENV === 'production' ? '/tmp/' : './tmp/';
-	console.log(tmp)
-	const ext = `${uniqid()}.jpeg`;
-	const path =  tmp + ext;
+	
+	const ext = `/${uniqid()}.jpeg`;
+	const path =  '/tmp' + ext;
 
 
 

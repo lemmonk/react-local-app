@@ -200,6 +200,7 @@ const editUser = values => {
 		.catch((err) => console.log(`Error at users queries 'EDIT'`, err));
 };
 
+
 const connectHost = values => {
 
 	const text = `

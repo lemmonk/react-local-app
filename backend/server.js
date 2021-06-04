@@ -59,7 +59,7 @@ app.use('/api/crons', cronsRouter);
 
 // Main routes
 app.get('/', (req, res) => {
-	res.send('Locals Backend');
+	res.send('abc');
 });
 
 

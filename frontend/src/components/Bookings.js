@@ -1,28 +1,23 @@
 import React, {useState, useEffect, useContext } from 'react';
+import useReference from '../hooks/useReference';
 import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 import globals from '../globals';
 import Calendar from 'react-awesome-calendar';
 import Loading from './Loading';
-
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
-
-
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
 import CheckoutForm from './CheckoutForm';
-
 
 
 function TransitionUp(props) {
@@ -36,14 +31,12 @@ const bookingColors = {
 }
 
 function Bookings(props) {
-  
-
-
+console.log = function() {};
 
   const {user} = useContext(UserContext);
   const history = useHistory();
-
   const [loading, setLoading] = useState(false);
+  const [refresh] = useState(false);
 
   const [bookings, setBookings] = useState({
     state: [],
@@ -67,9 +60,8 @@ function Bookings(props) {
     })
   })
 
-  const [refresh, setRefresh] = useState(false);
-
-  const highlightLocalDay = (mode) => {
+ 
+  const highlightLocalDay = mode => {
   
     const d = new Date();
     const currentDay = d.getDate();
@@ -78,13 +70,29 @@ function Bookings(props) {
     const sameMonth = mode && Number(mode.month) <= month;
     const sameYear = mode && Number(mode.year) <= year;
     const allSpans = document.querySelectorAll(".dayText");
-   
-      for (const span of allSpans){
 
-        if(!mode && span.innerText == currentDay){
+    const realMonth = month + 1;
+    const daysInMonth = moment(`${year}-${realMonth}`, "YYYY-MM").daysInMonth();
+   
+
+      let count = 0;
+      for (const span of allSpans){
+        count++;
+        
+        if(!mode && span.innerText == currentDay && count <= daysInMonth){
+
+          allSpans.forEach(elm => {
+            elm.classList.remove('currentDay');
+          });
+
           span.classList.add('currentDay');
         
-        } else if(sameMonth && sameYear && span.innerText == currentDay){
+        } else if(sameMonth && sameYear && span.innerText == currentDay && count <= daysInMonth){
+
+          allSpans.forEach(elm => {
+            elm.classList.remove('currentDay');
+          });
+
           span.classList.add('currentDay');
         
         } else {
@@ -98,6 +106,7 @@ function Bookings(props) {
   const uiManipulation = mode => {
     window.scrollTo(0, 0);
     highlightLocalDay(mode);
+
     const allButtons = document.querySelectorAll("button");
     const d = new Date();
     const currentMonth = d.getMonth();
@@ -105,12 +114,15 @@ function Bookings(props) {
     allButtons[1].innerHTML = '';
     allButtons[0].style.display = 'none';
     allButtons[2].style.display = 'none';
+
+    const backBtn = document.getElementById('calendar-b-btn');
+    backBtn.style.display = !mode || mode.mode === 'monthlyMode' ? 'none' : 'block';
     
     if(!mode || mode.mode === 'monthlyMode'){
     
       allButtons[3].style.display = 'block';
       allButtons[4].style.display = 'block';
-   
+      
     } 
 
     if(!mode || mode.month === currentMonth){
@@ -131,6 +143,7 @@ function Bookings(props) {
 
 
     if (mode && mode.month - currentMonth > 2 || mode &&  mode.month - currentMonth < 0){
+      
       return history.push('/'),[history];
     }
 
@@ -139,15 +152,15 @@ function Bookings(props) {
 
       allButtons[3].style.display = 'none';
       allButtons[4].style.display = 'none';
-
     }
    
 	};
 
 
- 
+  const mounted = useReference();
   useEffect(() => {
   
+    if(!mounted)return;
    
     uiManipulation(null);
 
@@ -156,8 +169,6 @@ function Bookings(props) {
     
     if(!user)return history.push('/'),[history];
   
-
-
     const input = {
       id: bookings.identifier
     }
@@ -166,7 +177,6 @@ function Bookings(props) {
     axios.post(`/api/bookings/get`, {input})
     .then(res => {
     
-      // console.log(res.data);
       setLoading(false);
       setBookings((prev) => ({
         ...prev,
@@ -174,13 +184,15 @@ function Bookings(props) {
       }));
     })
     .catch(err => {
-      setLoading(true);
+      setLoading(false);
+      localStorage.clear();
       return history.push('/'),[history];
     });
 
   },[refresh]);
 
-  //format booking to be read by calendar component
+
+  //formats booking to be read by calendar component
   const events = bookings ? bookings.state.map(each =>{
 
     return {
@@ -198,10 +210,8 @@ function Bookings(props) {
   const openDay = trigger => {
     
     uiManipulation(trigger);
-    const d = new Date();
-
-
-    const elements = document.getElementsByClassName('dailyHourWrapper');
+    
+   const elements = document.getElementsByClassName('dailyHourWrapper');
   
     for (let i = 0; i < elements.length; i++) {
      
@@ -215,8 +225,7 @@ function Bookings(props) {
   const openTime = trig => {
     const d = new Date();
 
-
-    if(trig.day <= d.getDate()){
+    if(trig.day <= d.getDate() && trig.month <= d.getMonth()){
       const msg = "Bookings cannot be made day of or in the past.";
       const cc = 'calendar-snackbar-error';
       return handleSnack(TransitionUp, msg, cc);
@@ -264,6 +273,7 @@ const setDuration = duration => {
  
   const durationArr = [];
   const length = currentBooking.hour + duration;
+
   for (let i = currentBooking.hour; i < length; i++){
    
     if(i >= 22){
@@ -319,8 +329,6 @@ const closePay = () => {
 }
 
 
-
-
 const openStripeCheckout = () => {
 
 const duration = Number(currentBooking.duration);
@@ -337,9 +345,6 @@ const price = Number(props.location.state.detail.price) * duration;
   dialog: false
   }));
 }
-
-
-
 
 
 const createBooking = () => {
@@ -376,19 +381,14 @@ const createBooking = () => {
    return handleSnack(TransitionUp, msg, cc);
   }
 
-   triggerUseEffect();
-   const msg = 'Success! A notification email has been sent to your host.';
-   const cc = 'calendar-snackbar';
-  handleSnack(TransitionUp, msg, cc);
-  
-    // console.log(res.data);
+   
     return history.push({
       pathname: '/inbox',
       state: { detail: res.data }
     }),[history];
     
     }).catch((err) => {
-      console.log(err);
+      
       setLoading(false);
       const msg = "Something went wrong 😧";
       const cc = 'calendar-snackbar-error';
@@ -396,17 +396,6 @@ const createBooking = () => {
     });
 
 }; 
-
-
-const triggerUseEffect = () => {
-  window.scrollTo(0, 0);
-  handleClose();
-  if(refresh){
-    setRefresh(false);
-  }else{
-    setRefresh(true);
-  }
-}
 
 
 
@@ -498,13 +487,14 @@ const handleSnack = (Transition, msg, cc) => {
 
 }
 
-// console.log(bookings.stripePromise)
   return (
     
     <>
     {loading ? <Loading/> : null}
     <div  className='calendar'>
-  
+    <div id='calendar-b-btn'>
+      <p>← full month</p>
+    </div>
 
     <Calendar
         events={events}
@@ -593,7 +583,7 @@ const handleSnack = (Transition, msg, cc) => {
      </Elements>
    
    <div className='secured-by'>
-   <p>Transaction secured by <a href='https://stripe.com' target='_blank'>Stripe</a></p> 
+   <p>Transaction secured by <a href='https://stripe.com' target='_blank' rel="noreferrer">Stripe</a></p> 
    </div>
         </div>
       

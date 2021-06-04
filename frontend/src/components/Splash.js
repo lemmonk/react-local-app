@@ -86,12 +86,12 @@ function Splash() {
     <img
     className='map-foreground'
     scale='1'
-    src={`https://maps.googleapis.com/maps/api/staticmap?center=${mapCity}&zoom=10&size=500x3800&maptype=roadmap&key=${globals().map}`}></img>
+    src={`https://maps.googleapis.com/maps/api/staticmap?center=${mapCity}&zoom=10&size=500x3800&maptype=roadmap&key=${globals().map}`} alt='locals map'></img>
   </div>
 
     <div className='hook'>
     <h3>
-    Experience the places you visit through a local lense
+    Experience the places you visit through a local lens
     </h3>
     </div>
     <div className='pitch'>

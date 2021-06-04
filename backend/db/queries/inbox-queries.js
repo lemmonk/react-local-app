@@ -3,16 +3,14 @@ const db = require('../../lib/db.js');
 const getInbox = values => {
 
 	const text = `
-	SELECT bookings.id, bookings.start_time, bookings.end_time,
-	bookings.host_key, bookings.host_name, bookings.host_email, bookings.host_city, bookings.user_key, bookings.user_name, bookings.user_email, bookings.status
+	SELECT id, start_time, end_time,
+	host_key, host_name, host_email, host_city, user_key, user_name, user_email, status
 	FROM bookings
-	WHERE bookings.user_key = $1
-	AND bookings.color != 'black'
-	AND bookings.stamp >= NOW()
-  OR bookings.host_key = $1
-	AND bookings.color != 'black'
-	AND bookings.stamp >= NOW()
-	ORDER BY bookings.stamp ASC
+	WHERE user_key = $1
+	AND color != 'black'
+  OR host_key = $1
+	AND color != 'black'
+	ORDER BY stamp ASC
 	;`;
 
 	return db

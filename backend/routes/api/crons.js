@@ -56,7 +56,7 @@ router.get('/ratings', async (req, res) => {
            await nodemail.sendRating(details);
           }
 
-        
+          
 
         return res.json();
       } catch (error) {
@@ -76,6 +76,7 @@ router.get('/ratings', async (req, res) => {
     });
   
 });
+
 
 
 router.get('/recovery', (req, res) => {

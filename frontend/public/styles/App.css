@@ -16,7 +16,7 @@
   justify-content: center;
   align-items: center;
   margin: auto;
-  width: 500px;
+  width: 550px;
   height: 100vh;
   background-color: white;
   background-color: rgba(0, 0, 0, 0.7);
@@ -31,16 +31,14 @@
 }
 
 .main-loader {
-  border: 4px solid transparent;
-  /* Light grey */
-  border-top: 4px solid #1eabf7;
-  /* Blue */
+  border: 3px solid transparent;
+  border-top: 3px solid #1eabf7;
   border-radius: 50%;
   background-color: transparent;
   animation: spin 1s linear infinite;
   margin-top: -30px;
-  width: 80px;
-  height: 80px;
+  width: 40px;
+  height: 40px;
 }
 
 @keyframes spin {
@@ -81,6 +79,7 @@
 }
 
 .top-bar h3 {
+  line-height: 0;
   font-family: cursive;
   font-weight: bold;
 }
@@ -141,9 +140,9 @@
   opacity: 0;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   .nav-inner {
-    width: 500px;
+    width: 550px;
   }
 }
 
@@ -152,6 +151,7 @@
   bottom: 0;
   right: 0;
   width: 100%;
+  pointer-events: none;
 }
 
 .search-icon-inner {
@@ -163,6 +163,7 @@
 }
 
 .search-icon {
+  pointer-events: all;
   cursor: pointer;
   margin: 10px 20px;
   width: 55px;
@@ -207,7 +208,7 @@
   color: #45bdfe;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   .search-dialog {
     display: block;
     margin: auto;
@@ -217,7 +218,7 @@
     display: flex;
     margin: auto;
     justify-content: flex-end;
-    width: 500px;
+    width: 550px;
     background-color: transparent;
   }
 }
@@ -295,9 +296,9 @@
   background-color: #1eabf7;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   .map-foreground {
-    width: 500px;
+    width: 550px;
   }
 }
 
@@ -609,6 +610,14 @@
   color: #45bdfe;
 }
 
+a {
+  color: #1eabf7;
+}
+
+a:hover {
+  color: #45bdfe;
+}
+
 .edit-wrapper {
   width: 100%;
 }
@@ -803,12 +812,26 @@
   color: #fc5d5d;
 }
 
+.edit-snackbar .MuiSnackbar-root {
+  display: block;
+  margin: auto;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
 .edit-snackbar .MuiSnackbar-root .MuiPaper-root {
   background-color: #08bb08;
   color: white;
 }
 
+.edit-snackbar-error .MuiSnackbar-root {
+  display: block;
+  margin: auto;
+  width: 300px;
+}
+
 .edit-snackbar-error .MuiSnackbar-root .MuiPaper-root {
+  width: 300px;
   background-color: #fc5d5d;
   color: white;
 }
@@ -831,6 +854,11 @@
   width: 90%;
 }
 
+.calendarWrapper h3 {
+  width: 95%;
+  text-align: right;
+}
+
 .modeWrapper {
   color: transparent !important;
   z-index: 5 !important;
@@ -848,8 +876,23 @@
   background-color: transparent;
 }
 
+#calendar-b-btn {
+  pointer-events: none;
+  z-index: 100;
+  position: absolute;
+  top: 35px;
+  left: 5px;
+  width: 90%;
+  color: grey;
+  background-color: transparent;
+}
+
+#calendar-b-btn:hover {
+  color: #1eabf7;
+}
+
 .calendarHeader {
-  margin-top: -30px;
+  margin-top: -40px;
   position: relative;
   z-index: 1 !important;
   background-color: white !important;
@@ -936,13 +979,23 @@
   background-color: #fc5d5d;
 }
 
+.calendar-snackbar .MuiSnackbar-root {
+  display: block;
+  margin: auto;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
 .calendar-snackbar .MuiSnackbar-root .MuiPaper-root {
   background-color: #08bb08;
   color: white;
 }
 
 .calendar-snackbar-error .MuiSnackbar-root {
+  display: block;
+  margin: auto;
   width: 300px;
+  margin-bottom: 20px;
 }
 
 .calendar-snackbar-error .MuiSnackbar-root .MuiPaper-root {
@@ -950,21 +1003,36 @@
   color: white;
 }
 
+.MuiDialogContent-root {
+  display: block;
+  margin: auto;
+  width: 90%;
+  padding: 0px;
+  overflow: hidden;
+}
+
 #stripe-modal {
-  width: 300px;
+  display: block;
+  margin: auto;
+  width: 90%;
+  padding: 0px;
+  overflow: hidden;
 }
 
 .stripe-card-wrapper {
   display: block;
   margin: auto;
+  width: 95%;
 }
 
 .stripe-wrapper {
   display: block;
   margin: auto;
+  width: 95%;
 }
 
 .stripe-total {
+  width: 95%;
   text-align: right;
   color: #45bdfe;
 }
@@ -1001,6 +1069,9 @@
 }
 
 .stripe-form-wrapper {
+  display: block;
+  margin: auto;
+  width: 100%;
   padding: 10px 0px;
 }
 
@@ -1150,7 +1221,7 @@
 }
 
 .inbox-status-complete label, .inbox-status-complete p {
-  color: #1eabf7;
+  color: #08bb08;
   font-weight: bold;
 }
 
@@ -1186,6 +1257,10 @@
   color: #b367fa;
 }
 
+.chat-wrapper {
+  width: 100%;
+}
+
 .chat-card-wrapper {
   width: 90%;
   display: flex;
@@ -1197,8 +1272,8 @@
   padding: 10px 0px;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   color: black;
-  background-color: white;
-  border-left: solid 5px #282828;
+  background-color: whitesmoke;
+  border-left: solid 7px #282828;
 }
 
 .chat-card-wrapper-other {
@@ -1213,7 +1288,7 @@
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   color: black;
   background-color: white;
-  border-left: solid 5px #1eabf7;
+  border-left: solid 7px #1eabf7;
 }
 
 .chat-name {
@@ -1235,7 +1310,7 @@
   flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
-  color: lightgray;
+  color: #797979;
   margin-top: 20px;
 }
 
@@ -1285,11 +1360,11 @@
   background-color: white;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   .chat-input-double-wrap {
     display: block;
     margin: auto;
-    width: 500px;
+    width: 550px;
   }
 }
 
@@ -1332,7 +1407,8 @@
   display: block;
   margin: 30px auto;
   width: 90%;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: solid 1px lightgray;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
   padding: 10px;
 }
@@ -1448,7 +1524,7 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', 'sans-serif';
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: whitesmoke;
 }
 
@@ -1534,12 +1610,12 @@ body {
   color: gray;
 }
 
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 550px) {
   body {
     background-color: #282828;
   }
   .App {
-    width: 500px;
+    width: 550px;
     display: block;
     margin: auto;
   }

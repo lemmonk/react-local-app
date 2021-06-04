@@ -149,7 +149,7 @@
 }
 
 .edit-host-info{
-	margin-bottom: 5px;
+margin-bottom: 5px;
 color: $primary-color;
 text-align: center	;
 border: solid;
@@ -226,9 +226,13 @@ button{
 
 .edit-snackbar{
 
+
 	.MuiSnackbar-root {
 
-		// width: 95%;
+		display:block;
+		margin:auto;
+		width: 300px;
+		margin-bottom: 20px;
 	
 		.MuiPaper-root{
 	
@@ -244,12 +248,13 @@ button{
 .edit-snackbar-error{
 
 	.MuiSnackbar-root {
-
-		// width: 500px;
+		display:block;
+		margin:auto;
+		width: 300px;
 	
 		.MuiPaper-root{
 	
-			// width: 500px;
+			width: 300px;
 			background-color:$error;
 			color:$white;
 		

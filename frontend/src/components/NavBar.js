@@ -1,9 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -27,9 +25,7 @@ function NavBar(props) {
 
 useEffect(() => {
 
-  if(window.navigator.onLine){
-  console.log('Locals App')
-  } else {
+  if(!window.navigator.onLine){
     return history.push('/offline'),[history];
   }
   
@@ -101,7 +97,7 @@ const PWA = () => {
   const openEdit = () => {
     
     handleClose();
-    return history.push('/edit'),[history];
+    return history.push('/profile'),[history];
   }
 
   const openSchedule = () => {
@@ -155,7 +151,7 @@ const PWA = () => {
   }
 
 const contactUs = () => {
-  window.location.href = "mailto:locals.app@gmail.com?subject=Enquires @ Locals App&body=How can we help?";
+  window.location.href = "mailto:locals.application@gmail.com?subject=Enquires @ Locals App&body=How can we help?";
 }
   
 

@@ -24,3 +24,29 @@ self.addEventListener('fetch', function(e) {
     })
   );
 });
+
+
+
+
+self.addEventListener('push', function(event) {
+
+const title = `Locals App`;
+const tag = new Date().getUTCMilliseconds();
+
+const options = {
+  body: `${event.data.text()} sent you a new direct message.`,
+  icon: "https://locals-app-314118.wn.r.appspot.com/favicon.ico",
+  renotify: true,
+  tag: tag
+}
+   
+    const promiseChain = self.registration.showNotification(title, options);
+   
+    event.waitUntil(promiseChain);
+
+    
+});
+
+
+
+

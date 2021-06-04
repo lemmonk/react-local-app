@@ -1,13 +1,17 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useContext} from 'react';
+import useReference from '../hooks/useReference';
 import axios from "axios";
 import Splash from './Splash';
 import HostCard from "./HostCard";
 import Search from "./Search";
 import Loading from "./Loading";
+import  UserContext  from './UserContext';
 import { useHistory } from 'react-router-dom';
 
 function Feed() {
 
+ const {user, setUser} = useContext(UserContext);
+  
 const history = useHistory();
  const [loading, setLoading] = useState(true);
  const [feed, setFeed] = useState({
@@ -15,7 +19,50 @@ const history = useHistory();
     query: 'at random'
   })
 
-  const [refresh, setRefresh] = useState(false);
+const [refresh, setRefresh] = useState(false);
+
+
+ useEffect(() => {
+    window.scrollTo(0, 0);
+    
+    const uid = localStorage.getItem('locals-uid');
+
+    if(!user && uid){
+    
+
+    axios.post('/api/users/session', { uid })
+    .then(res => {
+   
+      
+      if(res.data.verified){
+     
+        setUser(res.data);
+
+
+      } else {
+       
+      localStorage.clear();
+      sessionStorage.clear();
+      setUser(null);
+     
+      }
+      
+    })
+    .catch(err => {
+      console.log(err);
+      localStorage.clear();
+      sessionStorage.clear();
+      setUser(null);
+     
+
+      //silent error
+    });
+  }
+
+  },[user]);
+
+
+
 
 
   const onSearch = (query, sort) => {
@@ -31,8 +78,10 @@ const history = useHistory();
   }
 
  
-
+  const mounted = useReference();
   useEffect(() => {
+
+    if(!mounted)return;
 
     const exist = sessionStorage.getItem('locals-search-query');
     const search = exist ? exist : '';

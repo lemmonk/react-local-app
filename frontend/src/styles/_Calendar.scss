@@ -7,13 +7,16 @@
 	position: relative;
 	display: block;
 	margin: auto;
-
 	width: 95%;
-
 	background-color: transparent !important;
 	border-radius: 5px;
 	padding:5px;
 	box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -12px, rgba(0, 0, 0, 0.3) 0px 8px 16px -12px;
+
+	h3{
+		width: 98%;
+		text-align: right;
+	}
 
 }
 
@@ -22,6 +25,7 @@
 	display: block;
 	margin: auto;
 	width: 90%;
+
 
 
 }
@@ -48,9 +52,23 @@ border:solid;
 
 }
 
+#calendar-b-btn{
+	pointer-events: none;
+	z-index: 100;
+	position: absolute;
+	top:35px;
+	left:5px;
+	width:90%;
+	color: grey;
+	background-color: transparent;
+	&:hover{
+		color: $accent-color;
+	}
+}
+
 .calendarHeader{
 
-	margin-top: -30px;
+	margin-top: -40px;
 	position: relative;
 	z-index: 1 !important;
 	background-color: $white !important;
@@ -160,7 +178,10 @@ button{
 
 	.MuiSnackbar-root {
 
-		// width: 300px;
+		display: block;
+		margin: auto;
+		width: 300px;
+		margin-bottom: 20px;
 	
 		.MuiPaper-root{
 	
@@ -177,7 +198,10 @@ button{
 
 	.MuiSnackbar-root {
 
+		display: block;
+		margin: auto;
 		width: 300px;
+		margin-bottom: 20px;
 	
 		.MuiPaper-root{
 	
@@ -190,25 +214,38 @@ button{
 }
 
 
-
+.MuiDialogContent-root{
+	display:block;
+	margin:auto;
+	width: 90%;
+	padding: 0px;
+	overflow: hidden;
+}
 
 #stripe-modal{
-	width: 300px;
+	display:block;
+	margin:auto;
+	width: 90%;
+	padding: 0px;
+	overflow: hidden;
 }
 
 .stripe-card-wrapper{
 	display:block;
 	margin:auto;
+	width: 95%;
+
 
 }
 
 .stripe-wrapper{
 	display: block;
 	margin: auto;
-
+	width: 95%;
 }
 
 .stripe-total{
+	width: 95%;
 	text-align: right;
 	color:$primary-color
 }
@@ -249,6 +286,9 @@ button{
 }
 
 .stripe-form-wrapper{
+	display: block;
+	margin: auto;
+	width: 100%;
 padding: 10px 0px;
 	button{
 		display: block;

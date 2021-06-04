@@ -85,15 +85,7 @@ const onImgLoaded = () => {
   });
 }
 
-const onImgError = () => {
 
-  setImageLoaded({
-    loaded: 'edit-img',
-    class: 'loaded-edit-img',
-    img: '/images/user.png',
-  });
-
-}
 
 const link = props ? props.social_link : null;
 
@@ -101,12 +93,12 @@ const link = props ? props.social_link : null;
     <section className='host-card-wrapper'>
 
       <div className='host-card'>
-       {link ?  <LinkIcon className='link-icon' fontSize='default' onClick={() => onSocialLink(props.social_link)}/>: null}
+       {link ?  <LinkIcon className='link-icon' fontSize='large' onClick={() => onSocialLink(props.social_link)}/>: null}
         <div className='host-wrapper'>
         <div className='host-header'>
         <div className='host-header-left'>
         <div className={imgLoaded.loaded}>
-        <img className={imgLoaded.class} src={imgLoaded.img} alt='n/a' onLoad={() => onImgLoaded()} onError={() => onImgError()} />
+        <img className={imgLoaded.class} src={imgLoaded.img} alt='locals' onLoad={() => onImgLoaded()} />
         </div>
        
 

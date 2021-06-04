@@ -1,6 +1,7 @@
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import axios from 'axios';
 import React, { useContext, useState } from 'react';
+import {useHistory} from 'react-router-dom';
 import  UserContext  from './UserContext';
 import Loading from './Loading';
 
@@ -23,8 +24,10 @@ const CARD_ELEMENT_OPTIONS = {
 };
 
 export default function  CheckoutForm(props) {
+ 
 
 const {user} = useContext(UserContext);
+const history = useHistory();
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState(false);
   
@@ -33,7 +36,8 @@ const [error, setError] = useState(false);
   event.preventDefault();
 
   if(!user || !localStorage.getItem('locals-uid')){
-    return alert('Invalid credentials');
+    alert('Invalid credentials');
+    return history.push('/'),[history];
   }
   setError(false);
  
@@ -50,19 +54,16 @@ const [error, setError] = useState(false);
   .then(res => {
   
    
-  // console.log('CLIENT_SECRET',res.data.client_secret);
    handleSubmit(res.data.client_secret);
   })
   .catch(err => {
-    setError(false);
-    console.log(err);
+    setError(true);
+    // console.log(err);
   });
 
  }
    
   
-
-
 
 const stripe = useStripe();
 const elements = useElements();

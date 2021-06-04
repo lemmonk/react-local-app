@@ -27,7 +27,7 @@ function Terms() {
             mobile application related, linked, or otherwise connected thereto (collectively, the “App”). You
             agree that by accessing the App, you have read, understood, and agreed to be bound by all of these
             Terms of Use. IF YOU DO NOT AGREE WITH ALL OF THESE TERMS OF USE, THEN YOU ARE EXPRESSLY PROHIBITED
-            FROM USING THE SITE AND YOU MUST DISCONTINUE USE IMMEDIATELY.
+            FROM USING THE APP AND YOU MUST DISCONTINUE USE IMMEDIATELY.
             <br></br>
             Supplemental terms and conditions or documents that may be posted in the App from time to time are
             hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to
@@ -41,23 +41,32 @@ function Terms() {
             The information provided in the App is not intended for distribution to or use by any person or
             entity in any jurisdiction or country where such distribution or use would be contrary to law or
             regulation or which would subject us to any registration requirement within such jurisdiction or
-            country. Accordingly, those persons who choose to access the Site from other locations do so on
+            country. Accordingly, those persons who choose to access the App from other locations do so on
             their own initiative and are solely responsible for compliance with local laws, if and to the extent
             local laws are applicable.
             <br></br><br></br>
             The App is intended for users who are at least 18 years old. Persons under the age of 18 are not
             permitted to use or register for the App.
         </p>
+        <h3>REFUNDS</h3>
+        <p>
+        Cancellations enacted by either party (host or guest) before 12:00am of a scheduled booking date should result in a full refund.
+        All refunds involving transactions made within the App are administered and therefore the sole responsibility of the acting host.  Any and all legal proceedings will be between the host and their scheduled client (guest) respectively.  On a case by case basis {brand} may release additional contact infomation to authorities, including but not limited to emails, names, and bank account information should a host refuse to cooperate within 30 days of a cancellation, or if either party is thought to have made fraudulent claims. 
+        </p>
+        <h3>BOOKING FEES</h3>
+        <p>
+        {brand} uses Stripe's secure payment system to handle all transactions.  Stripe has there own service fee which we do not pass on to our customers.  For each booking {brand} charges a non-refundable 12% fee for conduit services provided within the App.    
+        </p>
         <h3>INTELLECTUAL PROPERTY RIGHTS</h3>
         <p>
             Unless otherwise indicated, the App is our proprietary property and all source code, databases,
-            functionality, software, website designs, audio, video, text, photographs, and graphics on the Site
+            functionality, software, website designs, audio, video, text, photographs, and graphics in the App
             (collectively, the “Content”) and the trademarks, service marks, and logos contained therein (the
             “Marks”) are owned or controlled by us or licensed to us, and are protected by copyright and
-            trademark laws and various other intellectual property rights and unfair competition laws of the
+            trademark laws and various other intellectual property rights and unfair competition laws of Canada, and the
             United States, international copyright laws, and international conventions. The Content and the
-            Marks are provided on the Site “AS IS” for your information and personal use only. Except as
-            expressly provided in these Terms of Use, no part of the Site and no Content or Marks may be copied,
+            Marks are provided in the App “AS IS” for your information and personal use only. Except as
+            expressly provided in these Terms of Use, no part of the App and no Content or Marks may be copied,
             reproduced, aggregated, republished, uploaded, posted, publicly displayed, encoded, translated,
             transmitted, distributed, sold, licensed, or otherwise exploited for any commercial purpose
             whatsoever, without our express prior written permission.
@@ -86,7 +95,7 @@ function Terms() {
             indirectly, a collection, compilation, database, or directory without written permission from us.
             <br></br>
             2. Trick, defraud, or mislead us and other users, especially in any attempt to learn sensitive
-            account information such as user passwords.
+            account information such as user passwords or credentials.
             <br></br>
             3. Circumvent, disable, or otherwise interfere with security-related features of the App, including
             features that prevent or restrict the use or copying of any Content or enforce limitations on the
@@ -104,12 +113,14 @@ function Terms() {
             <br></br>
             9. Upload or transmit (or attempt to upload or to transmit) viruses, Trojan horses, or other
             material, including excessive use of capital letters and spamming (continuous posting of repetitive
-            text), that interferes with any party’s uninterrupted use and enjoyment of the Site or modifies,
+            text), that interferes with any party’s uninterrupted use and enjoyment of the App or modifies,
             impairs, disrupts, alters, or interferes with the use, features, functions, operation, or
             maintenance of the Site.
             <br></br>
             10. Engage in any automated use of the system, such as using scripts to send comments or messages,
-            or using any data mining, robots, or similar data gathering and extraction tools. 11. Delete the
+            or using any data mining, robots, or similar data gathering and extraction tools. 
+            <br></br>
+            11. Delete the
             copyright or other proprietary rights notice from any Content.
             <br></br>
             12. Attempt to impersonate another user or person or use the username of another user.
@@ -125,16 +136,15 @@ function Terms() {
             connected to the Site.
             <br></br>
             16. Harass, annoy, intimidate, or threaten any of our employees or agents engaged in providing any
-            portion of the Site to you.
+            portion of the App to you.
             <br></br>
-            17. Attempt to bypass any measures of the Site designed to prevent or restrict access to the App, or
+            17. Attempt to bypass any measures of the App designed to prevent or restrict access to the App, or
             any portion of the App.
             <br></br>
-            18. Copy or adapt the App's software, including but not limited to Flash, PHP, HTML, JavaScript,C#
-            or other code.
+            18. Copy or adapt the App's software.
             <br></br>
             19. Decipher, decompile, disassemble, or reverse engineer any of the software comprising or in any
-            way making up a part of the Site.
+            way making up a part of the App.
             <br></br>
             20. Except as may be the result of standard search engine or Internet browser usage, use, launch,
             develop, or distribute any automated system, including without limitation, any spider, robot, cheat
@@ -152,6 +162,9 @@ function Terms() {
             <br></br>
             24. Use the App to justify trespassing on private property.
         </p>
+
+     
+
         <h3>SUBMISSIONS</h3>
         <p>
             You acknowledge and agree that any questions, comments, suggestions, ideas, feedback, or other
@@ -171,23 +184,19 @@ function Terms() {
             information, applications, software, and other content or items belonging to or originating from
             third parties ("Third-Party Content"). Such Third-Party Websites and Third-Party Content are not
             investigated, monitored, or checked for accuracy, appropriateness, or completeness by us, and we are
-            not responsible for any Third-Party Websites accessed through the Site or any Third-Party Content
-            posted on, available through, or installed from the Site, including the content, accuracy,
+            not responsible for any Third-Party Websites accessed through the App or any Third-Party Content
+            posted on, available through, or installed from the App, including the content, accuracy,
             offensiveness, opinions, reliability, privacy practices, or other policies of or contained in the
             Third-Party Websites or the Third-Party Content. Inclusion of, linking to, or permitting the use or
             installation of any Third-Party Websites or any Third-Party Content does not imply approval or
-            endorsement thereof by us. If you decide to leave the Site and access the Third-Party Websites or to
+            endorsement thereof by us. If you decide to leave the App and access the Third-Party Websites or to
             use or install any Third-Party Content, you do so at your own risk, and you should be aware these
             Terms of Use no longer govern. You should review the applicable terms and policies, including
-            privacy and data gathering practices, of any website to which you navigate from the Site or relating
-            to any applications you use or install from the Site. Any purchases you make through Third-Party
+            privacy and data gathering practices, of any website to which you navigate from the App or relating
+            to any applications you use or install from the App. Any purchases you make through Third-Party
             Websites will be through other websites and from other companies, and we take no responsibility
             whatsoever in relation to such purchases which are exclusively between you and the applicable third
-            party. You agree and acknowledge that we do not endorse the products or services offered on
-            Third-Party Websites and you shall hold us harmless from any harm caused by your purchase of such
-            products or services. Additionally, you shall hold us harmless from any losses sustained by you or
-            harm caused to you relating to or resulting in any way from any Third-Party Content or any contact
-            with Third-Party Websites.
+            party.
         </p>
         <h3>APP MANAGEMENT</h3>
         <p>
@@ -197,27 +206,27 @@ function Terms() {
             authorities; (3) in our sole discretion and without limitation, refuse, restrict access to, limit
             the availability of, or disable (to the extent technologically feasible) any of your Contributions
             or any portion thereof; (4) in our sole discretion and without limitation, notice, or liability, to
-            remove from the Site or otherwise disable all files and content that are excessive in size or are in
-            any way burdensome to our systems; and (5) otherwise manage the Site in a manner designed to protect
-            our rights and property and to facilitate the proper functioning of the Site.
+            remove from the App or otherwise disable all files and content that are excessive in size or are in
+            any way burdensome to our systems; and (5) otherwise manage the App in a manner designed to protect
+            our rights and property and to facilitate the proper functioning of the App.
         </p>
         <h3>PRIVACY POLICY</h3>
         <p>
             We care about data privacy and security. By using the App, you agree to be bound by our Privacy
-            Policy posted on the Site, which is incorporated into these Terms of Use. Please be advised the Site
-            is hosted in Canada. If you access the Site from any other region of the world with laws or other
+            Policy posted on the App, which is incorporated into these Terms of Use. Please be advised the App
+            is hosted in Canada. If you access the App from any other region of the world with laws or other
             requirements governing personal data collection, use, or disclosure that differ from applicable laws
-            in Canada, then through your continued use of the Site, you are transferring your data to Canada,
+            in Canada, then through your continued use of the App, you are transferring your data to Canada,
             and you agree to have your data transferred to and processed in Canada.
         </p>
         <h3>TERM AND TERMINATION</h3>
         <p>
             These Terms of Use shall remain in full force and effect while you use the App. WITHOUT LIMITING ANY
             OTHER PROVISION OF THESE TERMS OF USE, WE RESERVE THE RIGHT TO, IN OUR SOLE DISCRETION AND WITHOUT
-            NOTICE OR LIABILITY, DENY ACCESS TO AND USE OF THE SITE (INCLUDING BLOCKING CERTAIN IP ADDRESSES),
+            NOTICE OR LIABILITY, DENY ACCESS TO AND USE OF THE APP (INCLUDING BLOCKING CERTAIN IP ADDRESSES),
             TO ANY PERSON FOR ANY REASON OR FOR NO REASON, INCLUDING WITHOUT LIMITATION FOR BREACH OF ANY
             REPRESENTATION, WARRANTY, OR COVENANT CONTAINED IN THESE TERMS OF USE OR OF ANY APPLICABLE LAW OR
-            REGULATION. WE MAY TERMINATE YOUR USE OR PARTICIPATION IN THE SITE OR DELETE YOUR ACCOUNT AND ANY
+            REGULATION. WE MAY TERMINATE YOUR USE OR PARTICIPATION IN THE APP OR DELETE YOUR ACCOUNT AND ANY
             CONTENT OR INFORMATION THAT YOU POSTED AT ANY TIME, WITHOUT WARNING, IN OUR SOLE DISCRETION.
             <br></br>
             If we terminate or suspend your account for any reason, you are prohibited from registering and
@@ -235,9 +244,9 @@ function Terms() {
             price change, suspension, or discontinuance of the App.
             <br></br><br></br>
             We cannot guarantee the App will be available at all times. We may experience hardware, software, or
-            other problems or need to perform maintenance related to the Site, resulting in interruptions,
+            other problems or need to perform maintenance related to the App, resulting in interruptions,
             delays, or errors. We reserve the right to change, revise, update, suspend, discontinue, or
-            otherwise modify the Site at any time or for any reason without notice to you. You agree that we
+            otherwise modify the App at any time or for any reason without notice to you. You agree that we
             have no liability whatsoever for any loss, damage, or inconvenience caused by your inability to
             access or use the App during any downtime or discontinuance of the App. Nothing in these Terms of
             Use will be construed to obligate us to maintain and support the App or to supply any corrections,
@@ -259,17 +268,8 @@ function Terms() {
             negotiate any Dispute (except those Disputes expressly provided below) informally for at least
             thirty (30) days before initiating arbitration. Such informal negotiations commence upon written
             notice from one Party to the other Party.
-            <br></br>
-            Binding Arbitration
-            <br></br>
-            Any dispute arising out of or in connection with this contract, including any question regarding its
-            existence, validity, or termination, shall be referred to and finally resolved by the International
-            Commercial Arbitration Court under the European Arbitration Chamber (Belgium, Brussels, Avenue
-            Louise, 146) according to the Rules of this ICAC, which, as a result of referring to it, is
-            considered as the part of this clause. The number of arbitrators shall be two (2). The seat, or
-            legal place, of arbitration shall be Vancouver, Canada. The language of the proceedings shall be
-            English. The governing law of the contract shall be the substantive law of Canada.
-            <br></br>
+           
+            <br></br> <br></br>
             Restrictions
             <br></br>
             The Parties agree that any arbitration shall be limited to the Dispute between the Parties
@@ -360,27 +360,27 @@ function Terms() {
         <h3>ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES</h3>
         <p>
             By using the App you agree that all agreements, notices, disclosures, and other communications we
-            provide to you electronically, via email and through the app, satisfy any legal requirement that
+            provide to you electronically, via email and through the App, satisfy any legal requirement that
             such communication be in writing. YOU HEREBY AGREE TO THE USE OF ELECTRONIC SIGNATURES, CONTRACTS,
             ORDERS, AND OTHER RECORDS, AND TO ELECTRONIC DELIVERY OF NOTICES, POLICIES, AND RECORDS OF
-            TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE SITE. You hereby waive any rights or
+            TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE APP. You hereby waive any rights or
             requirements under any statutes, regulations, rules, ordinances, or other laws in any jurisdiction
             which require an original signature or delivery or retention of non-electronic records, or to
             payments or the granting of credits by any means other than electronic means.
         </p>
         <h3>MISCELLANEOUS</h3>
         <p>
-            These Terms of Use and any policies or operating rules posted by us on the APP or in respect to the
-            Site constitute the entire agreement and understanding between you and us. Our failure to exercise
+            These Terms of Use and any policies or operating rules posted by us on the App or in respect to the
+            App constitute the entire agreement and understanding between you and us. Our failure to exercise
             or enforce any right or provision of these Terms of Use shall not operate as a waiver of such right
-            or provision. These Terms of Use operate to the fullest extent permissible by law. We may assign any
+            or provision. These Terms of Use and external links operate to the fullest extent permissible by law. We may assign any
             or all of our rights and obligations to others at any time. We shall not be responsible or liable
             for any loss, damage, delay, or failure to act caused by any cause beyond our reasonable control. If
             any provision or part of a provision of these Terms of Use is determined to be unlawful, void, or
             unenforceable, that provision or part of the provision is deemed severable from these Terms of Use
             and does not affect the validity and enforceability of any remaining provisions. There is no joint
             venture, partnership, employment or agency relationship created between you and us as a result of
-            these Terms of Use or use of the Site. You agree that these Terms of Use will not be construed
+            these Terms of Use or use of the App. You agree that these Terms of Use will not be construed
             against us by virtue of having drafted them. You hereby waive any and all defenses you may have
             based on the electronic form of these Terms of Use and the lack of signing by the parties hereto to
             execute these Terms of Use.
@@ -423,7 +423,7 @@ function Terms() {
         <p>
             In Short: We collect very little personal information. Information collected includes your email,
             password, and in-app analytics. Passwords are kept a secret even from us, and emails are never
-            shared with any third-party. We do not collect location data or IP addresses.
+            shared with any third-party. We do not collect Credit Card information location data or IP addresses.
             <br></br>
             We automatically collect certain information when you use or navigate the App. This information does
             not reveal your specific identity (like your name or contact information) but may include device and
@@ -473,7 +473,7 @@ function Terms() {
         <p>
             We may transfer, store, and process your information in countries other than your own.
             <br></br>
-            Our servers are located in Canada. If you are accessing our App from outside of Canada, please be
+            Our servers are located in Canada adn the USA. If you are accessing our App from outside of Canada or the USA, please be
             aware that your information may be transferred to, stored, and processed by us in our facilities and
             by those third parties with whom we may share your personal information (see "WILL YOUR INFORMATION
             BE SHARED WITH ANYONE?" above), in and other countries.
@@ -488,13 +488,6 @@ function Terms() {
             We are not responsible for the safety of any information that you share with third-party providers
             who advertise, but are not affiliated with, our App.
             <br></br>
-            {brand} may contain advertisements from third parties that are not affiliated with us and which may
-            link to other websites, online services or mobile applications. We cannot guarantee the safety and
-            privacy of data you provide to any third parties. Any data collected by third parties is not covered
-            by this privacy policy. We are not responsible for the content or privacy and security practices and
-            policies of any third parties, including other websites, services or applications that may be linked
-            to or from the . You should review the policies of such third parties and contact them directly to
-            respond to your questions.
         </p>
         <h3>HOW LONG DO WE KEEP YOUR INFORMATION?</h3>
         <p>
@@ -511,12 +504,11 @@ function Terms() {
             information has been stored in backup archives), then we will securely store your personal
             information and isolate it from any further processing until deletion is possible.
             <br></br>
-            We do not knowingly solicit data from or market to children under 13 years of age. By using Wild
-            Pacific you represent that you are at least 13 or that you are the parent or guardian of such a
-            minor and consent to such minor dependent’s use of the app. If we learn that personal information
-            from users less than 13 years of age has been collected, we will deactivate the account and take
+            We do not knowingly solicit data from or market to children under 18 years of age. By using ${brand} you represent that you are at least 18 or that you are the parent or guardian of such a
+            minor and consent to such minor dependent’s use of the App. If we learn that personal information
+            from users less than 18 years of age has been collected, we will deactivate the account and take
             reasonable measures to promptly delete such data from our records. If you become aware of any data
-            we have collected from children under age 13, please contact us at mail.bluegreendev@gmail.com.
+            we have collected from children under age 18, please contact us at mail.${email}.
         </p>
         <h3>WHAT ARE YOUR PRIVACY RIGHTS?</h3>
         <p>
@@ -533,12 +525,7 @@ function Terms() {
             information from our active databases. However, some information may be retained in our files to
             prevent fraud, troubleshoot problems, assist with any investigations, enforce our Terms of Use
             and/or comply with legal requirements.
-            <br></br>
-            Opting out of email marketing: You can unsubscribe from our marketing email list at any time by
-            clicking on the unsubscribe link in the emails that we send or by contacting us using the details
-            provided below. You will then be removed from the marketing email list – however, we will still need
-            to send you service-related emails that are necessary for the administration and use of your
-            account. To otherwise opt-out, you may:
+           
         </p>
         <h3>CONTROLS FOR DO-NOT-TRACK FEATURES</h3>
         <p>

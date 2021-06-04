@@ -1,8 +1,20 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
 import AppleIcon from '@material-ui/icons/Apple';
 import AndroidIcon from '@material-ui/icons/Android';
+import  UserContext  from './UserContext';
+import {useHistory} from 'react-router-dom';
 
 function Pwa() {
+
+  const {user} = useContext(UserContext);
+  const history = useHistory();
+
+  useEffect(() => {
+
+  if(!user)return history.push('/'),[history];
+
+  },[]);
+  
 
   const os = sessionStorage.getItem('locals-os');
 
@@ -70,7 +82,7 @@ For us it came down to being able to provide our customers with a fair and hones
      Thank you for choosing Locals, your ongoing support is what keeps us going.
 <br></br>
 <br></br>
-<a href='https://danboterhoven.medium.com/the-case-for-progressive-web-apps-ef40754e3fd6' target='_blank'>A case for progressive web apps</a>
+<a href='https://danboterhoven.medium.com/the-case-for-progressive-web-apps-ef40754e3fd6' target='_blank' rel="noreferrer">A case for progressive web apps</a>
 
 </h3>
 </div>

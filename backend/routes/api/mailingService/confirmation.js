@@ -20,7 +20,7 @@ const methods = {};
   <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
   <h3>
    Hello ${details.name}!<br><br>
-   We're very excited to welcome you to our network of travellers, and host.
+   We're very excited to welcome you to our network of travellers and host.
   <br> 
   Please follow this <a style='color:#1eabf7' href=${link}>link</a> to
    confirm your account before getting started.
@@ -32,7 +32,7 @@ const methods = {};
   
  
   try {
-   let mail = await nodemail.letter(details.name, details.email, subject, body);
+   let mail = await nodemail.letter(`${brand} App`, details.email, subject, body);
  
   
      return mail;
@@ -112,7 +112,7 @@ const methods = {};
       
       try {
       
-       let mail = await nodemail.letter(details.host_name, details.host_email, subject, body);
+       let mail = await nodemail.letter(`${brand} App`, details.host_email, subject, body);
       
         if(mail){
           return mail;
@@ -155,7 +155,7 @@ const methods = {};
         
         try {
       
-          let mail = await nodemail.letter(details.to, details.email, subject, body);
+          let mail = await nodemail.letter(`${brand} App`, details.email, subject, body);
        
          
            if(mail){
@@ -182,13 +182,11 @@ const methods = {};
           const body = `
           <div style='display:block; margin:auto; line-height:1.6; border:solid 2px lightgray; border-left: solid 4px #1eabf7; border-radius: 5px; padding:2px 0px 2px 15px;'>
           <h3>
-          We noticed you just had a booking complete!
-          <br><br>
-          Rate your experience with ${details.name} in ${details.host_city}.
+          Rate your ${brand} experience with ${details.name} in ${details.host_city}.
           <br><br>
        
-          <a style='font-size: 2rem; text-decoration:none;' href=${link_y}>👍 —— </a> or <a style='font-size: 2rem; text-decoration:none;' href=${link_n}> —— 👎</a> 
-        
+          <a style='font-size: 2rem; text-decoration:none;' href=${link_y}>👍</a> or <a style='font-size: 2rem; text-decoration:none;' href=${link_n}>👎</a> 
+          <br><br> 
            <br><br> 
           Thank you for choosing ${brand}.
           </h3>
@@ -198,7 +196,7 @@ const methods = {};
          
     try {
       
-      let mail =  await nodemail.letter(subject, details.email, details.name, body);
+      let mail =  await nodemail.letter(`${brand} App`, details.email, details.name, body);
     
       
         if(mail){

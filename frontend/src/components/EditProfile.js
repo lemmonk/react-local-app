@@ -1,10 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
+import useReference from '../hooks/useReference';
 import globals from '../globals';
 import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
 import axios from 'axios';
 import Loading from './Loading';
-
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,10 +17,9 @@ import FormControl from '@material-ui/core/FormControl';
 import StarIcon from '@material-ui/icons/Star';
 import Snackbar from '@material-ui/core/Snackbar';
 import Slide from '@material-ui/core/Slide';
-
 import DynamicDialog from './DynamicDialog';
-
 import { withStyles } from '@material-ui/core/styles';
+
 const EditTextField = withStyles({
   root: {
     '& label.Mui-focused': {
@@ -82,17 +81,17 @@ function EditProfile() {
   });
 
 
-
+  const mounted = useReference();
   useEffect(() => {
-    
+
+    if(!mounted)return;
+   
     if(!user)return history.push('/'),[history];
+    
     const uid = localStorage.getItem('locals-uid');
     
-     setLoading(true);
     axios.post('/api/users/session', { uid })
       .then(res => {
-
-        // console.log(res.data)
 
         if (res.data.verified) {
           setUser(res.data);
@@ -104,13 +103,15 @@ function EditProfile() {
           setLoading(true);
           localStorage.clear();
           setUser(null);
-          return history.push('/create'), [history];
+          return history.push('/'), [history];
         }
 
       })
       .catch(err => {
 
-        console.log(err);
+        setLoading(true);
+        localStorage.clear();
+        setUser(null);
         return history.push('/'),[history];
       });
 
@@ -150,11 +151,8 @@ function EditProfile() {
 
     const id = user.connect_id;
     
-    
     axios.get(`/api/stripe/${id}`)
     .then(res => {
-  
-    // console.log('HOST',res.data)
   
     if(res.data.details_submitted){ // <-- stripe connect details 
       
@@ -167,7 +165,10 @@ function EditProfile() {
       title: 'Transactions',
       content: <p>
         We couldn't find your payment details.  This is either because your session has timed out or you did not complete your Stripe onboarding.
-        In order to be a Local Host you must be able to accept payments from your booked clients.<br></br><br></br>  Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+        In order to be a Local Host you must be able to accept payments from your booked guest.<br></br><br></br>  Locals app uses <a href='https://stripe.com' target='_blank' rel="noreferrer">Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+        <br></br>
+        <a  href='/terms' target='_blank'>Refund policy</a>
+           
       </p>,
        action: stripeOnboarding
     })
@@ -202,7 +203,6 @@ function EditProfile() {
    
         if (!mandatory[item] || mandatory[item] === null || mandatory[item] === undefined | mandatory[item] === 0) {
 
-        console.log('here')
           return setError((prev) => ({
             ...prev,
             [item]: true,
@@ -264,7 +264,7 @@ function EditProfile() {
     const update = {
       host: host,
       city: input.city,
-      bio: input.bio,
+      bio: input.bio ? input.bio : ' ',
       day_rate: input.day_rate ? input.day_rate : 0,
       social_link : input.social_link,
       uid: localStorage.getItem('locals-uid'),
@@ -274,7 +274,6 @@ function EditProfile() {
     setLoading(true);
     axios.patch(`/api/users/edit`, { update }).then((res) => {
 
-      // console.log(res.data);
       setLoading(false);
       if (!res.data) {
         const msg = 'Invalid Credentials';
@@ -290,6 +289,7 @@ function EditProfile() {
 
     
     }).catch((err) => {
+      // console.log(err);
       setLoading(false);
       const msg = 'Something went wrong 😧';
       const cc = 'edit-snackbar-error';
@@ -350,29 +350,27 @@ function EditProfile() {
     })
       .then((res) => {
         
-        setLoading(false);
-        console.log(res.data)
-
+  
       if (!res.data){
+      setLoading(false);
       const msg = 'Failed to upload image.';
       const cc = 'edit-snackbar-error';
-     return handleSnack(TransitionUp, msg, cc);
+      return handleSnack(TransitionUp, msg, cc);
         }
 
       // setUser(res.data);
+      setLoading(false);
       const msg = 'Image Saved.';
       const cc = 'edit-snackbar';
       handleSnack(TransitionUp, msg, cc);
       })
       .catch((err) => {
+        setLoading(false);
         const msg = 'Failed to upload image.';
         const cc = 'edit-snackbar-error';
         handleSnack(TransitionUp, msg, cc);
       });
   }
-
-
-  
 
 
   const gotoCalendar = () =>{
@@ -382,7 +380,7 @@ function EditProfile() {
 
     //input ui
 
-    const [value, setValue] = useState('No');
+    const [value, setValue] = useState(user && user.host === true ? 'Yes' : 'No');
 
     const handleChange = (event) => {
 
@@ -399,7 +397,9 @@ function EditProfile() {
           open: true,
           title: 'Transactions',
           content: <p>
-            In order to be a Local Host you must be able to accept payments from your guest.<br></br><br></br>Locals app uses <a href='https://stripe.com' target='_blank'>Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+            In order to be a Local Host you must be able to accept payments from your guest.<br></br><br></br>Locals app uses <a href='https://stripe.com' target='_blank' rel="noreferrer">Stripe payments</a>  to securely connect your account and encrypt all money transfers.
+            <br></br>
+        <a  href='/terms' target='_blank' rel="noreferrer">Refund policy</a>
           </p>,
           action: stripeOnboarding
         })
@@ -431,24 +431,38 @@ function EditProfile() {
        //password required < -------------------TODO
       }
 
-      console.log(input);
       setLoading(true);
     
       axios.post(`/api/stripe/createAccountLink`, {input})
       .then(res => {
     
-      console.log(res.data)
+     
       setLoading(false);
       localStorage.setItem('connect-id', res.data.id);
-      window.open(res.data.link.url);
+      // window.open(res.data.link.url);
+
+        setDialog({
+          open: true,
+          title: 'Onboarding',
+          content: <p>
+            Your account is now ready to be connected, please follow this <a href={res.data.link.url} target='_blank'>link</a>  to securely connect your account details through the Stripe dashboard.
+          </p>,
+          action: handleClose
+        })
+    
     
       })
       .catch(err => {
-        console.log(err);
+        // console.log(err);
+
+        setLoading(false);
+        const msg = 'Something went wrong 😧';
+        const cc = 'edit-snackbar-error';
+        handleSnack(TransitionUp, msg, cc);
       });
     }
   
-    
+ 
   
   
   const hourly_rate = <div>
@@ -579,10 +593,10 @@ const rating =  <div>
 
 const onRatingClicked = () => {
 
-  let msg = 'You currently do not have enough data to display an accurate rating. In the meantime your rating will be displayed as "No rating available".  Once your account has accumulated enough data for an accurate rating the results will be shown here and on your public facing profile, both as a host and as a guest.'
+  let msg = 'You currently do not have enough data to display an accurate rating. In the meantime your rating will be displayed as "No rating available".  Once your account has accumulated enough data for an accurate rating the results will be shown here and on your public facing profile.'
 
   if(showRating){
-    msg = 'This is your accumulated rating from your encounters with host and guest alike.'
+    msg = 'This is your combined rating from your encounters as a guest and host.'
   }
 
 
@@ -639,20 +653,24 @@ const onRatingClicked = () => {
   const logout = () => {
     
     const public_key = user.public_key;
-    localStorage.clear();
-    sessionStorage.clear();
-    setUser(null);
+   
 
     setLoading(true);
     axios.patch(`/api/users/logout`, {public_key})
     .then(res => {
 
     // console.log(res.data)
-    setLoading(false)
+      localStorage.clear();
+      sessionStorage.clear();
+      setUser(null);
+      setLoading(false)
     return history.push('/'), [history];
 
     })
     .catch(err => {
+      localStorage.clear();
+      sessionStorage.clear();
+      setUser(null);
       setLoading(false)
       return history.push('/'), [history];
     });
@@ -677,15 +695,7 @@ const onRatingClicked = () => {
     });
   }
 
-  const onImgError = () => {
 
-    setImageLoaded({
-      loaded: 'edit-img',
-      class: 'loaded-edit-img',
-      img: '/images/user.png',
-    });
-
-  }
 
  
   return (
@@ -707,10 +717,10 @@ const onRatingClicked = () => {
 
 {tempImg ? <img className={imgLoaded.class} src={tempImg}></img> 
 :
-<img className={imgLoaded.class} src={imgLoaded.img} alt='n/a' onLoad={() => onImgLoaded()} onError={() => onImgError()}></img>
+<img className={imgLoaded.class} src={imgLoaded.img} alt='.' onLoad={() => onImgLoaded()} ></img>
 }
 </div>
-: <img className='loaded-edit-img' src='/images/user.png' alt='img'></img>
+: <img className='loaded-edit-img' src='/images/user.png' alt='.'></img>
 }
 
       

@@ -1,9 +1,10 @@
 import React, {useState, useEffect, useContext } from 'react';
+import useReference from '../hooks/useReference';
 import  UserContext  from './UserContext';
 import {useHistory} from 'react-router-dom';
 import axios from 'axios';
+import moment from 'moment';
 import Calendar from 'react-awesome-calendar';
-
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -30,6 +31,8 @@ const bookingColors = {
 }
 
 function Scheduler() {
+
+  console.log = function() {}
 
   const {user} = useContext(UserContext);
   const history = useHistory();
@@ -74,13 +77,28 @@ function Scheduler() {
     const sameMonth = mode && Number(mode.month) <= month;
     const sameYear = mode && Number(mode.year) <= year;
     const allSpans = document.querySelectorAll(".dayText");
-   
-      for (const span of allSpans){
 
-        if(!mode && span.innerText == currentDay){
+    const realMonth = month + 1;
+    const daysInMonth = moment(`${year}-${realMonth}`, "YYYY-MM").daysInMonth();
+   
+
+    let count = 0;
+      for (const span of allSpans){
+    count++
+        if(!mode && span.innerText == currentDay && count <= daysInMonth){
+
+          allSpans.forEach(elm => {
+            elm.classList.remove('currentDay');
+          });
+
           span.classList.add('currentDay');
         
-        } else if(sameMonth && sameYear && span.innerText == currentDay){
+        } else if(sameMonth && sameYear && span.innerText == currentDay && count <= daysInMonth){
+
+          allSpans.forEach(elm => {
+            elm.classList.remove('currentDay');
+          });
+
           span.classList.add('currentDay');
         
         } else {
@@ -106,6 +124,9 @@ function Scheduler() {
     allButtons[1].innerHTML = '';
     allButtons[0].style.display = 'none';
     allButtons[2].style.display = 'none';
+
+    const backBtn = document.getElementById('calendar-b-btn');
+    backBtn.style.display = !mode || mode.mode === 'monthlyMode' ? 'none' : 'block';
     
     if(!mode || mode.mode === 'monthlyMode'){
     
@@ -127,7 +148,7 @@ function Scheduler() {
 
     } else if (mode.month  < currentMonth && mode.year <= currentYear){
 
-     return history.push('/edit'),[history]; 
+     return history.push('/profile'),[history]; 
 
     }
 
@@ -143,13 +164,12 @@ function Scheduler() {
 
 
  
- 
+  const mounted = useReference();
   useEffect(() => {
    
+    if(!mounted)return;
     
-
-
-    if(!user) return history.push('/'),[history];
+    if(!user)return history.push('/'),[history];
 
     uiManipulation(null);
 
@@ -161,7 +181,6 @@ function Scheduler() {
     axios.post(`/api/bookings/get`, {input})
     .then(res => {
    
-      // console.log(res.data);
       setLoading(false);
       setBookings((prev) => ({
         ...prev,
@@ -170,6 +189,7 @@ function Scheduler() {
     })
     .catch(err => {
       setLoading(false);
+      localStorage.clear();
       return history.push('/'),[history];
     });
 
@@ -250,7 +270,7 @@ const openCourseOfAction = mode => {
     
     const d = new Date();
 
-    if(trig.day <= d.getDate()){
+    if(trig.day <= d.getDate() && trig.month <= d.getMonth()){
       const msg = "Bookings cannot be made day of or in the past.";
       const cc = 'calendar-snackbar-error';
       return  handleSnack(TransitionUp, msg, cc);
@@ -362,7 +382,6 @@ const createBooking = () => {
 
   axios.post(`/api/bookings/block`, { input }).then((res) => {
 
-    //  console.log(res.data);
     
     triggerUseEffect();
     const msg = 'Saved!'
@@ -553,7 +572,7 @@ const createMultiBooking = () => {
       triggerUseEffect();
     
       }).catch((err) => {
-        console.log(err);
+        // console.log(err);
         const msg = 'Something went wrong 😧';
         const cc = 'calendar-snackbar-error';
       handleSnack(TransitionUp, msg, cc);
@@ -619,7 +638,7 @@ const deleteBooking = () => {
 
   axios.post(`/api/bookings/delete`, { input })
   .then(res => {
-  // console.log(res.data)
+ 
 
   if(res.data.length > 0){
     triggerUseEffect();
@@ -638,7 +657,10 @@ const deleteBooking = () => {
 
   })
   .catch(err => {
-    console.log(err);
+    // console.log(err);
+    const msg = "Failed to deleted booking.";
+    const cc = 'calendar-snackbar-error'
+    handleSnack(TransitionUp, msg, cc);
   });
 
 }
@@ -821,7 +843,7 @@ const handleSnack = (Transition, msg, cc) => {
       ...prev,
      snackbar: false
     }));
-  }, 5000)
+  }, 8000)
 
 }
 
@@ -829,7 +851,12 @@ const handleSnack = (Transition, msg, cc) => {
   return (
    
     <div  className='calendar'>
-    
+     {loading ? <Loading/> : null}
+
+     <div id='calendar-b-btn'>
+      <p>← full month</p>
+    </div>
+
     <Calendar
         events={events}
         onChange={(trig) => openDay(trig)}
